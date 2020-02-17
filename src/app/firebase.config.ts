@@ -1,9 +1,11 @@
 export const firebaseKeys = {
   // For your own projects please use different keys
-  apiKey: 'AIzaSyBUYZcc_HKi1TckbZPpSjSkxyFvml3Is0A',
-  authDomain: 'angular4materialdesign.firebaseapp.com',
-  databaseURL: 'https://angular4materialdesign.firebaseio.com',
-  projectId: 'angular4materialdesign',
-  storageBucket: 'angular4materialdesign.appspot.com',
-  messagingSenderId: '136985605193'
-}
+  apiKey: 'AIzaSyAhT6LgLK_HcnpTFYOJI07SNdaozbFE39A',
+  authDomain: 'mcfam-systems.firebaseapp.com',
+  databaseURL: 'https://mcfam-systems.firebaseio.com',
+  projectId: 'mcfam-systems',
+  storageBucket: 'mcfam-systems.appspot.com',
+  messagingSenderId: '164025316451',
+  appId: '1:164025316451:web:48a5eddbf050a10d7ff456',
+  measurementId: 'G-8CW9M8PLSF'
+};
