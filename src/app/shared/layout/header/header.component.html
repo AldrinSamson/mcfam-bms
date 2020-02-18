@@ -4,6 +4,17 @@
   <img [src]="angularImage">
 
   <div class="menu-link">
+
+    <button mat-button routerLink="/project" (click)="sidenav.close()">
+      <mat-icon class="misc">burst_mode</mat-icon>
+      <span>Project Management</span>
+    </button>
+
+    <button mat-button routerLink="/broker" (click)="sidenav.close()">
+      <mat-icon class="misc">burst_mode</mat-icon>
+      <span>Broker Management</span>
+    </button>
+
     <button mat-button routerLink="/home" (click)="sidenav.close()">
       <mat-icon class="home">home</mat-icon>
       <span>Home</span>

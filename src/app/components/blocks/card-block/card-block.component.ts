@@ -13,6 +13,6 @@ export class CardBlockComponent {
   angularImage: string;
 
   constructor() {
-    this.angularImage = '/assets/img/angular2.png'; }
+    this.angularImage = '/assets/img/house.png'; }
 
 }

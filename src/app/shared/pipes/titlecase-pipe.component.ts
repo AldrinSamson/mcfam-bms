@@ -7,6 +7,6 @@ import { Component } from '@angular/core';
   `
 })
 export class TitleCasePipeComponent {
-  public message = 'angular material firebase';
+  public message = 'MCFAM Broker and Project Managemet';
 
 }

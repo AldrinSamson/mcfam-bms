@@ -12,6 +12,8 @@ import { ContactComponent } from './pages/contact/contact.component';
 import { AuthComponent } from './pages/auth/auth.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { ProfileSettingsComponent } from './pages/profile/profile-settings.component';
+import { ProjectComponent } from './pages/project/project.component';
+import { BrokerComponent } from './pages/broker/broker.component';
 
 // Components
 import { MiscComponent } from './components/misc/misc.component';
@@ -29,6 +31,8 @@ const appRoutes: Routes = [
   { path: 'contact', component: ContactComponent },
   { path: 'misc', component: MiscComponent },
   { path: 'auth', component: AuthComponent },
+  { path: 'project' , component: ProjectComponent},
+  { path: 'broker' , component: BrokerComponent},
 
   // Protected pages
   // { path: 'profile/:uid/:name', component: ProfileComponent, canActivate: [AuthGuardService] },
