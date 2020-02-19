@@ -10,9 +10,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgxAuthFirebaseUIModule } from 'ngx-auth-firebaseui';
 
 // Modules
-import { BlocksModule } from './components/blocks/blocks.module';
 import { AuthModule } from './pages/auth/auth.module';
-import { BackgroundsModule } from './components/backgrounds/backgrounds.module';
 import { ProfileModule } from './pages/profile/profile.module';
 import { MiscModule } from './components/misc/misc.module';
 import { PipesModule } from '@shared/pipes/pipes.module';
@@ -34,7 +32,6 @@ import { AppRoutingModule } from './app.routing';
 import { firebaseKeys } from './firebase.config';
 
 // Pages
-import { HomeComponent } from './pages/home/home.component';
 import { AboutMeComponent } from './pages/about-me/about-me.component';
 import { ContactComponent } from './pages/contact/contact.component';
 import { PageNotFoundComponent } from './pages/not-found/not-found.component';
@@ -47,7 +44,6 @@ import { ProjectComponent } from './pages/project/project.component';
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
     AboutMeComponent,
     ContactComponent,
     HeaderComponent,
@@ -68,9 +64,7 @@ import { ProjectComponent } from './pages/project/project.component';
     HttpClientModule,
     AppRoutingModule,
     PipesModule,
-    BlocksModule,
     AuthModule,
-    BackgroundsModule,
     ProfileModule,
     MiscModule,
     NgxAuthFirebaseUIModule.forRoot(firebaseKeys)

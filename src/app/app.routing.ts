@@ -6,7 +6,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { PageNotFoundComponent } from './pages/not-found/not-found.component';
 
 // Pages
-import { HomeComponent } from './pages/home/home.component';
 import { AboutMeComponent } from './pages/about-me/about-me.component';
 import { ContactComponent } from './pages/contact/contact.component';
 import { AuthComponent } from './pages/auth/auth.component';
@@ -25,19 +24,19 @@ import { AuthGuardService } from '@shared';
 const appRoutes: Routes = [
 
   // Public pages
-  { path: '', redirectTo: '/home', pathMatch : 'full' },
-  { path: 'home', component: HomeComponent },
+  { path: '', redirectTo: '/auth', pathMatch : 'full' },
   { path: 'about', component: AboutMeComponent },
   { path: 'contact', component: ContactComponent },
   { path: 'misc', component: MiscComponent },
   { path: 'auth', component: AuthComponent },
-  { path: 'project' , component: ProjectComponent},
-  { path: 'broker' , component: BrokerComponent},
+  
 
   // Protected pages
   // { path: 'profile/:uid/:name', component: ProfileComponent, canActivate: [AuthGuardService] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService] },
   { path: 'profile-settings', component: ProfileSettingsComponent, canActivate: [AuthGuardService] },
+  { path: 'project' , component: ProjectComponent, canActivate: [AuthGuardService]},
+  { path: 'broker' , component: BrokerComponent, canActivate: [AuthGuardService]},
   { path: '**', component: PageNotFoundComponent }
 ];
 

@@ -3,11 +3,11 @@ export class Broker {
         brkrID: String,
         brkrFirstName: String,
         brkrLastName: String,
-        brkrContactNumber: String,
+        brkrContactNumber: Number,
         brkrAddress: String,
         brkrUsername: String,
         brkrEmail: String,
-        brkerPassword: String
-
+        brkerPassword: String,
+        brkrPhotoURL : String
     ) { }
 }
