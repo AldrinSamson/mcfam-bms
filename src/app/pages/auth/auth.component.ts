@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
-
+import { Router } from '@angular/router';
 import { AuthService } from '@shared';
 
 @Component({
@@ -10,10 +10,13 @@ import { AuthService } from '@shared';
 })
 export class AuthComponent {
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService,
+    private router: Router) {}
 
   public onSuccess(): void {
+    this.router.navigate(['/project']);
     return this.authService.onSuccess();
+  
   }
 
 }

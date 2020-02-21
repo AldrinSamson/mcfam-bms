@@ -3,3 +3,6 @@ export * from './auth.service';
 export * from './alert.service';
 export * from './user.service';
 export * from './window.service';
+export * from './broker.service';
+export * from './project.service';
+export * from './firebase.service';

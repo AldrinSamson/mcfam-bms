@@ -14,7 +14,7 @@ export class AuthService {
   public onSuccess(): void {
     sessionStorage.setItem('session-alive', 'true');
     this.token = 'some-temporary-token';
-    this.router.navigate(['/']);
+    this.router.navigate(['/project']);
     console.log('AUTH: ', this.auth);
   }
 
