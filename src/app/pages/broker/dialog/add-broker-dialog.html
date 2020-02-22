@@ -1,0 +1,56 @@
+<h2 mat-dialog-title>Add Broker</h2>
+<div mat-dialog-content [formGroup] = "addBrokerForm" >
+           
+            <mat-form-field >
+                <mat-label> ID </mat-label>
+                <input matInput formControlName = "brkrID"  required>
+            </mat-form-field>
+            <br>
+           <mat-form-field >
+                <mat-label> Position </mat-label>
+                <mat-select formControlName = "brkrClass" required>
+                        <mat-option value="Manager">Manager</mat-option>
+                        <mat-option value="Agent">Agent</mat-option>
+                    </mat-select>
+            </mat-form-field>
+            <br>
+            <mat-form-field >
+                    <mat-label> Username </mat-label>
+                    <input matInput formControlName = "brkrUsername"  required>
+                </mat-form-field>
+                <br>
+            <mat-form-field >
+                <mat-label> First Name </mat-label>
+                <input matInput formControlName = "brkrFirstName"  required>
+            </mat-form-field>
+            <br>
+            <mat-form-field >
+                <mat-label> Last Name </mat-label>
+                <input matInput formControlName = "brkrLastName" required>
+            </mat-form-field>
+            <br>
+            <mat-form-field >
+                <mat-label>  Email  </mat-label>
+                <input matInput type = "email" formControlName = "brkrEmail"  required>
+            </mat-form-field>
+            <br>
+            <mat-form-field >
+                <mat-label> Address </mat-label>
+                <input matInput formControlName = "brkrAddress"  required>
+            </mat-form-field>
+            <br>
+            <mat-form-field >
+                <mat-label> Contact Number </mat-label>
+                <input matInput formControlName = "brkrContactNumber"  required>
+            </mat-form-field>
+            <br>
+            <mat-form-field >
+                <mat-label> Password </mat-label>
+                <input matInput type="password" formControlName = "brkrPassword"  required>
+            </mat-form-field>
+            <br>
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click) = "submitAddBrokerForm()" >Add</button>
+    <button mat-button (click)="onNoClick()">Back</button> 
+</div>

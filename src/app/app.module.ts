@@ -2,10 +2,7 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonModule, MatCheckboxModule, MatMenuModule, MatInputModule, MatSnackBarModule,
-         MatToolbarModule, MatDialogModule, MatSidenavModule, MatNativeDateModule,
-         MatCardModule, MatTabsModule, MatIconModule } from '@angular/material';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MaterialModule } from './material.module';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxAuthFirebaseUIModule } from 'ngx-auth-firebaseui';
 
@@ -38,10 +35,13 @@ import { PageNotFoundComponent } from './pages/not-found/not-found.component';
 
 // Components
 import { EmailMeComponent } from './components/email-me/email-me.component';
-import { BrokerComponent } from './pages/broker/broker.component';
+import { BrokerComponent , AddBrokerDialogComponent } from './pages/broker/broker.component';
 import { ProjectComponent } from './pages/project/project.component';
 
 @NgModule({
+  entryComponents: [
+    AddBrokerDialogComponent
+  ],
   declarations: [
     AppComponent,
     AboutMeComponent,
@@ -51,16 +51,13 @@ import { ProjectComponent } from './pages/project/project.component';
     PageNotFoundComponent,
     EmailMeComponent,
     BrokerComponent,
-    ProjectComponent
+    ProjectComponent,
+    AddBrokerDialogComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    MatButtonModule, MatCheckboxModule, MatMenuModule, MatInputModule, MatSnackBarModule,
-    MatToolbarModule, MatDialogModule, MatSidenavModule, MatNativeDateModule,
-    MatCardModule, MatTabsModule, MatIconModule,
-    FormsModule,
-    ReactiveFormsModule,
+    MaterialModule,
     HttpClientModule,
     AppRoutingModule,
     PipesModule,

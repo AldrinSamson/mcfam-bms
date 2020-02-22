@@ -6,8 +6,9 @@ export class Broker {
         brkrContactNumber: Number,
         brkrAddress: String,
         brkrUsername: String,
+        brkrClass: String,
         brkrEmail: String,
-        brkerPassword: String,
-        brkrPhotoURL : String
+        brkrPhotoURL: String,
+        uid: String
     ) { }
 }
