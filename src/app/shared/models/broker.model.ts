@@ -1,5 +1,6 @@
 export class Broker {
     constructor(
+        id: String,
         brkrID: String,
         brkrFirstName: String,
         brkrLastName: String,

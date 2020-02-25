@@ -1,6 +1,7 @@
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
+import * as admin from "firebase-admin";
 
 import { Broker } from '../models';
 import { AlertService } from './alert.service';
@@ -30,5 +31,15 @@ export class BrokerService {
                 }).catch((_error) => {
                     console.log('Broker Create Failed!', _error);
                 });
+  }
+
+  deleteBroker(id) {
+    admin.auth().deleteUser(id)
+    .then(function() {
+      console.log("Successfully deleted user");
+      })
+    .catch(function(error) {
+      console.log("Error deleting user:", error);
+    });
   }
 }

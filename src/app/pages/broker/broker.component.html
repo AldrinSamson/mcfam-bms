@@ -8,9 +8,11 @@
         <div class="col col-md-8 text-col">
           <h5 class="mb-1">{{item.payload.doc.data().brkrFirstName}} {{item.payload.doc.data().brkrLastName}}</h5>
           <small>Age: {{item.payload.doc.data().brkrEmail}}</small>
+          <small>Age: {{item.payload.doc.id}}</small>
+          <small>Age: {{item.payload.doc.data().uid}}</small>
         </div>
         <div class="col col-md-2 actions-col">
-          <button class="btn btn-outline-primary action" (click)="viewDetails(item)" type="button">
+          <button class="btn btn-outline-primary action" (click)="openViewBroker(item.payload.doc)" type="button">
             <ion-icon class="icon" name="arrow-round-forward"></ion-icon>
           </button>
         </div>

@@ -1,0 +1,40 @@
+<h2 mat-dialog-title>Edit {{data.brkrUsername}}'s Profile</h2>
+<div mat-dialog-content [formGroup] = "editBrokerForm" >
+   
+           <mat-form-field >
+                <mat-label> Username </mat-label>
+                <input matInput formControlName = "brkrUsername" value = {{data.brkrUsername}} required>
+            </mat-form-field>
+            <br>
+            <mat-form-field >
+                <mat-label> ID </mat-label>
+                <input matInput formControlName = "brkrID" value = {{data.brkrID}} required>
+            </mat-form-field>
+            <br>
+            <mat-form-field >
+                <mat-label> First Name </mat-label>
+                <input matInput formControlName = "brkrFirstName" value = {{data.brkrFirstName}} required>
+            </mat-form-field>
+            <br>
+            <mat-form-field >
+                <mat-label> Last Name </mat-label>
+                <input matInput formControlName = "brkrLastName" value = {{data.brkrLastName}} required>
+            </mat-form-field>
+            <br>
+            <mat-form-field >
+                <mat-label> Contact Number </mat-label>
+                <input matInput formControlName = "brkrContactNumber" value = {{data.brkrContactNumber}} required>
+            </mat-form-field>
+            <br>
+            <mat-form-field >
+                <mat-label> Address </mat-label>
+                <input matInput formControlName = "brkrAddress" value = {{data.brkrAddress}} required>
+            </mat-form-field>
+            <br>
+</div>
+<div mat-dialog-actions>
+    <button mat-button color = "warn" (click) = "deleteBroker()" >Delete</button>
+    <button mat-button color = "warn" (click) = "deleteBroker()" >Change Email or Password</button>
+    <button mat-button (click) = "submitEditBrokerForm()" >Edit</button>
+    <button mat-button (click)="onNoClick()">Back</button> 
+</div>

@@ -35,12 +35,14 @@ import { PageNotFoundComponent } from './pages/not-found/not-found.component';
 
 // Components
 import { EmailMeComponent } from './components/email-me/email-me.component';
-import { BrokerComponent , AddBrokerDialogComponent } from './pages/broker/broker.component';
+import { BrokerComponent , AddBrokerDialogComponent , ViewBrokerDialogComponent } from './pages/broker/broker.component';
 import { ProjectComponent } from './pages/project/project.component';
 
 @NgModule({
   entryComponents: [
-    AddBrokerDialogComponent
+    AddBrokerDialogComponent,
+    ViewBrokerDialogComponent
+    
   ],
   declarations: [
     AppComponent,
@@ -52,7 +54,8 @@ import { ProjectComponent } from './pages/project/project.component';
     EmailMeComponent,
     BrokerComponent,
     ProjectComponent,
-    AddBrokerDialogComponent
+    AddBrokerDialogComponent,
+    ViewBrokerDialogComponent
   ],
   imports: [
     BrowserModule,
