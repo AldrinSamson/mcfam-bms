@@ -36,13 +36,13 @@ import { PageNotFoundComponent } from './pages/not-found/not-found.component';
 // Components
 import { EmailMeComponent } from './components/email-me/email-me.component';
 import { BrokerComponent , AddBrokerDialogComponent , ViewBrokerDialogComponent } from './pages/broker/broker.component';
-import { ProjectComponent } from './pages/project/project.component';
+import { ProjectComponent , AddProjectDialogComponent } from './pages/project/project.component';
 
 @NgModule({
   entryComponents: [
     AddBrokerDialogComponent,
-    ViewBrokerDialogComponent
-    
+    ViewBrokerDialogComponent,
+    AddProjectDialogComponent
   ],
   declarations: [
     AppComponent,
@@ -55,7 +55,8 @@ import { ProjectComponent } from './pages/project/project.component';
     BrokerComponent,
     ProjectComponent,
     AddBrokerDialogComponent,
-    ViewBrokerDialogComponent
+    ViewBrokerDialogComponent,
+    AddProjectDialogComponent
   ],
   imports: [
     BrowserModule,
