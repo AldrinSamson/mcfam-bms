@@ -1,7 +1,7 @@
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import * as admin from "firebase-admin";
+
 
 import { Broker } from '../models';
 import { AlertService } from './alert.service';
@@ -12,34 +12,35 @@ import { AlertService } from './alert.service';
 export class BrokerService {
 
   constructor(public afAuth: AngularFireAuth,
-    public db: AngularFirestore) { }
+    public db: AngularFirestore,
+    public alertService: AlertService) { }
 
   createBroker(values) {
-    return this.afAuth.auth.createUserWithEmailAndPassword(values.brkrEmail, values.brkrPassword)
+    return this.afAuth.auth.createUserWithEmailAndPassword(values.email, values.password)
                  .then((authData) => {
                   this.db.collection('broker').add({
-                    brkrID: values.brkrID,
-                    brkrFirstName: values.brkrFirstName,
-                    brkrLastName: values.brkrLastName,
-                    brkrContactNumber : values.brkrContactNumber,
-                    brkrAddress: values.brkrAddress,
-                    brkrUsername: values.brkrUsername,
-                    brkrClass: values.brkrClass,
-                    brkrPhotoURL: values.brkrPhotoURL,
+                    brokerId: values.brokerId,
+                    firstName: values.firstName,
+                    lastName: values.lastName,
+                    fullName: values.fullName,
+                    username: values.username,
+                    position: values.position,
+                    contactNumber : values.contactNumber,
+                    addressStreet: values.addressStreet,
+                    addressTown: values.addressTown,
+                    addressCity: values.addressCity,
+                    addressRegion: values.addressRegion,
+                    photoURL: values.photoURL,
                     uid : authData.user.uid,
                   });
-                }).catch((_error) => {
+                  this.alertService.showToaster('Create Success');
+                })
+                .catch((_error) => {
                     console.log('Broker Create Failed!', _error);
                 });
   }
 
   deleteBroker(id) {
-    admin.auth().deleteUser(id)
-    .then(function() {
-      console.log("Successfully deleted user");
-      })
-    .catch(function(error) {
-      console.log("Error deleting user:", error);
-    });
+    // TODO : DELETE USER FROM FIRE AUTH
   }
 }

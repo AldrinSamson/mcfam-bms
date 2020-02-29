@@ -36,20 +36,20 @@ export class BrokerComponent implements OnInit {
     });
   }
 
-  openViewBroker(item): void {
+  openViewBroker(value): void {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = {
-      id : item.id,
-      brkrID : item.data().brkrID,
-      brkrFirstName : item.data().brkrFirstName,
-      brkrLastName : item.data().brkrLastName,
-      brkrContactNumber : item.data().brkrContactNumber,
-      brkrAddress : item.data().brkrAddress,
-      brkrUsername : item.data().brkrUsername,
-      brkrClass : item.data().brkrClass,
-      brkrEmail : item.data().brkrEmail,
-      brkrPhotoURL : item.data().brkrPhotoURL,
-      uid : item.data().uid,
+      id : value.id,
+      brkrID : value.data().brkrID,
+      brkrFirstName : value.data().brkrFirstName,
+      brkrLastName : value.data().brkrLastName,
+      brkrContactNumber : value.data().brkrContactNumber,
+      brkrAddress : value.data().brkrAddress,
+      brkrUsername : value.data().brkrUsername,
+      brkrClass : value.data().brkrClass,
+      brkrEmail : value.data().brkrEmail,
+      brkrPhotoURL : value.data().brkrPhotoURL,
+      uid : value.data().uid,
     }
     this.dialog.open(ViewBrokerDialogComponent, dialogConfig).afterClosed().subscribe(result => {
       this.getData();
@@ -75,16 +75,19 @@ export class AddBrokerDialogComponent {
     public fb: FormBuilder,
   ) {
     this.addBrokerForm = this.fb.group({
-      brkrID: [''],
-      brkrFirstName: [''],
-      brkrLastName: [''],
-      brkrContactNumber: [''],
-      brkrAddress: [''],
-      brkrUsername: [''],
-      brkrClass: [''],
-      brkrEmail: [''],
-      brkrPhotoURL: [''],
-      brkrPassword: [''],
+      brokerId: [''],
+      firstName: [''],
+      lastName: [''],
+      fullName: [''],
+      userName: [''],
+      position: [''],
+      contactNumber: [''],
+      email : [''],
+      addressStreet: [''],
+      addressTown: [''],
+      addressCity: [''],
+      addressRegion: [''],
+      photoURL: [''],
       uid: ['']
     });
   }
@@ -143,7 +146,7 @@ export class ViewBrokerDialogComponent {
     deleteBroker(){
         this.firebaseService.deleteOne(this.data.id ,'broker')
         this.firebaseService.deleteOne(this.data.uid ,'users')
-        this.BrokerService.deleteBroker(this.data.uid)
+        //this.BrokerService.deleteBroker(this.data.uid)
         this.dialogRef.close();
     }
 
