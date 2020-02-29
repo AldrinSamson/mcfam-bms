@@ -1,7 +1,7 @@
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import * as admin from "firebase-admin";
+//import * as admin from 'firebase-admin';
 
 import { Broker } from '../models';
 import { AlertService } from './alert.service';
@@ -34,6 +34,7 @@ export class BrokerService {
   }
 
   deleteBroker(id) {
+    /*
     admin.auth().deleteUser(id)
     .then(function() {
       console.log("Successfully deleted user");
@@ -41,5 +42,6 @@ export class BrokerService {
     .catch(function(error) {
       console.log("Error deleting user:", error);
     });
+    */
   }
 }
