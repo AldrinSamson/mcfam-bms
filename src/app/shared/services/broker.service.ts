@@ -41,6 +41,20 @@ export class BrokerService {
                 });
   }
 
+  updateBroker(id ,values) {
+    return this.db.collection('broker').doc(id).update({
+      brokerId: values.brokerId,
+                    firstName: values.firstName,
+                    lastName: values.lastName,
+                    fullName: values.fullName,
+                    userName: values.userName,
+                    contactNumber : values.contactNumber,
+                    addressStreet: values.addressStreet,
+                    addressTown: values.addressTown,
+                    addressCity: values.addressCity,
+                    addressRegion: values.addressRegion,
+    }) 
+  }
   deleteBroker(id) {
     // TODO : DELETE USER FROM FIRE AUTH
   }

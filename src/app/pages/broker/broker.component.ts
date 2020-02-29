@@ -160,7 +160,7 @@ export class ViewBrokerDialogComponent {
 
   submitEditBrokerForm() {
         if (this.editBrokerForm.valid){
-              this.firebaseService.updateOne(this.data.id , this.editBrokerForm.value , 'broker')
+              this.BrokerService.updateBroker(this.data.id , this.editBrokerForm.value )
             this.dialogRef.close();
         }
         
