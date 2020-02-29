@@ -40,15 +40,18 @@ export class BrokerComponent implements OnInit {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = {
       id : value.id,
-      brkrID : value.data().brkrID,
-      brkrFirstName : value.data().brkrFirstName,
-      brkrLastName : value.data().brkrLastName,
-      brkrContactNumber : value.data().brkrContactNumber,
-      brkrAddress : value.data().brkrAddress,
-      brkrUsername : value.data().brkrUsername,
-      brkrClass : value.data().brkrClass,
-      brkrEmail : value.data().brkrEmail,
-      brkrPhotoURL : value.data().brkrPhotoURL,
+      brokerId : value.data().brokerId,
+      firstName : value.data().firstName,
+      lastName : value.data().lastName,
+      userName : value.data().userName,
+      contactNumber : value.data().contactNumber,
+      addressStreet : value.data().addressStreet,
+      addressTown : value.data().addressTown,
+      addressCity : value.data().addressCity,
+      addressRegion : value.data().addressRegion,
+      position : value.data().position,
+      email : value.data().email,
+      photoURL : value.data().photoURL,
       uid : value.data().uid,
     }
     this.dialog.open(ViewBrokerDialogComponent, dialogConfig).afterClosed().subscribe(result => {
@@ -78,7 +81,6 @@ export class AddBrokerDialogComponent {
       brokerId: [''],
       firstName: [''],
       lastName: [''],
-      fullName: [''],
       userName: [''],
       position: [''],
       contactNumber: [''],
@@ -88,12 +90,30 @@ export class AddBrokerDialogComponent {
       addressCity: [''],
       addressRegion: [''],
       photoURL: [''],
-      uid: ['']
+      uid: [''],
+      password: ['']
     });
   }
 
 submitAddBrokerForm() {
     if (this.addBrokerForm.valid) {
+      this.addBrokerForm = this.fb.group({
+        brokerId: [this.addBrokerForm.value.brokerId],
+        firstName: [this.addBrokerForm.value.firstName],
+        lastName: [this.addBrokerForm.value.lastName],
+        fullName: [this.addBrokerForm.value.firstName+' '+this.addBrokerForm.value.lastName],
+        userName: [this.addBrokerForm.value.userName],
+        position: [this.addBrokerForm.value.position],
+        contactNumber: [this.addBrokerForm.value.contactNumber],
+        email : [this.addBrokerForm.value.email],
+        addressStreet: [this.addBrokerForm.value.addressStreet],
+        addressTown: [this.addBrokerForm.value.addressTown],
+        addressCity: [this.addBrokerForm.value.addressCity],
+        addressRegion: [this.addBrokerForm.value.addressRegion],
+        photoURL: [''],
+        uid: [this.addBrokerForm.value.uid],
+        password: [this.addBrokerForm.value.password]
+      });
         this.BrokerService.createBroker(this.addBrokerForm.value);
         this.dialogRef.close();
     }
@@ -124,13 +144,16 @@ export class ViewBrokerDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: any
     ) {
       this.editBrokerForm = this.fb.group({
-        id : [this.data.id],
-        brkrID: [this.data.brkrID],
-        brkrFirstName: [this.data.brkrFirstName],
-        brkrLastName: [this.data.brkrLastName],
-        brkrContactNumber: [this.data.brkrContactNumber],
-        brkrAddress: [this.data.brkrAddress],
-        brkrUsername: [this.data.brkrUsername],
+        brokerId: [this.data.brokerId],
+        firstName: [this.data.firstName],
+        lastName: [this.data.lastName],
+        fullName: [this.data.firstName + this.data.lastName],
+        userName: [this.data.userName],
+        contactNumber: [this.data.contactNumber],
+        addressStreet: [this.data.addressStreet],
+        addressTown: [this.data.addressTown],
+        addressCity: [this.data.addressCity],
+        addressRegion: [this.data.addressRegion],
         uid: [this.data.uid] 
       })
     }
