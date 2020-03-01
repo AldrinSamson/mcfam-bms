@@ -6,11 +6,11 @@
         <div class="col col-md-2 image-col">
         </div>
         <div class="col col-md-8 text-col">
-          <h5 class="mb-1">{{item.payload.doc.data().fullName}} </h5>
-          <small>Email: {{item.payload.doc.data().email}}</small>
+          <h5 class="mb-1">{{item.fullName}} </h5>
+          <small>Email: {{item.email}}</small>
         </div>
         <div class="col col-md-2 actions-col">
-          <button class="btn btn-outline-primary action" (click)="openViewBroker(item.payload.doc)" type="button">
+          <button class="btn btn-outline-primary action" (click)="openViewBroker(item)" type="button">
             <ion-icon class="icon" name="arrow-round-forward"></ion-icon>
           </button>
         </div>

@@ -65,7 +65,7 @@ export class FirebaseService {
   }
 
   getAllData(tableName) {
-    return this.db.collection(tableName).snapshotChanges();
+    return this.db.collection(tableName).valueChanges({ idField: 'id' });
   }
 
   // search(searchValue){

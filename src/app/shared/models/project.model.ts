@@ -1,6 +1,6 @@
 export class Project {
     constructor (
-        _id: String,
+        id: String,
         name: String,
         overview: String,
         saleType: String,

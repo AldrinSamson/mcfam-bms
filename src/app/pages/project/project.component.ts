@@ -4,6 +4,8 @@ import { MatDialog, MatDialogRef , MatDialogConfig , MAT_DIALOG_DATA } from '@an
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router, Params } from '@angular/router';
 import { ProjectService } from '../../shared';
+import { Project } from '../../shared';
+import { MatTableDataSource } from '@angular/material';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -12,7 +14,10 @@ import { ProjectService } from '../../shared';
   styleUrls: ['./project.component.scss']
 })
 export class ProjectComponent implements OnInit {
-  items: Array<any>;
+  
+  displayedColumnsProject : string[] = ['name' , 'saleType' , 'propertyType' , 'addressStreet' , 'addressTown' , 'addressCity' , 'addressRegion' , 'cost' , 'status'];
+
+  projects: MatTableDataSource<any>;
 
   constructor( public firebaseService: FirebaseService,
     public dialog: MatDialog) { }
@@ -23,7 +28,7 @@ export class ProjectComponent implements OnInit {
   getData() {
     this.firebaseService.getAllData('project')
     .subscribe(result => {
-      this.items = result;
+      this.projects = new MatTableDataSource(result) ;
     });
   }
 
