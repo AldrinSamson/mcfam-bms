@@ -15,6 +15,11 @@
       <span>Broker Management</span>
     </button>
 
+    <button mat-button routerLink="/inquiries" (click)="sidenav.close()">
+      <mat-icon class="misc">mail</mat-icon>
+      <span>Customer Inquiries</span>
+    </button>
+
     <hr>
 
     <div *ngIf="!authService.isAuthenticated(); else logout">

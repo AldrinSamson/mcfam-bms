@@ -6,3 +6,4 @@ export * from './window.service';
 export * from './broker.service';
 export * from './project.service';
 export * from './firebase.service';
+export * from './inquiries.service';

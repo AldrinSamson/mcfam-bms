@@ -3,6 +3,7 @@ import { FirebaseService } from '../../shared/services';
 import { MatDialog, MatDialogRef , MatDialogConfig , MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router, Params } from '@angular/router';
+import { ProjectService } from '../../shared';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -35,6 +36,7 @@ export class ProjectComponent implements OnInit {
   openViewProject(value): void {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = {
+      id : value.id,
       name : value.data().name,
       overview : value.data().overview,
       saleType : value.data().saleType,
@@ -75,6 +77,7 @@ export class AddProjectDialogComponent {
       overview: [''],
       saleType: [''],
       propertyType: [''],
+      ownerClientUid: [''],
       ownerClientName: [''],
       addressStreet: [''],
       addressTown: [''],
@@ -82,7 +85,10 @@ export class AddProjectDialogComponent {
       addressRegion: [''],
       cost: [''],
       status: [''],
-      agentName: ['']
+      agentUid: [''],
+      agentName: [''],
+      photoURL: [''],
+      isArchived: ['']
     });
   }
   submitAddProjectForm() {
@@ -110,6 +116,7 @@ export class ViewProjectDialogComponent {
 
   constructor(
     public firebaseService: FirebaseService,
+    public projectService: ProjectService,
     public dialogRef: MatDialogRef<AddProjectDialogComponent>,
     public fb: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: any
@@ -125,20 +132,20 @@ export class ViewProjectDialogComponent {
         addressCity: [this.data.addressCity],
         addressRegion: [this.data.addressRegion],
         cost: [this.data.cost],
-        status: [this.data.status]
+        status: [this.data.status],
+        agentName: [this.data.agentName]
       });
     }
 
-  submitEditBrokerForm() {
+    submitEditProjectForm() {
         if (this.editProjectForm.valid) {
-              this.firebaseService.updateOne(this.data.id , this.editProjectForm.value , 'project');
-                          this.dialogRef.close();
+              this.projectService.updateProject(this.data.id , this.editProjectForm.value );
+              this.dialogRef.close();
         }
     }
 
     deleteProject() {
-        this.firebaseService.deleteOne(this.data.id , 'project');
-        this.firebaseService.deleteOne(this.data.uid , 'users');
+       
         this.dialogRef.close();
     }
 

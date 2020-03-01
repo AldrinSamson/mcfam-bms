@@ -1,4 +1,4 @@
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore, validateEventsArray } from '@angular/fire/firestore';
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 
@@ -14,8 +14,24 @@ export class ProjectService {
     public db: AngularFirestore) { }
 
   createProject(values) {
-    return this.db.collection('broker').add({
-                  });
+    
+  }
+
+  updateProject(id , values) {
+    return this.db.collection('project').doc(id).update({
+      name: values.name,
+      overview: values.overview,
+      saleType: values.saleType,
+      propertyType: values.propertyType,
+      ownerClientName: values.ownerClientName,
+      addressStreet: values.addressStreet,
+      addressTown: values.addressTown,
+      addressCity: values.addressCity,
+      addressRegion: values.addressRegion, 
+      cost: values.cost,
+      status: values.status,
+      agentName: values.agentName, 
+    });
   }
 
 }

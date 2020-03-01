@@ -13,6 +13,7 @@ export class FirebaseService {
     return this.db.collection(tableName).doc(id).snapshotChanges();
   }
 
+  //DONUT USE unless you're submitting the full form data
   updateOne(id, value , tableName) {
     return this.db.collection(tableName).doc(id).set(value)
     .then((res) => {
@@ -40,6 +41,26 @@ export class FirebaseService {
     })
     .catch((_error) => {
       console.log(''+tableName+' Delete Failed!', _error);
+    });
+  }
+
+  archiveOne(id, value , tableName) {
+    return this.db.collection(tableName).doc(id).set({isArchived:true})
+    .then((res) => {
+      this.alertService.showToaster('Archive Success');
+    })
+    .catch((_error) => {
+      console.log(''+tableName+' Archive Failed!', _error);
+    });
+  }
+
+  restoreOne(id, value , tableName) {
+    return this.db.collection(tableName).doc(id).set({isArchived:false})
+    .then((res) => {
+      this.alertService.showToaster('Restore Success');
+    })
+    .catch((_error) => {
+      console.log(''+tableName+' Restore Failed!', _error);
     });
   }
 

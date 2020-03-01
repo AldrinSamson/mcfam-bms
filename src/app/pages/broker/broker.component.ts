@@ -147,7 +147,7 @@ export class ViewBrokerDialogComponent {
         brokerId: [this.data.brokerId],
         firstName: [this.data.firstName],
         lastName: [this.data.lastName],
-        fullName: [this.data.firstName + this.data.lastName],
+        fullName: [this.data.firstName +' '+ this.data.lastName],
         userName: [this.data.userName],
         contactNumber: [this.data.contactNumber],
         addressStreet: [this.data.addressStreet],
