@@ -3,20 +3,27 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '@shared';
 
+
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.scss']
 })
 export class AuthComponent {
-
-  constructor(private authService: AuthService,
+  email='';
+  passw='';
+  constructor(private auths: AuthService,
     private router: Router) {}
 
   public onSuccess(): void {
     this.router.navigate(['/project']);
-    return this.authService.onSuccess();
+    return this.auths.onSuccess();
   
   }
+  login(){
+    this.auths.login(this.email,this.passw);
+  }
+
+  
 
 }
