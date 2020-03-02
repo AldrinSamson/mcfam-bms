@@ -44,7 +44,7 @@ export class FirebaseService {
     });
   }
 
-  archiveOne(id, value , tableName) {
+  archiveOne(id, tableName) {
     return this.db.collection(tableName).doc(id).set({isArchived: true})
     .then((res) => {
       this.alertService.showToaster('Archive Success');
@@ -54,7 +54,7 @@ export class FirebaseService {
     });
   }
 
-  restoreOne(id, value , tableName) {
+  restoreOne(id, tableName) {
     return this.db.collection(tableName).doc(id).set({isArchived: false})
     .then((res) => {
       this.alertService.showToaster('Restore Success');
