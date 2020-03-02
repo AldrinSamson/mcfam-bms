@@ -10,12 +10,12 @@ export class Project {
         addressStreet: String,
         addressTown: String,
         addressCity: String,
-        addressRegion: String, 
+        addressRegion: String,
         cost: Number,
         status: String,
         agentUid: String,
         agentName: String,
         photoURL: String,
-        isArchived: String, 
+        isArchived: String,
     ) { }
 }

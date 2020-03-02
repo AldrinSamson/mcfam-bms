@@ -11,12 +11,12 @@ import { AlertService } from './alert.service';
 })
 export class InquiriesService {
 
-  currentUser =  firebase.auth().currentUser.uid
+  currentUser =  sessionStorage.getItem('currentUid');
 
   constructor(public afAuth: AngularFireAuth,
     public db: AngularFirestore) { }
 
-  getInquiries(){
-    return this.db.collection('inquries',ref => ref.where('agentUid', '==', this.currentUser)).snapshotChanges();
+  getInquiries() {
+    return this.db.collection('inquiry', ref => ref.where('agentUid', '==', this.currentUser)).valueChanges({ idToken: 'id'});
   }
 }

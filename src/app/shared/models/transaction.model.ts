@@ -18,7 +18,7 @@ export class Transaction {
         isCompleted: Boolean,
         isUnapproved: Boolean
 
-        //Add doc urls
+        // Add doc urls
 
-    ){}
+    ) {}
 }

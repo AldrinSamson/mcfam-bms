@@ -8,5 +8,5 @@ export class Inquiry {
         clientMessage: String,
         agentUid: String,
         isArchived: Boolean
-    ){}
+    ) {}
 }

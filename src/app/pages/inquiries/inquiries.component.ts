@@ -12,12 +12,20 @@ import { InquiriesService } from '../../shared';
   styleUrls: ['./inquiries.component.scss']
 })
 export class InquiriesComponent implements OnInit {
-    
-    constructor(
-        
-    ){}
 
-    ngOnInit(){
+    inquiries: Array<any>;
 
+    constructor( public fbs: FirebaseService,
+      public inquiryService: InquiriesService
+    ) {}
+
+    ngOnInit() {
+      this.getUserInquiries();
+    }
+
+    getUserInquiries() {
+      this.inquiryService.getInquiries().subscribe( result => {
+        this.inquiries = result;
+      });
     }
 }

@@ -4,8 +4,10 @@
     <div *ngFor="let item of items" class="list-group-item list-group-item-action flex-column align-items-start">
       <div class="row">
         <div class="col col-md-2 image-col">
-        </div>
+				<img class="image" [src]=item.photoURL>
+			</div>
         <div class="col col-md-8 text-col">
+        
           <h5 class="mb-1">{{item.fullName}} </h5>
           <small>Email: {{item.email}}</small>
         </div>

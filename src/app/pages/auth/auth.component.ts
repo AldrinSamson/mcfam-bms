@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '@shared';
+import { FirebaseService } from '../../shared';
+import * as firebase from 'firebase';
 
 @Component({
   selector: 'app-auth',
@@ -10,13 +12,19 @@ import { AuthService } from '@shared';
 })
 export class AuthComponent {
 
+  public user;
+
   constructor(private authService: AuthService,
-    private router: Router) {}
+    private router: Router,
+    public fbs: FirebaseService) {}
 
   public onSuccess(): void {
+    this.fbs.getOne(firebase.auth().currentUser.uid).subscribe( result => {
+      this.user = result;
+      sessionStorage.setItem('currentUserDetails' , JSON.stringify(this.user));
+    });
     this.router.navigate(['/project']);
     return this.authService.onSuccess();
-  
   }
 
 }

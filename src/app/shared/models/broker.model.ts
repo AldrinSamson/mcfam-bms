@@ -8,7 +8,7 @@ export class Broker {
         userName: String,
         position: String,
         contactNumber: Number,
-        email : String,
+        email: String,
         addressStreet: String,
         addressTown: String,
         addressCity: String,

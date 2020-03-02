@@ -93,7 +93,9 @@
 
 
   <ng-template #loggedin>
+    <div *ngIf="authService.isAuthenticated()">
     <h4>Welcome</h4>
+    </div>
 
     
 

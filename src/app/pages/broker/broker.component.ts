@@ -40,20 +40,20 @@ export class BrokerComponent implements OnInit {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = {
       id : value.id,
-      brokerId : value.data().brokerId,
-      firstName : value.data().firstName,
-      lastName : value.data().lastName,
-      userName : value.data().userName,
-      contactNumber : value.data().contactNumber,
-      addressStreet : value.data().addressStreet,
-      addressTown : value.data().addressTown,
-      addressCity : value.data().addressCity,
-      addressRegion : value.data().addressRegion,
-      position : value.data().position,
-      email : value.data().email,
-      photoURL : value.data().photoURL,
-      uid : value.data().uid,
-    }
+      brokerId : value.brokerId,
+      firstName : value.firstName,
+      lastName : value.lastName,
+      userName : value.userName,
+      contactNumber : value.contactNumber,
+      addressStreet : value.addressStreet,
+      addressTown : value.addressTown,
+      addressCity : value.addressCity,
+      addressRegion : value.addressRegion,
+      position : value.position,
+      email : value.email,
+      photoURL : value.photoURL,
+      uid : value.uid,
+    };
     this.dialog.open(ViewBrokerDialogComponent, dialogConfig).afterClosed().subscribe(result => {
       this.getData();
     });
@@ -101,7 +101,7 @@ submitAddBrokerForm() {
         brokerId: [this.addBrokerForm.value.brokerId],
         firstName: [this.addBrokerForm.value.firstName],
         lastName: [this.addBrokerForm.value.lastName],
-        fullName: [this.addBrokerForm.value.firstName+' '+this.addBrokerForm.value.lastName],
+        fullName: [this.addBrokerForm.value.firstName + ' ' + this.addBrokerForm.value.lastName],
         userName: [this.addBrokerForm.value.userName],
         position: [this.addBrokerForm.value.position],
         contactNumber: [this.addBrokerForm.value.contactNumber],

@@ -14,8 +14,8 @@ import { MatTableDataSource } from '@angular/material';
   styleUrls: ['./project.component.scss']
 })
 export class ProjectComponent implements OnInit {
-  
-  displayedColumnsProject : string[] = ['name' , 'saleType' , 'propertyType' , 'addressStreet' , 'addressTown' , 'addressCity' , 'addressRegion' , 'cost' , 'status'];
+
+  displayedColumnsProject: string[] = ['name' , 'saleType' , 'propertyType' , 'addressStreet' , 'addressTown' , 'addressCity' , 'addressRegion' , 'cost' , 'status'];
 
   projects: MatTableDataSource<any>;
 
@@ -42,18 +42,18 @@ export class ProjectComponent implements OnInit {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = {
       id : value.id,
-      name : value.data().name,
-      overview : value.data().overview,
-      saleType : value.data().saleType,
-      propertyType : value.data().propertyType,
-      ownerClientName : value.data().ownerClientName,
-      addressStreet : value.data().addressStreet,
-      addressTown : value.data().addressTown,
-      addressCity : value.data().addressCity,
-      addressRegion : value.data().addressRegion,
-      cost : value.data().cost,
-      status : value.data().status,
-      agentName : value.data().agentName
+      name : value.name,
+      overview : value.overview,
+      saleType : value.saleType,
+      propertyType : value.propertyType,
+      ownerClientName : value.ownerClientName,
+      addressStreet : value.addressStreet,
+      addressTown : value.addressTown,
+      addressCity : value.addressCity,
+      addressRegion : value.addressRegion,
+      cost : value.cost,
+      status : value.status,
+      agentName : value.agentName
     };
     this.dialog.open(ViewProjectDialogComponent, dialogConfig).afterClosed().subscribe(result => {
       this.getData();
@@ -150,11 +150,10 @@ export class ViewProjectDialogComponent {
     }
 
     deleteProject() {
-       
         this.dialogRef.close();
     }
 
     onNoClick(): void {
     this.dialogRef.close();
     }
-  }
+}

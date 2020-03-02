@@ -6,6 +6,7 @@ import * as firebase from 'firebase';
 import { UserService, AlertService } from '@shared';
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],
@@ -29,11 +30,11 @@ import { UserService, AlertService } from '@shared';
 export class ProfileComponent implements OnInit {
   public uid = firebase.auth().currentUser.uid;
 
-  public fullImagePath: string = '/assets/img/mb-bg-04.png';
-  public profileTitle: string = 'My profile';
-  public displayName: string = 'Your username';
+  public fullImagePath = '/assets/img/mb-bg-04.png';
+  public profileTitle = 'My profile';
+  public displayName = 'Your username';
   public bio: any = 'Your bio';
-  public state: string = 'small';
+  public state = 'small';
 
   constructor(
     private userService: UserService,
@@ -42,7 +43,7 @@ export class ProfileComponent implements OnInit {
   public ngOnInit(): Promise<void> {
     return firebase.database().ref().child('users/' + this.uid).once('value').then((snap) => {
       this.displayName  = snap.val().displayName,
-      this.bio = snap.val().bio
+      this.bio = snap.val().bio;
     });
   }
 
@@ -52,6 +53,7 @@ export class ProfileComponent implements OnInit {
 
   public userEmail(): void {
     this.userService.getUserProfileInformation();
+    // tslint:disable-next-line:no-unused-expression
     firebase.auth().currentUser.email;
   }
 

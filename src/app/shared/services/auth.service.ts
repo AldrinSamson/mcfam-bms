@@ -13,6 +13,7 @@ export class AuthService {
 
   public onSuccess(): void {
     sessionStorage.setItem('session-alive', 'true');
+    sessionStorage.setItem('currentUid' , firebase.auth().currentUser.uid);
     this.token = 'some-temporary-token';
     this.router.navigate(['/project']);
     console.log('AUTH: ', this.auth);
@@ -20,6 +21,8 @@ export class AuthService {
 
   public logout(): void {
     sessionStorage.removeItem('session-alive');
+    sessionStorage.removeItem('currentUid');
+    sessionStorage.removeItem('currentDetails');
     this.token = null;
     this.router.navigate(['/']);
   }
