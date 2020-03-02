@@ -7,7 +7,7 @@ import * as firebase from 'firebase';
 export class AuthService {
   public token: string;
 
-  constructor(
+  constructor(public afAuth: AngularFireAuth,
     private router: Router,
     private auth: AngularFireAuth) { }
 
@@ -17,6 +17,30 @@ export class AuthService {
     this.token = 'some-temporary-token';
     this.router.navigate(['/project']);
     console.log('AUTH: ', this.auth);
+  }
+
+  async login(email: string, password: string) {
+    //console.log(" user auth "+this.isAuthenticated());
+    try {
+
+      var result = await this.afAuth.auth.signInWithEmailAndPassword(email, password);
+      const user = JSON.parse(localStorage.getItem('user'));
+      console.log(user);
+      sessionStorage.setItem('session-alive', 'true');
+      this.router.navigate(['/project']);
+      //mcfamrealty.is@gmail.com
+      var user2 = firebase.auth().currentUser;
+
+      if (user) {
+        // User is signed in.
+        console.log(user2);
+      } else {
+        // No user is signed in.
+      }
+    } catch (err) {
+      console.log(err);
+      alert(err.message);
+    }
   }
 
   public logout(): void {

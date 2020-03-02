@@ -1,3 +1,37 @@
+<<<<<<< HEAD
+
+<div class="thebody center">
+  <!---
+  <h1>Login</h1>
+  <br>
+  <label>
+    Email:<br>
+    <input type='text' [(ngModel)]='email'>
+  </label>
+  <br>
+  <label>
+    Password:<br>
+    <input type='password' [(ngModel)]='passw'>
+  </label><br>
+  <button (click)='login()'>Login</button>
+  <br>
+  <br>
+-->
+  
+
+  <div class="form-group">
+    <label for=""><b>Email</b>
+      <input type="text" class="form-control" placeholder="Enter Email" name="email" [(ngModel)]='email'>
+    </label>
+    <br>
+    <label for="psw"><b>Password</b>
+      <input type="password" class="form-control" placeholder="Enter Password" name="psw" [(ngModel)]='passw'>
+    </label>
+    <button type="submit" class="btn btn-success" (click)='login()'>Login</button>
+  </div>
+
+</div>
+=======
 <ngx-auth-firebaseui
   (onSuccess)="onSuccess()"
   appearance="">
@@ -5,3 +39,4 @@
 
 
 
+>>>>>>> f6b063b493de814add2aabf111389339d55cbe58

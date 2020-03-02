@@ -5,13 +5,15 @@ import { AuthService } from '@shared';
 import { FirebaseService } from '../../shared';
 import * as firebase from 'firebase';
 
+
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.scss']
 })
 export class AuthComponent {
-
+email='';
+passw='';
   public user;
 
   constructor(private authService: AuthService,
@@ -24,7 +26,14 @@ export class AuthComponent {
       sessionStorage.setItem('currentUserDetails' , JSON.stringify(this.user));
     });
     this.router.navigate(['/project']);
+
     return this.authService.onSuccess();
+  
   }
+  login(){
+    this.authService.login(this.email,this.passw);
+  }
+
+  
 
 }
