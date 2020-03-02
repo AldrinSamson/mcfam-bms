@@ -13,6 +13,7 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { ProfileSettingsComponent } from './pages/profile/profile-settings.component';
 import { ProjectComponent } from './pages/project/project.component';
 import { BrokerComponent } from './pages/broker/broker.component';
+import { InquiriesComponent } from './pages/inquiries/inquiries.component'
 
 // Components
 import { MiscComponent } from './components/misc/misc.component';
@@ -37,6 +38,7 @@ const appRoutes: Routes = [
   { path: 'profile-settings', component: ProfileSettingsComponent, canActivate: [AuthGuardService] },
   { path: 'project' , component: ProjectComponent, canActivate: [AuthGuardService]},
   { path: 'broker' , component: BrokerComponent, canActivate: [AuthGuardService]},
+  { path: 'inquiries' , component: InquiriesComponent, canActivate: [AuthGuardService]},
   { path: '**', component: PageNotFoundComponent }
 ];
 

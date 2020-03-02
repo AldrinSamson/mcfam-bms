@@ -6,6 +6,7 @@ import { MaterialModule } from './material.module';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxAuthFirebaseUIModule } from 'ngx-auth-firebaseui';
 
+
 // Modules
 import { AuthModule } from './pages/auth/auth.module';
 import { ProfileModule } from './pages/profile/profile.module';
@@ -13,15 +14,7 @@ import { MiscModule } from './components/misc/misc.module';
 import { PipesModule } from '@shared/pipes/pipes.module';
 
 // Shared
-import {
-  FooterComponent,
-  HeaderComponent,
-  UserService,
-  AlertService,
-  AuthGuardService,
-  AuthService,
-  WindowService
-} from '@shared';
+import { FooterComponent, HeaderComponent, UserService, AlertService, AuthGuardService, AuthService, WindowService } from '@shared';
 
 // Main
 import { AppComponent } from './app.component';
@@ -35,14 +28,16 @@ import { PageNotFoundComponent } from './pages/not-found/not-found.component';
 
 // Components
 import { EmailMeComponent } from './components/email-me/email-me.component';
-import { BrokerComponent , AddBrokerDialogComponent , ViewBrokerDialogComponent } from './pages/broker/broker.component';
-import { ProjectComponent } from './pages/project/project.component';
+import { BrokerComponent, AddBrokerDialogComponent, ViewBrokerDialogComponent } from './pages/broker/broker.component';
+import { ProjectComponent, AddProjectDialogComponent, ViewProjectDialogComponent } from './pages/project/project.component';
+import { InquiriesComponent } from './pages/inquiries/inquiries.component';
 
 @NgModule({
   entryComponents: [
     AddBrokerDialogComponent,
-    ViewBrokerDialogComponent
-    
+    ViewBrokerDialogComponent,
+    AddProjectDialogComponent,
+    ViewProjectDialogComponent
   ],
   declarations: [
     AppComponent,
@@ -54,8 +49,11 @@ import { ProjectComponent } from './pages/project/project.component';
     EmailMeComponent,
     BrokerComponent,
     ProjectComponent,
+    InquiriesComponent,
     AddBrokerDialogComponent,
-    ViewBrokerDialogComponent
+    ViewBrokerDialogComponent,
+    AddProjectDialogComponent,
+    ViewProjectDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -67,7 +65,8 @@ import { ProjectComponent } from './pages/project/project.component';
     AuthModule,
     ProfileModule,
     MiscModule,
-    NgxAuthFirebaseUIModule.forRoot(firebaseKeys)
+    NgxAuthFirebaseUIModule.forRoot(firebaseKeys),
+ 
   ],
   providers: [
     UserService,

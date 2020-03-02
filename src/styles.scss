@@ -1,8 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
 @import '~@angular/material/prebuilt-themes/indigo-pink';
+@import "~bootstrap/dist/css/bootstrap.css";
 
 body {
     background-color: #f7f7f7;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+
 }
 
 /* Tablet format and lower */

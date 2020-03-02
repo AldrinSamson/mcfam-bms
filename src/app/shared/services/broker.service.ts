@@ -1,7 +1,11 @@
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
+<<<<<<< HEAD
 //import * as admin from 'firebase-admin';
+=======
+
+>>>>>>> f6b063b493de814add2aabf111389339d55cbe58
 
 import { Broker } from '../models';
 import { AlertService } from './alert.service';
@@ -12,28 +16,51 @@ import { AlertService } from './alert.service';
 export class BrokerService {
 
   constructor(public afAuth: AngularFireAuth,
-    public db: AngularFirestore) { }
+    public db: AngularFirestore,
+    public alertService: AlertService) { }
 
   createBroker(values) {
-    return this.afAuth.auth.createUserWithEmailAndPassword(values.brkrEmail, values.brkrPassword)
+    return this.afAuth.auth.createUserWithEmailAndPassword(values.email, values.password)
                  .then((authData) => {
                   this.db.collection('broker').add({
-                    brkrID: values.brkrID,
-                    brkrFirstName: values.brkrFirstName,
-                    brkrLastName: values.brkrLastName,
-                    brkrContactNumber : values.brkrContactNumber,
-                    brkrAddress: values.brkrAddress,
-                    brkrUsername: values.brkrUsername,
-                    brkrClass: values.brkrClass,
-                    brkrPhotoURL: values.brkrPhotoURL,
+                    brokerId: values.brokerId,
+                    firstName: values.firstName,
+                    lastName: values.lastName,
+                    fullName: values.fullName,
+                    userName: values.userName,
+                    position: values.position,
+                    email: values.email,
+                    contactNumber : values.contactNumber,
+                    addressStreet: values.addressStreet,
+                    addressTown: values.addressTown,
+                    addressCity: values.addressCity,
+                    addressRegion: values.addressRegion,
+                    photoURL: values.photoURL,
                     uid : authData.user.uid,
                   });
-                }).catch((_error) => {
+                  this.alertService.showToaster('Create Success');
+                })
+                .catch((_error) => {
                     console.log('Broker Create Failed!', _error);
                 });
   }
 
+  updateBroker(id ,values) {
+    return this.db.collection('broker').doc(id).update({
+                    brokerId: values.brokerId,
+                    firstName: values.firstName,
+                    lastName: values.lastName,
+                    fullName: values.fullName,
+                    userName: values.userName,
+                    contactNumber : values.contactNumber,
+                    addressStreet: values.addressStreet,
+                    addressTown: values.addressTown,
+                    addressCity: values.addressCity,
+                    addressRegion: values.addressRegion,
+    }) 
+  }
   deleteBroker(id) {
+<<<<<<< HEAD
     /*
     admin.auth().deleteUser(id)
     .then(function() {
@@ -43,5 +70,8 @@ export class BrokerService {
       console.log("Error deleting user:", error);
     });
     */
+=======
+    // TODO : DELETE USER FROM FIRE AUTH
+>>>>>>> f6b063b493de814add2aabf111389339d55cbe58
   }
 }
