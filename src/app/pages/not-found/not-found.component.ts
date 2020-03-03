@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
     <div id="content">
       <mat-card>
           <h1>Page not found 404</h1>
-            The page you're looking for doesn't exist, please return to the <a routerLink="/home">homepage</a>.
+            The page you're looking for doesn't exist, please return to the <a routerLink="/project ">homepage</a>.
       </mat-card>
    </div>
 `,
