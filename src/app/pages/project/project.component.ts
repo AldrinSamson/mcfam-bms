@@ -59,9 +59,9 @@ export class ProjectComponent implements OnInit {
       this.getData();
     });
   }
+}
 
-
-}@Component({
+@Component({
   // tslint:disable-next-line:component-selector
   selector : 'add-project-dialog',
   templateUrl : './dialog/add-project-dialog.html',
