@@ -1,9 +1,10 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject , OnDestroy } from '@angular/core';
 import { FirebaseService } from '../../shared/services';
 import { MatDialog, MatDialogRef , MatDialogConfig , MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router, Params } from '@angular/router';
 import { InquiriesService } from '../../shared';
+import { Subscription } from 'rxjs';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -11,9 +12,10 @@ import { InquiriesService } from '../../shared';
   templateUrl: './inquiries.component.html',
   styleUrls: ['./inquiries.component.scss']
 })
-export class InquiriesComponent implements OnInit {
+export class InquiriesComponent implements OnInit, OnDestroy {
 
     inquiries: Array<any>;
+    public inquirySub: Subscription;
 
     constructor( public fbs: FirebaseService,
       public inquiryService: InquiriesService,
@@ -25,7 +27,7 @@ export class InquiriesComponent implements OnInit {
     }
 
     getUserInquiries() {
-      this.inquiryService.getInquiries(false).subscribe( result => {
+      this.inquirySub = this.inquiryService.getInquiries(false).subscribe( result => {
         this.inquiries = result;
       });
     }
@@ -44,6 +46,10 @@ export class InquiriesComponent implements OnInit {
         this.getUserInquiries();
       });
     }
+
+    ngOnDestroy() {
+      this.inquirySub.unsubscribe();
+    }
 }
 
 @Component({
@@ -54,22 +60,19 @@ export class InquiriesComponent implements OnInit {
 })
 
 export class ViewInquiryDialogComponent {
-  
 
   constructor(
     public firebaseService: FirebaseService,
     public dialogRef: MatDialogRef<ViewInquiryDialogComponent>,
     public fb: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: any
-    ) {
-      
-    }
+    ) { }
 
   archiveInquiry() {
     this.firebaseService.archiveOne(this.data.id , 'inquiry');
     this.dialogRef.close();
   }
-  
+
   onNoClick(): void {
     this.dialogRef.close();
   }

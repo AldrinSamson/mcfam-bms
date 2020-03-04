@@ -31,6 +31,11 @@ import { EmailMeComponent } from './components/email-me/email-me.component';
 import { BrokerComponent, AddBrokerDialogComponent, ViewBrokerDialogComponent } from './pages/broker/broker.component';
 import { ProjectComponent, AddProjectDialogComponent, ViewProjectDialogComponent } from './pages/project/project.component';
 import { InquiriesComponent , ViewInquiryDialogComponent } from './pages/inquiries/inquiries.component';
+import { SaleTransactionComponent } from './pages/sale-transaction/sale-transaction.component';
+import { ClientComponent } from './pages/client/client.component';
+import { SaleReportComponent } from './pages/sale-report/sale-report.component';
+import { ProjectArchiveComponent } from './pages/project-archive/project-archive.component';
+import { AuditComponent } from './pages/audit/audit.component';
 
 @NgModule({
   entryComponents: [
@@ -51,6 +56,11 @@ import { InquiriesComponent , ViewInquiryDialogComponent } from './pages/inquiri
     BrokerComponent,
     ProjectComponent,
     InquiriesComponent,
+    ClientComponent,
+    SaleReportComponent,
+    ProjectArchiveComponent,
+    AuditComponent,
+    SaleTransactionComponent,
     AddBrokerDialogComponent,
     ViewBrokerDialogComponent,
     AddProjectDialogComponent,
@@ -68,7 +78,7 @@ import { InquiriesComponent , ViewInquiryDialogComponent } from './pages/inquiri
     ProfileModule,
     MiscModule,
     NgxAuthFirebaseUIModule.forRoot(firebaseKeys),
- 
+
   ],
   providers: [
     UserService,

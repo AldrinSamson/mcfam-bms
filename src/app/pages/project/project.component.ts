@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject , OnDestroy } from '@angular/core';
 import { FirebaseService } from '../../shared/services';
 import { MatDialog, MatDialogRef , MatDialogConfig , MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, Validators } from '@angular/forms';
@@ -6,6 +6,7 @@ import { Router, Params } from '@angular/router';
 import { ProjectService } from '../../shared';
 import { Project } from '../../shared';
 import { MatTableDataSource } from '@angular/material';
+import { Subscription } from 'rxjs';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -13,11 +14,13 @@ import { MatTableDataSource } from '@angular/material';
   templateUrl: './project.component.html',
   styleUrls: ['./project.component.scss']
 })
-export class ProjectComponent implements OnInit {
+export class ProjectComponent implements OnInit , OnDestroy {
 
   displayedColumnsProject: string[] = ['name' , 'saleType' , 'propertyType' , 'addressStreet' , 'addressTown' , 'addressCity' , 'addressRegion' , 'cost' , 'status'];
 
   projects: MatTableDataSource<any>;
+
+  public projectSub: Subscription;
 
   constructor( public firebaseService: FirebaseService,
     public dialog: MatDialog) { }
@@ -26,7 +29,7 @@ export class ProjectComponent implements OnInit {
     this.getData();
   }
   getData() {
-    this.firebaseService.getAllData('project')
+    this.projectSub = this.firebaseService.getAllData('project')
     .subscribe(result => {
       this.projects = new MatTableDataSource(result) ;
     });
@@ -34,6 +37,8 @@ export class ProjectComponent implements OnInit {
 
   openAddProject(): void {
     const dialogConfig = new MatDialogConfig();
+    dialogConfig.maxWidth = '50vw';
+    dialogConfig.width = '50vw';
     this.dialog.open(AddProjectDialogComponent , dialogConfig).afterClosed().subscribe(result => {
 
     });
@@ -55,9 +60,17 @@ export class ProjectComponent implements OnInit {
       status : value.status,
       agentName : value.agentName
     };
+    dialogConfig.maxWidth = '50vw';
+    dialogConfig.width = '50vw';
     this.dialog.open(ViewProjectDialogComponent, dialogConfig).afterClosed().subscribe(result => {
       this.getData();
     });
+  }
+
+  ngOnDestroy(): void {
+    // Called once, before the instance is destroyed.
+    // Add 'implements OnDestroy' to the class.
+    this.projectSub.unsubscribe();
   }
 }
 
@@ -68,9 +81,25 @@ export class ProjectComponent implements OnInit {
   styleUrls: ['./project.component.scss'],
 })
 
-export class AddProjectDialogComponent {
+export class AddProjectDialogComponent implements OnInit , OnDestroy {
 
   addProjectForm: any;
+  public clientSub: Subscription;
+  agentSub: Subscription;
+
+  clients: MatTableDataSource<any>;
+  selectedClientUid = '';
+  selectedClient = '';
+  displayedColumnsClient: string[] = ['fullName' , 'userName' , 'email'];
+
+  agents: MatTableDataSource<any>;
+  selectedAgentUid = '';
+  selectedAgent = '';
+  displayedColumnsAgent: string[] = ['fullName' , 'userName' , 'email'];
+
+  ngOnInit() {
+    this.getAgentandClient();
+  }
 
   constructor(
     public firebaseService: FirebaseService,
@@ -82,7 +111,7 @@ export class AddProjectDialogComponent {
       overview: [''],
       saleType: [''],
       propertyType: [''],
-      ownerClientUid: [''],
+      'ownerClientUid': [''],
       ownerClientName: [''],
       addressStreet: [''],
       addressTown: [''],
@@ -90,23 +119,52 @@ export class AddProjectDialogComponent {
       addressRegion: [''],
       cost: [''],
       status: [''],
-      agentUid: [''],
+      'agentUid': [''],
       agentName: [''],
       photoURL: [''],
-      isArchived: ['']
+      isArchived: [false]
     });
   }
+
+  getAgentandClient() {
+    this.clientSub = this.firebaseService.getAllData('client').subscribe( result => {
+      this.clients = new MatTableDataSource(result);
+    });
+
+    this.agentSub = this.firebaseService.getAllData('broker').subscribe( result => {
+      this.agents = new MatTableDataSource(result);
+    });
+  }
+
+  selectClient(value) {
+    this.selectedClientUid = value.uid;
+    this.selectedClient = value.fullName;
+  }
+
+  selectAgent(value) {
+    this.selectedAgentUid = value.uid;
+    this.selectedAgent = value.fullName;
+  }
+
   submitAddProjectForm() {
     if (this.addProjectForm.valid) {
+        this.addProjectForm.controls['ownerClientUid'].setValue(this.selectedClientUid);
+        this.addProjectForm.controls['agentUid'].setValue(this.selectedAgentUid);
         this.firebaseService.addOne(this.addProjectForm.value , 'project');
         this.dialogRef.close();
     }
-}
+  }
 
-onNoClick(): void {
-this.dialogRef.close();
-}
+  onNoClick(): void {
+  this.dialogRef.close();
+  }
 
+  ngOnDestroy(): void {
+    // Called once, before the instance is destroyed.
+    // Add 'implements OnDestroy' to the class.
+    this.clientSub.unsubscribe();
+    this.agentSub.unsubscribe();
+  }
 
 }
 @Component({

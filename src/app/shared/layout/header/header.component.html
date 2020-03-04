@@ -15,27 +15,32 @@
       <span>Broker Management</span>
     </button>
 
+    <button mat-button routerLink="/client" (click)="sidenav.close()">
+      <mat-icon class="misc">account_box</mat-icon>
+      <span>Client Management</span>
+    </button>
+
     <button mat-button routerLink="/inquiries" (click)="sidenav.close()">
       <mat-icon class="misc">mail</mat-icon>
       <span>Customer Inquiries</span>
     </button>
       
-    <button mat-button routerLink="/inquiries" (click)="sidenav.close()">
+    <button mat-button routerLink="/saleTransaction" (click)="sidenav.close()">
       <mat-icon class="misc">receipt</mat-icon>
       <span>Sales Transaction</span>
     </button>
 
-    <button mat-button routerLink="/inquiries" (click)="sidenav.close()">
+    <button mat-button routerLink="/saleReport" (click)="sidenav.close()">
       <mat-icon class="misc">description</mat-icon>
       <span>Sales Reports</span>
     </button>
 
-    <button mat-button routerLink="/inquiries" (click)="sidenav.close()">
+    <button mat-button routerLink="/projectArchive" (click)="sidenav.close()">
       <mat-icon class="misc">archive</mat-icon> 
       <span>Archived Projects</span>
     </button>
 
-    <button mat-button routerLink="/inquiries" (click)="sidenav.close()">
+    <button mat-button routerLink="/audit" (click)="sidenav.close()">
       <mat-icon class="misc">security</mat-icon>
       <span>Audit</span>
     </button>

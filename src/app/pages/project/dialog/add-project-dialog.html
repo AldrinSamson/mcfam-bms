@@ -1,6 +1,7 @@
 <h2 mat-dialog-title>Add Project</h2>
 <div mat-dialog-content [formGroup] = "addProjectForm" >
-           
+    <div class = "row" >
+        <div class = "col-6">
             <mat-form-field >
                 <mat-label> Name </mat-label>
                 <input matInput formControlName = "name"  name = "project-name" required>
@@ -36,7 +37,7 @@
 
            <mat-form-field >
                 <mat-label> Owner Client Name</mat-label>
-                <input matInput formControlName = "ownerClientName"  name = "project-ownerClientName" required>
+                <input matInput formControlName = "ownerClientName"  name = "project-ownerClientName" value = {{selectedClient}} required>
             </mat-form-field>
             <br>
            
@@ -82,13 +83,78 @@
 
             <mat-form-field >
                 <mat-label>Agent Name</mat-label>
-                <input matInput formControlName = "agentName"  name = "project-agentName" required>
+                <input matInput formControlName = "agentName"  name = "project-agentName" value = {{selectedAgent}} required>
             </mat-form-field>
             <br>
+        </div>
+        <div class = "col-6">
+            <div class = "row">
+                <div class="card">
+                    <div class="card-header">  
+                        <mat-form-field fxFlex="40%">
+                        <input matInput placeholder="Filter">
+                        </mat-form-field>
+                    </div>
+                    <div class="card-body">
+                        <table mat-table [dataSource]="clients" class="mat-elevation-z8">
+            
+                            <ng-container matColumnDef="fullName">
+                                <th mat-header-cell *matHeaderCellDef> Name </th>
+                                <td mat-cell *matCellDef="let clients"> {{clients.fullName}} </td>
+                            </ng-container>
 
+                            <ng-container matColumnDef="userName">
+                                <th mat-header-cell *matHeaderCellDef> User Name </th>
+                                <td mat-cell *matCellDef="let clients"> {{clients.userName}} </td>
+                            </ng-container>
 
+                            <ng-container matColumnDef="email">
+                                <th mat-header-cell *matHeaderCellDef> Email </th>
+                                <td mat-cell *matCellDef="let clients"> {{clients.email}} </td>
+                            </ng-container>
 
-</div>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnsClient"></tr>
+                            <tr mat-row *matRowDef="let clients; columns: displayedColumnsClient;" (click) = "selectClient(clients)"></tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>    
+            <div class = "row">
+                <div class="card">
+                    <div class="card-header">  
+                        <mat-form-field fxFlex="40%">
+                        <input matInput placeholder="Filter">
+                        </mat-form-field>
+                    </div>
+                    <div class="card-body">
+                        <table mat-table [dataSource]="agents" class="mat-elevation-z8">
+            
+                            <ng-container matColumnDef="fullName">
+                                <th mat-header-cell *matHeaderCellDef> Name </th>
+                                <td mat-cell *matCellDef="let agents"> {{agents.fullName}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="userName">
+                                <th mat-header-cell *matHeaderCellDef> User Name </th>
+                                <td mat-cell *matCellDef="let agents"> {{agents.userName}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="email">
+                                <th mat-header-cell *matHeaderCellDef> Email </th>
+                                <td mat-cell *matCellDef="let agents"> {{agents.email}} </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnsClient"></tr>
+                            <tr mat-row *matRowDef="let agents; columns: displayedColumnsAgent;" (click) = "selectAgent(agents)"></tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+
 <div mat-dialog-actions>
     <button mat-button (click) = "submitAddProjectForm()" >Add</button>
     <button mat-button (click)="onNoClick()">Back</button> 
