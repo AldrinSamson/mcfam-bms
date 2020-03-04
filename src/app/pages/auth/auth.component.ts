@@ -21,10 +21,7 @@ passw='';
     public fbs: FirebaseService) {}
 
   public onSuccess(): void {
-    this.fbs.getOne(firebase.auth().currentUser.uid).subscribe( result => {
-      this.user = result;
-      sessionStorage.setItem('currentUserDetails' , JSON.stringify(this.user));
-    });
+    
     this.router.navigate(['/project']);
 
     return this.authService.onSuccess();

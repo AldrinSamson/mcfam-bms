@@ -9,8 +9,8 @@ export class FirebaseService {
 
   constructor(public db: AngularFirestore , public alertService: AlertService) {}
 
-  getOne(id ) {
-    return this.db.collection('broker', ref => ref.where('uid', '==', id)).valueChanges();
+  getOne(id , tableName) {
+    return this.db.collection(tableName).doc(id).valueChanges();
   }
 
   // DONUT USE unless you're submitting the full form data
@@ -45,7 +45,7 @@ export class FirebaseService {
   }
 
   archiveOne(id, tableName) {
-    return this.db.collection(tableName).doc(id).set({isArchived: true})
+    return this.db.collection(tableName).doc(id).update({isArchived: true})
     .then((res) => {
       this.alertService.showToaster('Archive Success');
     })
@@ -55,7 +55,7 @@ export class FirebaseService {
   }
 
   restoreOne(id, tableName) {
-    return this.db.collection(tableName).doc(id).set({isArchived: false})
+    return this.db.collection(tableName).doc(id).update({isArchived: false})
     .then((res) => {
       this.alertService.showToaster('Restore Success');
     })

@@ -23,13 +23,14 @@ export class ProjectComponent implements OnInit , OnDestroy {
   public projectSub: Subscription;
 
   constructor( public firebaseService: FirebaseService,
+    public projectService: ProjectService,
     public dialog: MatDialog) { }
 
   ngOnInit() {
     this.getData();
   }
   getData() {
-    this.projectSub = this.firebaseService.getAllData('project')
+    this.projectSub = this.projectService.getProjects(false)
     .subscribe(result => {
       this.projects = new MatTableDataSource(result) ;
     });
@@ -68,9 +69,9 @@ export class ProjectComponent implements OnInit , OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // Called once, before the instance is destroyed.
-    // Add 'implements OnDestroy' to the class.
-    this.projectSub.unsubscribe();
+    if(this.projectSub != null){
+      this.projectSub.unsubscribe();
+    }
   }
 }
 
@@ -112,7 +113,7 @@ export class AddProjectDialogComponent implements OnInit , OnDestroy {
       saleType: [''],
       propertyType: [''],
       'ownerClientUid': [''],
-      ownerClientName: [''],
+      'ownerClientName': [''],
       addressStreet: [''],
       addressTown: [''],
       addressCity: [''],
@@ -120,7 +121,7 @@ export class AddProjectDialogComponent implements OnInit , OnDestroy {
       cost: [''],
       status: [''],
       'agentUid': [''],
-      agentName: [''],
+      'agentName': [''],
       photoURL: [''],
       isArchived: [false]
     });
@@ -150,6 +151,8 @@ export class AddProjectDialogComponent implements OnInit , OnDestroy {
     if (this.addProjectForm.valid) {
         this.addProjectForm.controls['ownerClientUid'].setValue(this.selectedClientUid);
         this.addProjectForm.controls['agentUid'].setValue(this.selectedAgentUid);
+        this.addProjectForm.controls['ownerClientName'].setValue(this.selectedClient);
+        this.addProjectForm.controls['agentName'].setValue(this.selectedAgent);
         this.firebaseService.addOne(this.addProjectForm.value , 'project');
         this.dialogRef.close();
     }
@@ -160,10 +163,13 @@ export class AddProjectDialogComponent implements OnInit , OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // Called once, before the instance is destroyed.
-    // Add 'implements OnDestroy' to the class.
-    this.clientSub.unsubscribe();
-    this.agentSub.unsubscribe();
+    if(this.clientSub != null ){
+      this.clientSub.unsubscribe();
+    }
+
+    if(this.agentSub != null) {
+      this.agentSub.unsubscribe();
+    }
   }
 
 }
@@ -180,7 +186,7 @@ export class ViewProjectDialogComponent {
   constructor(
     public firebaseService: FirebaseService,
     public projectService: ProjectService,
-    public dialogRef: MatDialogRef<AddProjectDialogComponent>,
+    public dialogRef: MatDialogRef<ViewProjectDialogComponent>,
     public fb: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: any
     ) {
@@ -207,7 +213,8 @@ export class ViewProjectDialogComponent {
         }
     }
 
-    deleteProject() {
+    archiveProject() {
+        this.firebaseService.archiveOne(this.data.id , 'project');
         this.dialogRef.close();
     }
 

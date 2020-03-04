@@ -12,6 +12,10 @@ export class ProjectService {
 
   constructor(public afAuth: AngularFireAuth,
     public db: AngularFirestore) { }
+  
+  getProjects(isArchived: Boolean) {
+    return this.db.collection('project' , ref => ref.where('isArchived', '==', isArchived) ).valueChanges({ idField: 'id' });
+  }
 
   createProject(values) {
     

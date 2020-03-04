@@ -1,9 +1,10 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { FirebaseService } from '../../shared/services';
 import { BrokerService } from '../../shared/services';
 import { MatDialog, MatDialogRef , MatDialogConfig , MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router, Params } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -11,10 +12,10 @@ import { Router, Params } from '@angular/router';
   templateUrl: './broker.component.html',
   styleUrls: ['./broker.component.scss']
 })
-export class BrokerComponent implements OnInit {
+export class BrokerComponent implements OnInit , OnDestroy {
 
   items: Array<any>;
-
+  brokerSub : Subscription;
   constructor( public firebaseService: FirebaseService,
     public dialog: MatDialog) { }
 
@@ -23,7 +24,7 @@ export class BrokerComponent implements OnInit {
   }
 
   getData() {
-    this.firebaseService.getAllData('broker')
+    this.brokerSub = this.firebaseService.getAllData('broker')
     .subscribe(result => {
       this.items = result;
     });
@@ -57,6 +58,12 @@ export class BrokerComponent implements OnInit {
     this.dialog.open(ViewBrokerDialogComponent, dialogConfig).afterClosed().subscribe(result => {
       this.getData();
     });
+  }
+
+  ngOnDestroy() {
+    if(this.brokerSub != null){
+      this.brokerSub.unsubscribe();
+    }
   }
 
 }

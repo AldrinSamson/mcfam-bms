@@ -48,7 +48,9 @@ export class InquiriesComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-      this.inquirySub.unsubscribe();
+      if(this.inquirySub != null){
+        this.inquirySub.unsubscribe();
+      }
     }
 }
 
