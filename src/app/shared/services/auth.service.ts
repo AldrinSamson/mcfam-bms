@@ -27,10 +27,12 @@ export class AuthService {
       const user = JSON.parse(localStorage.getItem('user'));
       console.log(user);
       sessionStorage.setItem('session-alive', 'true');
+
       this.router.navigate(['/project']);
       //mcfamrealty.is@gmail.com
       var user2 = firebase.auth().currentUser;
-
+      sessionStorage.setItem('session-user-logged', user2.uid);
+      
       if (user) {
         // User is signed in.
         console.log(user2);
