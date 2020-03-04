@@ -34,7 +34,7 @@ import { InquiriesComponent , ViewInquiryDialogComponent } from './pages/inquiri
 import { SaleTransactionComponent } from './pages/sale-transaction/sale-transaction.component';
 import { ClientComponent } from './pages/client/client.component';
 import { SaleReportComponent } from './pages/sale-report/sale-report.component';
-import { ProjectArchiveComponent } from './pages/project-archive/project-archive.component';
+import { ProjectArchiveComponent , ViewProjectArchiveDialogComponent } from './pages/project-archive/project-archive.component';
 import { AuditComponent } from './pages/audit/audit.component';
 
 @NgModule({
@@ -43,7 +43,8 @@ import { AuditComponent } from './pages/audit/audit.component';
     ViewBrokerDialogComponent,
     AddProjectDialogComponent,
     ViewProjectDialogComponent,
-    ViewInquiryDialogComponent
+    ViewInquiryDialogComponent,
+    ViewProjectArchiveDialogComponent
   ],
   declarations: [
     AppComponent,
@@ -66,6 +67,7 @@ import { AuditComponent } from './pages/audit/audit.component';
     AddProjectDialogComponent,
     ViewProjectDialogComponent,
     ViewInquiryDialogComponent,
+    ViewProjectArchiveDialogComponent
   ],
   imports: [
     BrowserModule,

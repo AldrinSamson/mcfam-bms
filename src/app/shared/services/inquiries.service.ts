@@ -17,7 +17,7 @@ export class InquiriesService {
     public db: AngularFirestore) { }
 
   getInquiries(isArchived: Boolean) {
-    return this.db.collection('inquiry', ref => ref.where('agentUid', '==', this.currentUser).where('isArchived', '==', isArchived))
+    return this.db.collection('inquiry', ref => ref.where('agentUid', '==', firebase.auth().currentUser.uid).where('isArchived', '==', isArchived))
     .valueChanges({ idToken: 'id'});
   }
 }
