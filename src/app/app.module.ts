@@ -36,6 +36,7 @@ import { ClientComponent } from './pages/client/client.component';
 import { SaleReportComponent } from './pages/sale-report/sale-report.component';
 import { ProjectArchiveComponent , ViewProjectArchiveDialogComponent } from './pages/project-archive/project-archive.component';
 import { AuditComponent } from './pages/audit/audit.component';
+import { AngularFireStorage } from 'angularfire2/storage';
 
 @NgModule({
   entryComponents: [
@@ -87,7 +88,8 @@ import { AuditComponent } from './pages/audit/audit.component';
     AlertService,
     AuthGuardService,
     AuthService,
-    WindowService
+    WindowService,
+    AngularFireStorage
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA
