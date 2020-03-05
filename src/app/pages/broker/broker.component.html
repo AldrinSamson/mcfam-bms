@@ -21,3 +21,14 @@
     </div>
 </div>
 
+ <table class="table">
+    <tr class="table-row">
+      <div class="col col-md-2 image-col">
+   
+      </div>
+        <td *ngFor="let item of items" class= "table-text" class="list-group-item flex-column align-items-start" (click)="openViewBroker(item)" >
+          <h3 class="mb-1">{{item.fullName}} </h3>
+          <small>Email: {{item.email}}</small>
+        </td>
+    </tr>
+  </table>
