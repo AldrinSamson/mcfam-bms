@@ -32,7 +32,7 @@ import { BrokerComponent, AddBrokerDialogComponent, ViewBrokerDialogComponent } 
 import { ProjectComponent, AddProjectDialogComponent, ViewProjectDialogComponent } from './pages/project/project.component';
 import { InquiriesComponent , ViewInquiryDialogComponent } from './pages/inquiries/inquiries.component';
 import { SaleTransactionComponent } from './pages/sale-transaction/sale-transaction.component';
-import { ClientComponent } from './pages/client/client.component';
+import { ClientComponent, AddClientDialogComponent, ViewClientDialogComponent } from './pages/client/client.component';
 import { SaleReportComponent } from './pages/sale-report/sale-report.component';
 import { ProjectArchiveComponent , ViewProjectArchiveDialogComponent } from './pages/project-archive/project-archive.component';
 import { AuditComponent } from './pages/audit/audit.component';
@@ -45,7 +45,9 @@ import { AngularFireStorage } from 'angularfire2/storage';
     AddProjectDialogComponent,
     ViewProjectDialogComponent,
     ViewInquiryDialogComponent,
-    ViewProjectArchiveDialogComponent
+    ViewProjectArchiveDialogComponent,
+    AddClientDialogComponent, 
+    ViewClientDialogComponent
   ],
   declarations: [
     AppComponent,
@@ -68,7 +70,9 @@ import { AngularFireStorage } from 'angularfire2/storage';
     AddProjectDialogComponent,
     ViewProjectDialogComponent,
     ViewInquiryDialogComponent,
-    ViewProjectArchiveDialogComponent
+    ViewProjectArchiveDialogComponent,
+    AddClientDialogComponent, 
+    ViewClientDialogComponent
   ],
   imports: [
     BrowserModule,
