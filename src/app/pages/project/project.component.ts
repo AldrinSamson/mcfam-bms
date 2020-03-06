@@ -164,17 +164,17 @@ export class AddProjectDialogComponent implements OnInit, OnDestroy {
 
       try {
         console.log(this.picFile);
-        for (var i = 0; i < this.picFile.length; i++) {
+        for (let i = 0; i < this.picFile.length; i++) {
 
-          //const customMetadata = { app: 'Profile Pics' };
+          // const customMetadata = { app: 'Profile Pics' };
 
           const randomId = Math.random().toString(36).substring(2);
           const path = `project/storeFile${new Date().getTime()}_${this.picFile[i].name}`;
           const customMetadata = { app: 'Project' };
           this.fileRef = this.afStorage.ref(path);
-          //this.task = this.ref.put(this.picFile[i]);
+          // this.task = this.ref.put(this.picFile[i]);
 
-          //this.task = this.afStorage.upload(path, this.picFile[i], { customMetadata });
+          // this.task = this.afStorage.upload(path, this.picFile[i], { customMetadata });
           /*this.task.snapshotChanges().pipe(
             finalize(() => {
               // Get uploaded file storage path
@@ -189,19 +189,17 @@ export class AddProjectDialogComponent implements OnInit, OnDestroy {
           this.afStorage.upload(path, this.picFile[i]).snapshotChanges().pipe(
             finalize(() => {
               this.fileRef.getDownloadURL().subscribe((url) => {
-                //this.url = url;
-                //this.fileService.insertImageDetails(this.id, this.url);
+                // this.url = url;
+                // this.fileService.insertImageDetails(this.id, this.url);
                 console.log(url);
                 this.addProjectForm.controls['photoURL'].setValue(url);
                 this.firebaseService.addOne(this.addProjectForm.value, 'project');
                 this.dialogRef.close();
                 alert('Upload Successful');
-              })
+              });
             })
-          ).subscribe();
-
+          );
         }
-        
       } catch (err) {
         alert(err.message);
       }
@@ -213,14 +211,14 @@ export class AddProjectDialogComponent implements OnInit, OnDestroy {
 
   }
   getFile(event) {
-    this.picFile = event.target.files
+    this.picFile = event.target.files;
     console.log(this.picFile > 0);
     if (this.picFile.length) {
-      document.getElementById("uploadbtn").classList.remove('btn-primary');
-      document.getElementById("uploadbtn").classList.add('btn-success');
+      document.getElementById('uploadbtn').classList.remove('btn-primary');
+      document.getElementById('uploadbtn').classList.add('btn-success');
     } else {
-      document.getElementById("uploadbtn").classList.remove('btn-success');
-      document.getElementById("uploadbtn").classList.add('btn-primary');
+      document.getElementById('uploadbtn').classList.remove('btn-success');
+      document.getElementById('uploadbtn').classList.add('btn-primary');
     }
 
   }

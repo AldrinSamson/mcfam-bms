@@ -7,6 +7,6 @@ import { Component } from '@angular/core';
   `
 })
 export class TitleCasePipeComponent {
-  public message = 'MCFAM Broker and Project Managemet';
+  public message = 'MCFAM Realty';
 
 }

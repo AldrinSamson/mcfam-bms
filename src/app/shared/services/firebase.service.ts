@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AlertService } from './alert.service';
+import * as firebase from 'firebase';
+
 
 @Injectable({
   providedIn: 'root'
@@ -67,6 +69,21 @@ export class FirebaseService {
   getAllData(tableName) {
     return this.db.collection(tableName).valueChanges({ idField: 'id' });
     // return this.db.collection(tableName).snapshotChanges();
+  }
+
+  getUserDetails() {
+
+    let uid;
+
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user != null) {
+        // this.name = user.displayName;
+        this.uid = user.uid;
+      } else {
+        // this.name = 'Unknown';
+      }
+    });
+    return uid;
   }
 
   // search(searchValue){
