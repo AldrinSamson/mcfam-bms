@@ -59,6 +59,14 @@
                 <input matInput formControlName = "addressRegion"  name = "broker-addressRegion" required>
             </mat-form-field>
             <br>
+            <label>
+                Upload Picture File<br>
+                <input hidden type="file" (change)="getFile($event)" id='inputfile' accept=".png,.jpg" >
+                <button class="btn btn-primary" id='uploadbtn' (click)='inputFileClick()'>Upload</button>
+                &nbsp;
+                <span id='qtyinput'></span>
+            </label>
+            <br>
             <mat-form-field >
                 <mat-label> Password </mat-label>
                 <input matInput type="password" formControlName = "password" autocomplete="off" name = "broker-password"required>

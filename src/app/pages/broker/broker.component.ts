@@ -161,16 +161,15 @@ export class ViewBrokerDialogComponent {
         addressTown: [this.data.addressTown],
         addressCity: [this.data.addressCity],
         addressRegion: [this.data.addressRegion],
-        uid: [this.data.uid] 
-      })
+        uid: [this.data.uid]
+      });
     }
 
   submitEditBrokerForm() {
-        if (this.editBrokerForm.valid){
-              this.BrokerService.updateBroker(this.data.id , this.editBrokerForm.value )
+        if (this.editBrokerForm.valid) {
+              this.BrokerService.updateBroker(this.data.id , this.editBrokerForm.value );
             this.dialogRef.close();
         }
-        
     }
 
     deleteBroker(){
