@@ -1,7 +1,11 @@
 <!-- Sidenav -->
   <mat-sidenav mode="over" opened="false" #sidenav class="sidenav">
 
-  <img [src]="angularImage">
+  <button style = "float: right"type="button" mat-icon-button (click)="sidenav.toggle()">
+        <mat-icon class="misc">keyboard_arrow_left</mat-icon>
+  </button>
+
+  <img [src]="angularImage" (click)="sidenav.toggle()" >
 
   <div class="menu-link">
 
@@ -72,14 +76,14 @@
 <!-- Header -->
 <mat-toolbar color="primary">
 
-  <span><a href="/"><app-titlecase-pipe></app-titlecase-pipe></a></span>
-
   <!-- Sidenav activate -->
   <div class="sidenav-content" *ngIf="authService.isAuthenticated();">
     <button type="button" mat-icon-button (click)="sidenav.toggle()">
         <mat-icon>menu</mat-icon>
     </button>
   </div>
+
+  <span><a href="/project"><app-titlecase-pipe></app-titlecase-pipe></a></span>
 
   <!-- Menu -->
   <span class="spacer"></span>
@@ -99,7 +103,7 @@
 
   <ng-template #loggedin>
     <div *ngIf="authService.isAuthenticated()">
-    <h4>Welcome</h4>
+    <h4>Welcome {{test}}</h4>
     </div>
 
     

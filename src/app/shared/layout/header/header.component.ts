@@ -11,6 +11,7 @@ import { AuthService, AlertService } from '../../services';
 export class HeaderComponent {
   public isAuthenticated: string;
   public angularImage: string = '/assets/img/house.png';
+  public test = '';
 
   public menuItems: Object[] = [
     {
@@ -44,16 +45,11 @@ export class HeaderComponent {
       link: 'https://github.com/jeroenouw/AngularMaterialFirebase'
     },
   ];
-user: Array<any>;
   constructor(
     public authService: AuthService,
     private alertService: AlertService,
     ) {
       this.isAuthenticated = this.authService.isAuthenticated();
-      if (this.isAuthenticated) {
-        this.user = JSON.parse(sessionStorage.getItem('currentUserDetails'));
-      }
-
   }
 
   public userUid(): string {
