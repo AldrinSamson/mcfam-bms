@@ -1,14 +1,20 @@
 
 <button  fxFlexAlign="center" mat-icon-button class="smallButton" color="accent" (click) = "openAddClient()" style = "float:right;"><i class="material-icons"> add </i></button>
-
- <table class="table">
-    <tr class="table-row">
-      <div class="col col-md-2 image-col">
+<div class="container-client">
+    <table class="table">
+        <tr class="table-row">
         
-      </div>
-        <td *ngFor="let item of items" class= "table-text" class="list-group-item flex-column align-items-start" (click)="openViewClient(item)">
-          <h3 class="mb-1">{{item.fullName}} </h3>
-          <small>Email: {{item.email}}</small>
-        </td>
-    </tr>
-  </table>
+            <td *ngFor="let item of items" class= "table-text" class="list-group-item flex-column align-items-start" (click)="openViewClient(item)">
+            <div class = "row">
+            <div class="col-4 table-img">
+                <img src="https://firebasestorage.googleapis.com/v0/b/mcfam-systems.appspot.com/o/project%2FstoreFile1583500757599_60535608_867800660226398_1738802155277516800_n.jpg?alt=media&token=0733557b-8eec-4f3d-99a9-916d1951426c&fbclid=IwAR3aV5__6yMOS0-xaYU0FaYzqFcB0Bo-8vgAonOIANLXseuSK83Puq4ouL4">
+            </div>
+            <div class="col-8">
+                <h3> {{item.fullName}} </h3>
+                <small>Email: {{item.email}}</small>
+            </div>
+            </div>
+            </td>
+        </tr>
+    </table>
+</div>
