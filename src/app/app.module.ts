@@ -5,6 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material.module';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxAuthFirebaseUIModule } from 'ngx-auth-firebaseui';
+import { AngularFireStorage } from 'angularfire2/storage';
 
 
 // Modules
@@ -29,14 +30,14 @@ import { PageNotFoundComponent } from './pages/not-found/not-found.component';
 // Components
 import { EmailMeComponent } from './components/email-me/email-me.component';
 import { BrokerComponent, AddBrokerDialogComponent, ViewBrokerDialogComponent } from './pages/broker/broker.component';
-import { ProjectComponent, AddProjectDialogComponent, ViewProjectDialogComponent } from './pages/project/project.component';
+import { ProjectComponent, AddProjectDialogComponent, ViewProjectDialogComponent, SaleProjectDialogComponent } from './pages/project/project.component';
 import { InquiriesComponent , ViewInquiryDialogComponent } from './pages/inquiries/inquiries.component';
 import { SaleTransactionComponent } from './pages/sale-transaction/sale-transaction.component';
 import { ClientComponent, AddClientDialogComponent, ViewClientDialogComponent } from './pages/client/client.component';
 import { SaleReportComponent } from './pages/sale-report/sale-report.component';
 import { ProjectArchiveComponent , ViewProjectArchiveDialogComponent } from './pages/project-archive/project-archive.component';
 import { AuditComponent } from './pages/audit/audit.component';
-import { AngularFireStorage } from 'angularfire2/storage';
+
 
 @NgModule({
   entryComponents: [
@@ -47,7 +48,8 @@ import { AngularFireStorage } from 'angularfire2/storage';
     ViewInquiryDialogComponent,
     ViewProjectArchiveDialogComponent,
     AddClientDialogComponent, 
-    ViewClientDialogComponent
+    ViewClientDialogComponent,
+    SaleProjectDialogComponent
   ],
   declarations: [
     AppComponent,
@@ -72,7 +74,8 @@ import { AngularFireStorage } from 'angularfire2/storage';
     ViewInquiryDialogComponent,
     ViewProjectArchiveDialogComponent,
     AddClientDialogComponent, 
-    ViewClientDialogComponent
+    ViewClientDialogComponent,
+    SaleProjectDialogComponent
   ],
   imports: [
     BrowserModule,

@@ -2,14 +2,14 @@ import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { FirebaseService } from '../../shared/services';
 import { MatDialog, MatDialogRef, MatDialogConfig, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Router, Params } from '@angular/router';
+// import { Router, Params } from '@angular/router';
 import { ProjectService } from '../../shared';
 import { Project } from '../../shared';
 import { MatTableDataSource } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask } from 'angularfire2/storage';
 import * as cors from 'cors';
-import * as firebase from 'firebase';
+// import * as firebase from 'firebase';
 import { finalize } from 'rxjs/operators';
 const corsHandler = cors({ origin: true });
 @Component({
@@ -42,8 +42,8 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   openAddProject(): void {
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.maxWidth = '50vw';
-    dialogConfig.width = '50vw';
+    dialogConfig.maxWidth = '100vw';
+    dialogConfig.width = '100vw';
     this.dialog.open(AddProjectDialogComponent, dialogConfig).afterClosed().subscribe(result => {
 
     });
@@ -57,13 +57,15 @@ export class ProjectComponent implements OnInit, OnDestroy {
       saleType: value.saleType,
       propertyType: value.propertyType,
       ownerClientName: value.ownerClientName,
+      ownerClientUid: value.ownerClientUid,
       addressStreet: value.addressStreet,
       addressTown: value.addressTown,
       addressCity: value.addressCity,
       addressRegion: value.addressRegion,
       cost: value.cost,
       status: value.status,
-      agentName: value.agentName
+      agentName: value.agentName,
+      agentUid: value.agentUid
     };
     dialogConfig.maxWidth = '50vw';
     dialogConfig.width = '50vw';
@@ -89,7 +91,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
 export class AddProjectDialogComponent implements OnInit, OnDestroy {
 
   addProjectForm: any;
-  public clientSub: Subscription;
+  clientSub: Subscription;
   agentSub: Subscription;
   picFile: any;
   clients: MatTableDataSource<any>;
@@ -128,7 +130,7 @@ export class AddProjectDialogComponent implements OnInit, OnDestroy {
       status: [''],
       'agentUid': [''],
       'agentName': [''],
-      photoURL: [''],
+      'photoURL': [''],
       isArchived: [false]
     });
   }
@@ -253,6 +255,7 @@ export class ViewProjectDialogComponent {
     public projectService: ProjectService,
     public dialogRef: MatDialogRef<ViewProjectDialogComponent>,
     public fb: FormBuilder,
+    public dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.editProjectForm = this.fb.group({
@@ -261,13 +264,15 @@ export class ViewProjectDialogComponent {
       saleType: [this.data.saleType],
       propertyType: [this.data.propertyType],
       ownerClientName: [this.data.ownerClientName],
+      ownerClientUid: [this.data.ownerClientUid],
       addressStreet: [this.data.addressStreet],
       addressTown: [this.data.addressTown],
       addressCity: [this.data.addressCity],
       addressRegion: [this.data.addressRegion],
       cost: [this.data.cost],
       status: [this.data.status],
-      agentName: [this.data.agentName]
+      agentName: [this.data.agentName],
+      agentUid:[this.data.agentUid]
     });
   }
 
@@ -278,10 +283,61 @@ export class ViewProjectDialogComponent {
     }
   }
 
+  openTransaction() {
+
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = {
+      projectUid: this.data.id,
+      projectName: this.data.name,
+      projectCost: this.data.cost,
+      projectSaleType: this.data.saleType,
+      agentName: this.data.agentName,
+      agentUid: this.data.agentUid
+    };
+    dialogConfig.maxWidth = '50vw';
+    dialogConfig.width = '50vw';
+    this.dialog.open(SaleProjectDialogComponent, dialogConfig).afterClosed().subscribe(result => {
+      this.dialogRef.close();
+    });
+
+  }
+
   archiveProject() {
     this.firebaseService.archiveOne(this.data.id, 'project');
     this.dialogRef.close();
   }
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+}
+
+@Component({
+  // tslint:disable-next-line:component-selector
+  selector: 'sale-project-dialog',
+  templateUrl: './dialog/sale-project-dialog.html',
+  styleUrls: ['./project.component.scss'],
+})
+
+export class SaleProjectDialogComponent implements OnInit, OnDestroy {
+
+  clientSub: Subscription;
+  addProjectForm: any;
+  clients: MatTableDataSource<any>;
+  selectedClientUid = '';
+  selectedClient = '';
+
+  constructor(
+    public firebaseService: FirebaseService,
+    public projectService: ProjectService,
+    public dialogRef: MatDialogRef<ViewProjectDialogComponent>,
+    public fb: FormBuilder,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {}
+
+  ngOnInit() {}
+
+  ngOnDestroy() {}
 
   onNoClick(): void {
     this.dialogRef.close();
