@@ -164,7 +164,7 @@ export class AddProjectDialogComponent implements OnInit, OnDestroy {
 
       try {
         console.log(this.picFile);
-        for (let i = 0; i < this.picFile.length; i++) {
+        for (var i = 0; i < this.picFile.length; i++) {
 
           // const customMetadata = { app: 'Profile Pics' };
 
@@ -196,9 +196,9 @@ export class AddProjectDialogComponent implements OnInit, OnDestroy {
                 this.firebaseService.addOne(this.addProjectForm.value, 'project');
                 this.dialogRef.close();
                 alert('Upload Successful');
-              });
+              })
             })
-          );
+          ).subscribe();
         }
       } catch (err) {
         alert(err.message);
@@ -319,11 +319,21 @@ export class ViewProjectDialogComponent {
 
 export class SaleProjectDialogComponent implements OnInit, OnDestroy {
 
+  public dateNow = Date.toString();
+
+  saleProjectForm: any;
+
   clientSub: Subscription;
-  addProjectForm: any;
   clients: MatTableDataSource<any>;
   selectedClientUid = '';
   selectedClient = '';
+  displayedColumnsClient: string[] = ['fullName', 'userName', 'email'];
+
+  managerSub: Subscription;
+  managers: MatTableDataSource<any>;
+  selectedManagerUid = '';
+  selectedManager = '';
+  displayedColumnsManager: string[] = ['fullName', 'userName', 'email'];
 
   constructor(
     public firebaseService: FirebaseService,
@@ -331,11 +341,75 @@ export class SaleProjectDialogComponent implements OnInit, OnDestroy {
     public dialogRef: MatDialogRef<ViewProjectDialogComponent>,
     public fb: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: any
-  ) {}
+  ) {
+    this.saleProjectForm = this.fb.group({
+      projectUid: [this.data.projectUid],
+      projectName: [this.data.projectName],
+      projectCost: [this.data.projectCost],
+      projectSaleType: [this.data.projectSaleType],
+      agentName: [this.data.agentName],
+      agentUid: [this.data.agentUid],
+      'clientName': [''],
+      'clientUid': [''],
+      'managerName': [''],
+      'managerUid': [''],
+      brokerRate: [''],
+      dateStart: [new Date()],
+      dateEnd: [''],
+      dateApproved:[''],
+      documentCollectionId: [''],
+      status: ['customer stage 2'],
+      isCompleted: [false],
+      isManagerApproved: [false],
+      isCustomerApproved: [false],
+      isDeleted : [false]
+    });
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.getClientAndManager();
+  }
 
-  ngOnDestroy() {}
+  getClientAndManager() {
+    this.clientSub = this.firebaseService.getAllData('client').subscribe(result => {
+      this.clients = new MatTableDataSource(result);
+    });
+
+    this.managerSub = this.firebaseService.getAllData('broker').subscribe(result => {
+      this.managers = new MatTableDataSource(result);
+    });
+  }
+
+  selectClient(value) {
+    this.selectedClientUid = value.uid;
+    this.selectedClient = value.fullName;
+  }
+
+  selectManager(value) {
+    this.selectedManagerUid = value.uid;
+    this.selectedManager = value.fullName;
+  }
+
+  submitSaleProjectForm() {
+    if (this.saleProjectForm.valid) {
+      this.saleProjectForm.controls['clientName'].setValue(this.selectedClient);
+      this.saleProjectForm.controls['clientUid'].setValue(this.selectedClientUid);
+      this.saleProjectForm.controls['managerName'].setValue(this.selectedManager);
+      this.saleProjectForm.controls['managerUid'].setValue(this.selectedManagerUid);
+      this.firebaseService.addOne(this.saleProjectForm.value , 'transaction');
+      this.dialogRef.close();
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.clientSub != null) {
+      this.clientSub.unsubscribe();
+    }
+
+    if (this.managerSub != null) {
+      this.managerSub.unsubscribe();
+    }
+  }
 
   onNoClick(): void {
     this.dialogRef.close();

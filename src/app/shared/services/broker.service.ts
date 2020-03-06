@@ -42,7 +42,7 @@ export class BrokerService {
   }
 
   updateBroker(id ,values) {
-    return this.db.collection('broker').doc(id).update({
+    return this.db.collection('broker').doc(id).set({
                     brokerId: values.brokerId,
                     firstName: values.firstName,
                     lastName: values.lastName,

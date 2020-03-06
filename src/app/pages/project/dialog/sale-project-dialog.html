@@ -28,7 +28,13 @@
 
             <mat-form-field>
                 <mat-label> Buying Client Name</mat-label>
-                <input matInput formControlName="clientName" name="project-ownerClientName" value={{selectedClient}} readonly>
+                <input matInput formControlName="clientName" name="transaction-clientName" value={{selectedClient}} readonly>
+            </mat-form-field>
+            <br>
+
+            <mat-form-field>
+                <mat-label> Manager Assigned</mat-label>
+                <input matInput formControlName="managerName" name="transaction-managerName" value={{selectedManager}} readonly>
             </mat-form-field>
             <br>
             
@@ -62,6 +68,38 @@
                             <tr mat-header-row *matHeaderRowDef="displayedColumnsClient"></tr>
                             <tr mat-row *matRowDef="let clients; columns: displayedColumnsClient;"
                                 (click)="selectClient(clients)"></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="card">
+                    <div class="card-header">
+                        <mat-form-field fxFlex="40%">
+                            <input matInput placeholder="Filter">
+                        </mat-form-field>
+                    </div>
+                    <div class="card-body">
+                        <table mat-table [dataSource]="managers" class="mat-elevation-z8">
+
+                            <ng-container matColumnDef="fullName">
+                                <th mat-header-cell *matHeaderCellDef> Name </th>
+                                <td mat-cell *matCellDef="let managers"> {{managers.fullName}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="userName">
+                                <th mat-header-cell *matHeaderCellDef> User Name </th>
+                                <td mat-cell *matCellDef="let managers"> {{managers.userName}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="email">
+                                <th mat-header-cell *matHeaderCellDef> Email </th>
+                                <td mat-cell *matCellDef="let managers"> {{managers.email}} </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnsManager"></tr>
+                            <tr mat-row *matRowDef="let managers; columns: displayedColumnsManager;"
+                                (click)="selectManager(managers)"></tr>
                         </table>
                     </div>
                 </div>
