@@ -89,11 +89,15 @@
 
             <br>
             <label>
-                Upload File<br>
-                <input hidden type="file" (change)="getFile($event)" id='inputfile' accept=".png,.jpg" >
-                <button class="btn btn-primary" id='uploadbtn' (click)='inputFileClick()'>Upload</button>
-                &nbsp;
-                <span id='qtyinput'></span>
+                Attach a photo<br>
+                <input hidden type="file" (change)="getFile($event)" id='inputfile' accept=".png,.jpg">
+                <div style="
+    vertical-align: bottom;
+">
+                    <button class="upload btn btn-primary" id='uploadbtn' (click)='inputFileClick()'>Upload</button>
+                    &nbsp;
+                    <span id='qtyinput'>{{qtyinput}}</span>
+                </div>
             </label>
             <br>
             <br>

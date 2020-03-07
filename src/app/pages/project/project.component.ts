@@ -26,6 +26,8 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   public projectSub: Subscription;
 
+  qtyinput='';
+
   constructor(public firebaseService: FirebaseService,
     public projectService: ProjectService,
     public dialog: MatDialog) { }
@@ -104,6 +106,7 @@ export class AddProjectDialogComponent implements OnInit, OnDestroy {
   selectedAgentUid = '';
   selectedAgent = '';
   displayedColumnsAgent: string[] = ['fullName', 'userName', 'email'];
+  qtyinput= '';
 
   ngOnInit() {
     this.getAgentandClient();
@@ -216,6 +219,7 @@ export class AddProjectDialogComponent implements OnInit, OnDestroy {
     if (this.picFile.length) {
       document.getElementById('uploadbtn').classList.remove('btn-primary');
       document.getElementById('uploadbtn').classList.add('btn-success');
+      this.qtyinput = "a file attached";;
     } else {
       document.getElementById('uploadbtn').classList.remove('btn-success');
       document.getElementById('uploadbtn').classList.add('btn-primary');
