@@ -65,6 +65,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
       addressCity: value.addressCity,
       addressRegion: value.addressRegion,
       cost: value.cost,
+      photoURL: value.photoURL,
       status: value.status,
       agentName: value.agentName,
       agentUid: value.agentUid

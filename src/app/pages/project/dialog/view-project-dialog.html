@@ -1,5 +1,5 @@
 <h2 mat-dialog-title>Edit {{data.name}} Project</h2>
-<div mat-dialog-content [formGroup] = "editProjectForm" >
+<div mat-dialog-content [formGroup] = "editProjectForm" class="modalform">
    
             <mat-form-field >
                 <mat-label> Name </mat-label>
@@ -70,6 +70,11 @@
                 <input matInput formControlName = "agentName" value = {{data.agentName}} name = "project-agentName" required>
             </mat-form-field>
             <br>
+            <div>
+                <h5>Photo:</h5>
+                <br>
+                <img src='{{data.photoURL}}' class='photoURL'>
+            </div>
 </div>
 <div mat-dialog-actions>
     <button mat-button color = "warn" (click) = "archiveProject()" >Archive</button>
