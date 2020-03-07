@@ -1,15 +1,17 @@
 import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
-import { FirebaseService } from '../../shared/services';
+import { FirebaseService, AuthService, FileService } from '../../shared/services';
 import { MatDialog, MatDialogRef, MatDialogConfig, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, Validators } from '@angular/forms';
 // import { Router, Params } from '@angular/router';
 import { ProjectService } from '../../shared';
 import { Project } from '../../shared';
+//import { FileService } from '../../shared/services/file.service';
 import { MatTableDataSource } from '@angular/material';
 import { Subscription } from 'rxjs';
+
 import { AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask } from 'angularfire2/storage';
 import * as cors from 'cors';
-// import * as firebase from 'firebase';
+import * as firebase from 'firebase';
 import { finalize } from 'rxjs/operators';
 const corsHandler = cors({ origin: true });
 @Component({
@@ -26,11 +28,18 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   public projectSub: Subscription;
 
-  qtyinput='';
+  qtyinput = '';
+  userId: string;
 
   constructor(public firebaseService: FirebaseService,
     public projectService: ProjectService,
-    public dialog: MatDialog) { }
+    public dialog: MatDialog, fileservice: FileService, authService: AuthService) {
+    try {
+      this.userId = firebase.auth().currentUser.uid
+    } catch (err) {
+      this.userId = '';
+    }
+  }
 
   ngOnInit() {
     this.getData();
@@ -106,8 +115,11 @@ export class AddProjectDialogComponent implements OnInit, OnDestroy {
   agents: MatTableDataSource<any>;
   selectedAgentUid = '';
   selectedAgent = '';
+  toAddUpload: any[];
   displayedColumnsAgent: string[] = ['fullName', 'userName', 'email'];
-  qtyinput= '';
+  qtyinput = '';
+  userId: any;
+  filestored: any[];
 
   ngOnInit() {
     this.getAgentandClient();
@@ -117,8 +129,16 @@ export class AddProjectDialogComponent implements OnInit, OnDestroy {
     public firebaseService: FirebaseService,
     public dialogRef: MatDialogRef<AddProjectDialogComponent>,
     public fb: FormBuilder,
+    public fileservice: FileService,
     @Inject(AngularFireStorage) private afStorage: AngularFireStorage
   ) {
+    try {
+      this.userId = firebase.auth().currentUser.uid;
+    } catch (err) {
+      this.userId = "";
+    }
+    localStorage.setItem('user', JSON.stringify(this.userId));
+    console.log(this.userId);
     this.addProjectForm = this.fb.group({
       name: [''],
       overview: [''],
@@ -165,49 +185,116 @@ export class AddProjectDialogComponent implements OnInit, OnDestroy {
       this.addProjectForm.controls['agentUid'].setValue(this.selectedAgentUid);
       this.addProjectForm.controls['ownerClientName'].setValue(this.selectedClient);
       this.addProjectForm.controls['agentName'].setValue(this.selectedAgent);
+      this.fileupload();
 
-      try {
-        console.log(this.picFile);
-        for (var i = 0; i < this.picFile.length; i++) {
 
-          // const customMetadata = { app: 'Profile Pics' };
+    }
+    this.fileupload();
+  }
+  submitFinal() {
+    //console.log(this.);
+    this.firebaseService.addOne(this.addProjectForm.value, 'project');
+    this.dialogRef.close();
+  }
+  uploadImageAsPromise(fl) {
+    console.log(fl);
+    var thisclass = this;
+    var fs = this.fileservice;
+    const path = `project/storeFile${new Date().getTime()}_${fl.name}`;
+    return new Promise(function (resolve, reject) {
+      var storageRef = firebase.storage().ref(path);
 
-          const randomId = Math.random().toString(36).substring(2);
-          const path = `project/storeFile${new Date().getTime()}_${this.picFile[i].name}`;
-          const customMetadata = { app: 'Project' };
-          this.fileRef = this.afStorage.ref(path);
-          // this.task = this.ref.put(this.picFile[i]);
-
-          // this.task = this.afStorage.upload(path, this.picFile[i], { customMetadata });
-          /*this.task.snapshotChanges().pipe(
-            finalize(() => {
-              // Get uploaded file storage path
-              var UploadedFileURL = this.fileRef.getDownloadURL();
-              UploadedFileURL.subscribe(resp => {
-                console.log(resp);
-              }, error => {
-                console.error(error);
-              })
-            })
-          )*/
-          this.afStorage.upload(path, this.picFile[i]).snapshotChanges().pipe(
-            finalize(() => {
-              this.fileRef.getDownloadURL().subscribe((url) => {
-                // this.url = url;
-                // this.fileService.insertImageDetails(this.id, this.url);
-                console.log(url);
-                this.addProjectForm.controls['photoURL'].setValue(url);
-                this.firebaseService.addOne(this.addProjectForm.value, 'project');
-                this.dialogRef.close();
-                alert('Upload Successful');
-              })
-            })
-          ).subscribe();
-        }
-      } catch (err) {
-        alert(err.message);
+      //Upload file
+      var task = storageRef.put(fl);
+      console.log(JSON.stringify(fl));
+      task.then(function (snapshot) {
+        snapshot.ref.getDownloadURL().then(function (url) {  // Now I can use url
+          var file1 = {
+            name: fl.name,
+            lastModified: fl.lastModified,
+            lastModifiedDate: fl.lastModifiedDate,
+            webkitRelativePath: fl.webkitRelativePath,
+            size: fl.size,
+            type: fl.type
+          };
+          var fileprop = {
+            fileProperties: file1,
+            uidUploaded: thisclass.userId,
+            section: 'BMS',
+            fileName: `storeFile${new Date().getTime()}_${fl.name}`,
+            category: 'project',
+            photoURL: url
+          };
+          console.log(fileprop);
+          thisclass.fileservice.createFile(fileprop);
+        });
+      });
+      /*
+            //Update progress bar
+            task.on('state_changed',
+              function progress(snapshot) {
+                //var percentage = snapshot.bytesTransferred / snapshot.totalBytes * 100;
+                //uploader.value = percentage;
+              },
+              function error(err) {
+      
+              },
+              function complete() {
+                var downloadURL = task.snapshot.downloadURL;
+                var fileprop = {
+                  fileProperties: fl,
+                  uidUploaded: this.userId,
+                  section: 'BMS',
+                  fileName: `storeFile${new Date().getTime()}_${fl.name}`,
+                  category: 'project',
+                  photoURL: downloadURL
+                };
+                console.log(fileprop);
+              }
+            );
+            */
+    });
+  }
+  /*
+    uploadprogress(fl) {
+      var thisclass = this;
+      const randomId = Math.random().toString(36).substring(2);
+      const path = `project/storeFile${new Date().getTime()}_${fl.name}`;
+      const customMetadata = { app: 'Project' };
+      var fileRef = firebase.storage().ref(path);
+      //console.log("ii = "+ii);
+      console.log(fl);
+      this.afStorage.upload(path, fl).snapshotChanges().pipe(
+        finalize(() => {
+          this.fileRef.getDownloadURL().subscribe((url) => {
+            // this.url = url;
+            // this.fileService.insertImageDetails(this.id, this.url);
+            console.log(url);
+            //this.addProjectForm.controls['photoURL'].setValue(url);
+  
+            //thisclass.filestored.push(fileprop);
+  
+            //console.log("filestored = "+ii);
+            //if(ii == this.picFile.length -1){
+            //this.submitFinal();
+            console.log("filestored");
+            //console.log(this.filestored);
+            //}
+            //alert('Upload Successful');
+          })
+        })
+      ).subscribe();
+    }*/
+  fileupload() {
+    try {
+      console.log(this.picFile);
+      var filestored = [];
+      //this.uploadprogress(this.picFile);
+      for (var i = 0; i < this.picFile.length; i++) {
+        this.uploadImageAsPromise(this.picFile[i]);
       }
-
+    } catch (err) {
+      alert(err.message);
     }
   }
   inputFileClick() {
@@ -216,7 +303,7 @@ export class AddProjectDialogComponent implements OnInit, OnDestroy {
   }
   getFile(event) {
     this.picFile = event.target.files;
-    console.log(this.picFile > 0);
+    console.log(this.picFile);
     if (this.picFile.length) {
       document.getElementById('uploadbtn').classList.remove('btn-primary');
       document.getElementById('uploadbtn').classList.add('btn-success');
@@ -275,7 +362,7 @@ export class ViewProjectDialogComponent {
       cost: [this.data.cost],
       status: [this.data.status],
       agentName: [this.data.agentName],
-      agentUid:[this.data.agentUid]
+      agentUid: [this.data.agentUid]
     });
   }
 
@@ -361,13 +448,13 @@ export class SaleProjectDialogComponent implements OnInit, OnDestroy {
       brokerRate: [''],
       dateStart: [new Date()],
       dateEnd: [''],
-      dateApproved:[''],
+      dateApproved: [''],
       documentCollectionId: [''],
       status: ['customer stage 2'],
       isCompleted: [false],
       isManagerApproved: [false],
       isCustomerApproved: [false],
-      isDeleted : [false]
+      isDeleted: [false]
     });
   }
 
@@ -401,7 +488,7 @@ export class SaleProjectDialogComponent implements OnInit, OnDestroy {
       this.saleProjectForm.controls['clientUid'].setValue(this.selectedClientUid);
       this.saleProjectForm.controls['managerName'].setValue(this.selectedManager);
       this.saleProjectForm.controls['managerUid'].setValue(this.selectedManagerUid);
-      this.firebaseService.addOne(this.saleProjectForm.value , 'transaction');
+      this.firebaseService.addOne(this.saleProjectForm.value, 'transaction');
       this.dialogRef.close();
     }
   }
