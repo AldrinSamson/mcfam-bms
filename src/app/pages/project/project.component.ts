@@ -169,7 +169,7 @@ export class AddProjectDialogComponent implements OnInit, OnDestroy {
     });
   }
 
-  selectClient(value) {
+  selectClient(value) {  
     this.selectedClientUid = value.uid;
     this.selectedClient = value.fullName;
   }
@@ -185,11 +185,16 @@ export class AddProjectDialogComponent implements OnInit, OnDestroy {
       this.addProjectForm.controls['agentUid'].setValue(this.selectedAgentUid);
       this.addProjectForm.controls['ownerClientName'].setValue(this.selectedClient);
       this.addProjectForm.controls['agentName'].setValue(this.selectedAgent);
-      this.fileupload();
+      //this.fileupload();
 
 
     }
-    this.fileupload();
+    if(this.picFile.length>0){
+      this.fileupload();
+    }else{
+      this.submitFinal();
+    }
+    
   }
   submitFinal() {
     //console.log(this.);
@@ -226,65 +231,12 @@ export class AddProjectDialogComponent implements OnInit, OnDestroy {
             photoURL: url
           };
           console.log(fileprop);
-          thisclass.fileservice.createFile(fileprop);
+          var fileid = thisclass.fileservice.createFile(fileprop);
         });
       });
-      /*
-            //Update progress bar
-            task.on('state_changed',
-              function progress(snapshot) {
-                //var percentage = snapshot.bytesTransferred / snapshot.totalBytes * 100;
-                //uploader.value = percentage;
-              },
-              function error(err) {
-      
-              },
-              function complete() {
-                var downloadURL = task.snapshot.downloadURL;
-                var fileprop = {
-                  fileProperties: fl,
-                  uidUploaded: this.userId,
-                  section: 'BMS',
-                  fileName: `storeFile${new Date().getTime()}_${fl.name}`,
-                  category: 'project',
-                  photoURL: downloadURL
-                };
-                console.log(fileprop);
-              }
-            );
-            */
     });
   }
-  /*
-    uploadprogress(fl) {
-      var thisclass = this;
-      const randomId = Math.random().toString(36).substring(2);
-      const path = `project/storeFile${new Date().getTime()}_${fl.name}`;
-      const customMetadata = { app: 'Project' };
-      var fileRef = firebase.storage().ref(path);
-      //console.log("ii = "+ii);
-      console.log(fl);
-      this.afStorage.upload(path, fl).snapshotChanges().pipe(
-        finalize(() => {
-          this.fileRef.getDownloadURL().subscribe((url) => {
-            // this.url = url;
-            // this.fileService.insertImageDetails(this.id, this.url);
-            console.log(url);
-            //this.addProjectForm.controls['photoURL'].setValue(url);
   
-            //thisclass.filestored.push(fileprop);
-  
-            //console.log("filestored = "+ii);
-            //if(ii == this.picFile.length -1){
-            //this.submitFinal();
-            console.log("filestored");
-            //console.log(this.filestored);
-            //}
-            //alert('Upload Successful');
-          })
-        })
-      ).subscribe();
-    }*/
   fileupload() {
     try {
       console.log(this.picFile);

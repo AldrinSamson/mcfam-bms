@@ -37,5 +37,6 @@ export class FileService {
     console.log(id + ' = fggjhh');
     console.log(f);
     this.fileCollection.doc(id).set(f);
+    return id;
   }
 }
