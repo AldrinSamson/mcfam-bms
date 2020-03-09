@@ -13,6 +13,7 @@ import { AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask 
 import * as cors from 'cors';
 import * as firebase from 'firebase';
 import { finalize } from 'rxjs/operators';
+import { AngularFirestore } from '@angular/fire/firestore';
 const corsHandler = cors({ origin: true });
 @Component({
   // tslint:disable-next-line:component-selector
@@ -119,7 +120,7 @@ export class AddProjectDialogComponent implements OnInit, OnDestroy {
   displayedColumnsAgent: string[] = ['fullName', 'userName', 'email'];
   qtyinput = '';
   userId: any;
-  filestored: any[];
+  filestored = [];
 
   ngOnInit() {
     this.getAgentandClient();
@@ -130,6 +131,7 @@ export class AddProjectDialogComponent implements OnInit, OnDestroy {
     public dialogRef: MatDialogRef<AddProjectDialogComponent>,
     public fb: FormBuilder,
     public fileservice: FileService,
+    private firestore: AngularFirestore,
     @Inject(AngularFireStorage) private afStorage: AngularFireStorage
   ) {
     try {
@@ -169,7 +171,7 @@ export class AddProjectDialogComponent implements OnInit, OnDestroy {
     });
   }
 
-  selectClient(value) {  
+  selectClient(value) {
     this.selectedClientUid = value.uid;
     this.selectedClient = value.fullName;
   }
@@ -189,31 +191,32 @@ export class AddProjectDialogComponent implements OnInit, OnDestroy {
 
 
     }
-    if(this.picFile.length>0){
+    if (this.picFile.length > 0) {
       this.fileupload();
-    }else{
+    } else {
       this.submitFinal();
     }
-    
+
   }
   submitFinal() {
     //console.log(this.);
+    this.addProjectForm.controls['photoURL'].setValue(this.filestored);
     this.firebaseService.addOne(this.addProjectForm.value, 'project');
     this.dialogRef.close();
   }
-  uploadImageAsPromise(fl) {
+  uploadImageAsPromise(fl,islast) {
     console.log(fl);
     var thisclass = this;
     var fs = this.fileservice;
     const path = `project/storeFile${new Date().getTime()}_${fl.name}`;
-    return new Promise(function (resolve, reject) {
+    return new Promise(function (resolvse, reject) {
       var storageRef = firebase.storage().ref(path);
 
       //Upload file
       var task = storageRef.put(fl);
       console.log(JSON.stringify(fl));
       task.then(function (snapshot) {
-        snapshot.ref.getDownloadURL().then(function (url) {  // Now I can use url
+        snapshot.ref.getDownloadURL().then(async function (url) {  // Now I can use url
           var file1 = {
             name: fl.name,
             lastModified: fl.lastModified,
@@ -222,28 +225,42 @@ export class AddProjectDialogComponent implements OnInit, OnDestroy {
             size: fl.size,
             type: fl.type
           };
+          const id = await thisclass.firestore.createId();
           var fileprop = {
+            id: id,
             fileProperties: file1,
             uidUploaded: thisclass.userId,
             section: 'BMS',
             fileName: `storeFile${new Date().getTime()}_${fl.name}`,
             category: 'project',
-            photoURL: url
+            photoURL: url,
+            path: path
           };
           console.log(fileprop);
-          var fileid = thisclass.fileservice.createFile(fileprop);
+          var fileID = await thisclass.fileservice.createFile(fileprop);
+          console.log('fileid');
+
+          thisclass.filestored.push(id);
+          
+          
+          if(islast){
+            
+            thisclass.submitFinal();
+          }
+          console.log(thisclass.filestored);
         });
       });
     });
   }
-  
+
   fileupload() {
     try {
       console.log(this.picFile);
       var filestored = [];
       //this.uploadprogress(this.picFile);
       for (var i = 0; i < this.picFile.length; i++) {
-        this.uploadImageAsPromise(this.picFile[i]);
+        var islast = i == this.picFile.length - 1;
+        this.uploadImageAsPromise(this.picFile[i],islast);
       }
     } catch (err) {
       alert(err.message);

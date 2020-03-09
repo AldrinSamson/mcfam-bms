@@ -6,4 +6,5 @@ export class FileModel {
     fileName: string;
     category: string;
     photoURL: string;
+    path: string;
 }

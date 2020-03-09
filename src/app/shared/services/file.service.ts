@@ -21,22 +21,25 @@ export class FileService {
       }
     });
   }
-  createFile(fl: any) {
+  async createFile(fl: any) {
     //return this.accountCollection.add(acc);
-    const id = this.firestore.createId();
+    
+
     console.log(fl);
     const f: FileModel = { 
-      id: id, 
+      id: fl.id, 
+      //id: id,
       fileProperties: fl.fileProperties, 
       uidUploaded: fl.uidUploaded, 
       section: 'BMS', 
       fileName: fl.fileName,
       category: fl.category,
-      photoURL: fl.photoURL
+      photoURL: fl.photoURL,
+      path: fl.path
     };
-    console.log(id + ' = fggjhh');
+    console.log(fl.id + ' = fggjhh');
     console.log(f);
-    this.fileCollection.doc(id).set(f);
-    return id;
+    this.fileCollection.doc(fl.id).set(f);
+    //return id;
   }
 }
