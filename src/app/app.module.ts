@@ -75,7 +75,7 @@ import { AuditComponent } from './pages/audit/audit.component';
     ViewProjectArchiveDialogComponent,
     AddClientDialogComponent, 
     ViewClientDialogComponent,
-    SaleProjectDialogComponent
+    SaleProjectDialogComponent,
   ],
   imports: [
     BrowserModule,

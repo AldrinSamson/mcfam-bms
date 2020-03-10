@@ -20,6 +20,7 @@ import { SaleReportComponent } from './pages/sale-report/sale-report.component';
 import { ProjectArchiveComponent } from './pages/project-archive/project-archive.component';
 import { AuditComponent } from './pages/audit/audit.component';
 
+
 // Components
 import { MiscComponent } from './components/misc/misc.component';
 
@@ -41,7 +42,7 @@ const appRoutes: Routes = [
   // { path: 'profile/:uid/:name', component: ProfileComponent, canActivate: [AuthGuardService] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService] },
   { path: 'profile-settings', component: ProfileSettingsComponent, canActivate: [AuthGuardService] },
-  { path: 'project' , component: ProjectComponent, canActivate: [AuthGuardService]},
+  { path: 'project' , component: ProjectComponent, canActivate: [AuthGuardService] },
   { path: 'broker' , component: BrokerComponent, canActivate: [AuthGuardService]},
   { path: 'inquiries' , component: InquiriesComponent, canActivate: [AuthGuardService]},
   { path: 'client' , component: ClientComponent, canActivate: [AuthGuardService]},
