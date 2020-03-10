@@ -9,7 +9,7 @@ import { ClientService } from '@shared/services/client.service';
 @Component({
   selector: 'app-client',
   templateUrl: './client.component.html',
-  styleUrls: ['./client.component.scss']
+  styleUrls: ['./client.component.css']
 })
 export class ClientComponent implements OnInit , OnDestroy {
 
@@ -67,7 +67,7 @@ ngOnDestroy() {
   //AddClient Component
   selector: 'add-client-dialog',
   templateUrl: './dialog/add-client-dialog.html',
-  styleUrls: ['./client.component.scss']
+  styleUrls: ['./client.component.css']
 })
 
 export class AddClientDialogComponent {
@@ -122,7 +122,7 @@ submitAddClientForm() {
   // tslint:disable-next-line:component-selector
   selector : 'view-client-dialog',
   templateUrl : './dialog/view-client-dialog.html',
-  styleUrls: ['./client.component.scss'],
+  styleUrls: ['./client.component.css'],
 })
 
 export class ViewClientDialogComponent {
