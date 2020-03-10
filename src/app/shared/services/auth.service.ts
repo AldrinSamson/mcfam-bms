@@ -13,7 +13,7 @@ export class AuthService {
 
   public onSuccess(): void {
     sessionStorage.setItem('session-alive', 'true');
-    sessionStorage.setItem('currentUid' , firebase.auth().currentUser.uid);
+    sessionStorage.setItem('currentUid', firebase.auth().currentUser.uid);
     this.token = 'some-temporary-token';
     this.router.navigate(['/project']);
     console.log('AUTH: ', this.auth);
@@ -32,7 +32,7 @@ export class AuthService {
       //mcfamrealty.is@gmail.com
       var user2 = firebase.auth().currentUser;
       sessionStorage.setItem('session-user-logged', user2.uid);
-      
+
       if (user) {
         // User is signed in.
         console.log(user2);

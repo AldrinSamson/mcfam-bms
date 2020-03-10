@@ -24,6 +24,7 @@ export class PhoneSigninComponent implements OnInit {
               private alertService: AlertService) {
       this.isAuthenticated = this.authService.isAuthenticated()
   }
+  
 
   ngOnInit() {
     this.windowRef = this.win.windowRef
