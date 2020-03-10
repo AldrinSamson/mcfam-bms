@@ -1,62 +1,33 @@
 <div class="main-box clearfix">
+<div class="search">
+      <input class="form-control" type="text" name="search" [(ngModel)]="clientSearchText" autocomplete="off" placeholder="&#61442;  Search for Client's Name">
+    </div>
 			<div class="table-responsive">
 				<table class="table user-list">
 					<thead>
 						<tr>
-							<th><span>User</span></th>
-							<th><span>Created</span></th>
-							<th class="text-center"><span>Status</span></th>
+							<th><span>Client</span></th>
+							<th><span>Contact Number</span></th>
 							<th><span>Email</span></th>
-							<th>&nbsp;</th>
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
+						<tr  *ngFor="let client of clients | paginate:{itemsPerPage: 5, currentPage:p} | filter:clientSearchText " (click)="openViewClient(client)">
 							<td>
 								<img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="">
-								<a href="#" class="user-link">Mila Kunis</a>
-								<span class="user-subhead">Admin</span>
+								<a  class="user-link">{{client.fullName}}</a>
 							</td>
 							<td>
-								2013/08/08
-							</td>
-							<td class="text-center">
-								<span class="label label-default">Inactive</span>
+								<a class ="contact-number">{{client.contactNumber}}</a>
 							</td>
 							<td>
-								<a href="#">mila@kunis.com</a>
-							</td>
-							<td style="width: 20%;">
-								<a href="#" class="table-link">
-									<span class="fa-stack">
-										<i class="fa fa-square fa-stack-2x"></i>
-										<i class="fa fa-search-plus fa-stack-1x fa-inverse"></i>
-									</span>
-								</a>
-								<a href="#" class="table-link">
-									<span class="fa-stack">
-										<i class="fa fa-square fa-stack-2x"></i>
-										<i class="fa fa-pencil fa-stack-1x fa-inverse"></i>
-									</span>
-								</a>
-								<a href="#" class="table-link danger">
-									<span class="fa-stack">
-										<i class="fa fa-square fa-stack-2x"></i>
-										<i class="fa fa-trash-o fa-stack-1x fa-inverse"></i>
-									</span>
-								</a>
+								<a >{{client.email}}</a>
 							</td>
 						</tr>
 					</tbody>
 				</table>
+					<div id="pagination">
+						<pagination-controls (pageChange)="p=$event"></pagination-controls>
+					</div>  
 			</div>
-			<ul class="pagination pull-right">
-				<li><a href="#"><i class="fa fa-chevron-left"></i></a></li>
-				<li><a href="#">1</a></li>
-				<li><a href="#">2</a></li>
-				<li><a href="#">3</a></li>
-				<li><a href="#">4</a></li>
-				<li><a href="#">5</a></li>
-				<li><a href="#"><i class="fa fa-chevron-right"></i></a></li>
-			</ul>
 		</div>

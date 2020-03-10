@@ -47,7 +47,7 @@ import { AuditComponent } from './pages/audit/audit.component';
     ViewProjectDialogComponent,
     ViewInquiryDialogComponent,
     ViewProjectArchiveDialogComponent,
-    AddClientDialogComponent, 
+    AddClientDialogComponent,
     ViewClientDialogComponent,
     SaleProjectDialogComponent
   ],

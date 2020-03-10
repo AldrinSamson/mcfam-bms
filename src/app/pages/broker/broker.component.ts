@@ -14,8 +14,9 @@ import { Subscription } from 'rxjs';
 })
 export class BrokerComponent implements OnInit , OnDestroy {
 
-  items: Array<any>;
-  brokerSub : Subscription;
+  brokerSearchText;
+  brokers: Array<any>;
+  brokerSub: Subscription;
   constructor( public firebaseService: FirebaseService,
     public dialog: MatDialog) { }
 
@@ -26,7 +27,7 @@ export class BrokerComponent implements OnInit , OnDestroy {
   getData() {
     this.brokerSub = this.firebaseService.getAllData('broker')
     .subscribe(result => {
-      this.items = result;
+      this.brokers = result;
     });
   }
 
@@ -154,7 +155,7 @@ export class ViewBrokerDialogComponent {
         brokerId: [this.data.brokerId],
         firstName: [this.data.firstName],
         lastName: [this.data.lastName],
-        fullName: [this.data.firstName +' '+ this.data.lastName],
+        'fullName': [''],
         userName: [this.data.userName],
         contactNumber: [this.data.contactNumber],
         addressStreet: [this.data.addressStreet],
@@ -167,12 +168,14 @@ export class ViewBrokerDialogComponent {
 
   submitEditBrokerForm() {
         if (this.editBrokerForm.valid) {
+              const fullName = this.data.firstName + ' ' + this.data.lastName;
+              this.editBrokerForm.controls['fullName'].setValue(fullName);
               this.BrokerService.updateBroker(this.data.id , this.editBrokerForm.value );
             this.dialogRef.close();
         }
     }
 
-    deleteBroker(){
+    deleteBroker() {
         this.firebaseService.deleteOne(this.data.id ,'broker')
         this.firebaseService.deleteOne(this.data.uid ,'users')
         //this.BrokerService.deleteBroker(this.data.uid)

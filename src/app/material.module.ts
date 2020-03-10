@@ -10,6 +10,8 @@ import {CdkStepperModule} from '@angular/cdk/stepper';
 import {CdkTableModule} from '@angular/cdk/table';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import {
     MatAutocompleteModule,
     MatButtonModule,
@@ -55,6 +57,8 @@ import {
       ScrollDispatchModule,
       CdkStepperModule,
       CdkTableModule,
+      NgxPaginationModule,
+      Ng2SearchPipeModule,
       // Material
       MatAutocompleteModule,
       MatButtonModule,

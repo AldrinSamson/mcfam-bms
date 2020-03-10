@@ -9,12 +9,13 @@ import { ClientService } from '@shared/services/client.service';
 @Component({
   selector: 'app-client',
   templateUrl: './client.component.html',
-  styleUrls: ['./client.component.css']
+  styleUrls: ['./client.component.scss']
 })
 export class ClientComponent implements OnInit , OnDestroy {
 
-  items: Array<any>;
-  clientSub : Subscription;
+  clientSearchText;
+  clients: Array<any>;
+  clientSub: Subscription;
   constructor( public firebaseService: FirebaseService,
     public dialog: MatDialog) { }
 
@@ -25,7 +26,7 @@ export class ClientComponent implements OnInit , OnDestroy {
   getData() {
     this.clientSub = this.firebaseService.getAllData('client')
     .subscribe(result => {
-      this.items = result;
+      this.clients = result;
     });
   }
 
@@ -67,7 +68,7 @@ ngOnDestroy() {
   //AddClient Component
   selector: 'add-client-dialog',
   templateUrl: './dialog/add-client-dialog.html',
-  styleUrls: ['./client.component.css']
+  styleUrls: ['./client.component.scss']
 })
 
 export class AddClientDialogComponent {
@@ -122,7 +123,7 @@ submitAddClientForm() {
   // tslint:disable-next-line:component-selector
   selector : 'view-client-dialog',
   templateUrl : './dialog/view-client-dialog.html',
-  styleUrls: ['./client.component.css'],
+  styleUrls: ['./client.component.scss'],
 })
 
 export class ViewClientDialogComponent {

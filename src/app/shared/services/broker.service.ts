@@ -42,7 +42,7 @@ export class BrokerService {
   }
 
   updateBroker(id ,values) {
-    return this.db.collection('broker').doc(id).set({
+    return this.db.collection('broker').doc(id).update({
                     brokerId: values.brokerId,
                     firstName: values.firstName,
                     lastName: values.lastName,
@@ -53,7 +53,7 @@ export class BrokerService {
                     addressTown: values.addressTown,
                     addressCity: values.addressCity,
                     addressRegion: values.addressRegion,
-    }) 
+    }); 
   }
   deleteBroker(id) {
     /*
