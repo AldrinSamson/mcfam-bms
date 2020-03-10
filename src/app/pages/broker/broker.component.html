@@ -1,34 +1,36 @@
 
 <button  fxFlexAlign="center" mat-icon-button class="smallButton" color="accent" (click) = "openAddBroker()" style = "float:right;"><i class="material-icons"> add </i></button>
 
-<div class="list-group users-list">
-    <div *ngFor="let item of items" class="list-group-item list-group-item-action flex-column align-items-start">
-      <div class="row">
-        <div class="col col-md-2 image-col">
-				<img class="image" [src]=item.photoURL>
-			</div>
-        <div class="col col-md-8 text-col">
-        
-          <h5 class="mb-1">{{item.fullName}} </h5>
-          <small>Email: {{item.email}}</small>
-        </div>
-        <div class="col col-md-2 actions-col">
-          <button class="btn btn-outline-primary action" (click)="openViewBroker(item)" type="button">
-            <ion-icon class="icon" name="arrow-round-forward"></ion-icon>
-          </button>
-        </div>
-      </div>
+<div class="main-box clearfix">
+<div class="search">
+      <input class="form-control" type="text" name="search" [(ngModel)]="brokerSearchText" autocomplete="off" placeholder="&#61442;  Search for Broker's Name">
     </div>
-</div>
-
- <table class="table">
-    <tr class="table-row">
-      <div class="col col-md-2 image-col">
-   
-      </div>
-        <td *ngFor="let item of items" class= "table-text" class="list-group-item flex-column align-items-start" (click)="openViewBroker(item)" >
-          <h3 class="mb-1">{{item.fullName}} </h3>
-          <small>Email: {{item.email}}</small>
-        </td>
-    </tr>
-  </table>
+			<div class="table-responsive">
+				<table class="table user-list">
+					<thead>
+						<tr>
+							<th><span>Broker's Name</span></th>
+							<th><span>Contact Number</span></th>
+							<th><span>Email</span></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr  *ngFor="let broker of brokers | paginate:{itemsPerPage: 5, currentPage:p} | filter:brokerSearchText " (click)="openViewBroker(broker)">
+							<td>
+								<img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="">
+								<a  class="user-link">{{broker.firstName}} {{broker.lastName}}</a>
+							</td>
+							<td>
+								<a class ="contact-number">{{broker.contactNumber}}</a>
+							</td>
+							<td>
+								<a >{{broker.email}}</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+					<div id="pagination">
+						<pagination-controls (pageChange)="p=$event"></pagination-controls>
+					</div>  
+			</div>
+		</div>
