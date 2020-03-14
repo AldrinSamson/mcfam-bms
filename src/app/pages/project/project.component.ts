@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
+import { Component, OnInit, Inject, OnDestroy,ElementRef} from '@angular/core';
 import { FirebaseService, AuthService, FileService } from '../../shared/services';
 import { MatDialog, MatDialogRef, MatDialogConfig, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, Validators } from '@angular/forms';
@@ -7,7 +7,7 @@ import { ProjectService } from '../../shared';
 import { Project } from '../../shared';
 //import { FileService } from '../../shared/services/file.service';
 import { MatTableDataSource } from '@angular/material';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 
 import { AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask } from 'angularfire2/storage';
 import * as cors from 'cors';
@@ -28,22 +28,29 @@ export class ProjectComponent implements OnInit, OnDestroy {
   projects: MatTableDataSource<any>;
 
   public projectSub: Subscription;
-
+  viewFile='';
   qtyinput = '';
   userId: string;
 
+  fileslist: any[];
+  joined$: Observable<any>;
+
   constructor(public firebaseService: FirebaseService,
     public projectService: ProjectService,
-    public dialog: MatDialog, fileservice: FileService, authService: AuthService) {
+    public dialog: MatDialog, public fileservice: FileService, authService: AuthService) {
     try {
+      this.fileslist = this.fileservice.getFiles();
       this.userId = firebase.auth().currentUser.uid
     } catch (err) {
       this.userId = '';
     }
+
   }
 
   ngOnInit() {
     this.getData();
+    this.fileslist = this.fileservice.getFiles();
+    console.log(this.fileslist);
   }
   getData() {
     this.projectSub = this.projectService.getProjects(false)
@@ -80,8 +87,38 @@ export class ProjectComponent implements OnInit, OnDestroy {
       agentName: value.agentName,
       agentUid: value.agentUid
     };
+    console.log("value.photoURL");
+    console.log(value.photoURL);
+
+    //console.log(this.fileservice.getFiles())
+    this.fileslist = this.fileservice.getFiles();
+    //console.log(this.fileslist);
+    this.viewFile='sds';
+    var thevf=[];
+    //thevf.innerHTML='asd';
+    console.log(thevf);
+    for (var i = 0; i < this.fileslist.length; i++) {
+      //var x = document.getElementById(value.photoURL[i]);
+      //x.src = '';
+      var y = this.fileslist[i]
+      for(var j=0; j< value.photoURL.length ;j++)  {
+        var x = value.photoURL[j];
+        
+        if(x===y.id){
+          //thevf = x.photoURL+"<br>";
+          thevf.push(y.photoURL); 
+        }
+      }
+      
+      //jQuery(".image2").attr("src","image1.jpg");
+    }
+    console.log("(thevf)");
+
+    console.log((thevf));
+    dialogConfig.data.photoURL = thevf;
     dialogConfig.maxWidth = '50vw';
     dialogConfig.width = '50vw';
+    console.log(dialogConfig.data)
     this.dialog.open(ViewProjectDialogComponent, dialogConfig).afterClosed().subscribe(result => {
       this.getData();
     });
@@ -121,7 +158,8 @@ export class AddProjectDialogComponent implements OnInit, OnDestroy {
   qtyinput = '';
   userId: any;
   filestored = [];
-
+  testing = '';
+  viewFile=[];
   ngOnInit() {
     this.getAgentandClient();
   }
@@ -204,7 +242,7 @@ export class AddProjectDialogComponent implements OnInit, OnDestroy {
     this.firebaseService.addOne(this.addProjectForm.value, 'project');
     this.dialogRef.close();
   }
-  uploadImageAsPromise(fl,islast) {
+  uploadImageAsPromise(fl, islast) {
     console.log(fl);
     var thisclass = this;
     var fs = this.fileservice;
@@ -241,10 +279,10 @@ export class AddProjectDialogComponent implements OnInit, OnDestroy {
           console.log('fileid');
 
           thisclass.filestored.push(id);
-          
-          
-          if(islast){
-            
+
+
+          if (islast) {
+
             thisclass.submitFinal();
           }
           console.log(thisclass.filestored);
@@ -260,7 +298,7 @@ export class AddProjectDialogComponent implements OnInit, OnDestroy {
       //this.uploadprogress(this.picFile);
       for (var i = 0; i < this.picFile.length; i++) {
         var islast = i == this.picFile.length - 1;
-        this.uploadImageAsPromise(this.picFile[i],islast);
+        this.uploadImageAsPromise(this.picFile[i], islast);
       }
     } catch (err) {
       alert(err.message);
