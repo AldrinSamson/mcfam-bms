@@ -1,79 +1,78 @@
 <h2 mat-dialog-title>Add Broker</h2>
-<div mat-dialog-content [formGroup] = "addBrokerForm" >
-           
-            <mat-form-field >
-                <mat-label> ID </mat-label>
-                <input matInput formControlName = "brokerId"  name = "brokerId" required>
-            </mat-form-field>
-            <br>
-           <mat-form-field >
-                <mat-label> Position </mat-label>
-                <mat-select formControlName = "position" name = "broker-position" required>
-                        <mat-option value="Manager">Manager</mat-option>
-                        <mat-option value="Agent">Agent</mat-option>
-                    </mat-select>
-            </mat-form-field>
-            <br>
-            <mat-form-field >
-                <mat-label> Username </mat-label>
-                <input matInput formControlName = "userName" name = "broker-userName" required>
-            </mat-form-field>
-            <br>
-            <mat-form-field >
-                <mat-label> First Name </mat-label>
-                <input matInput formControlName = "firstName"  name = "broker-firstName"required>
-            </mat-form-field>
-            <br>
-            <mat-form-field >
-                <mat-label> Last Name </mat-label>
-                <input matInput formControlName = "lastName" name = "broker-lastName" required>
-            </mat-form-field>
-            <br>
-            <mat-form-field >
-                <mat-label>  Email  </mat-label>
-                <input matInput type = "email" formControlName = "email" name = "broker-email" required>
-            </mat-form-field>
-            <br>
-            <mat-form-field >
-                <mat-label> Contact Number </mat-label>
-                <input matInput formControlName = "contactNumber" name = "broker-contactNumber" required>
-            </mat-form-field>
-            <br>
-            <mat-form-field >
-                <mat-label> Street </mat-label>
-                <input matInput formControlName = "addressStreet"  name = "broker-addressStreet" required>
-            </mat-form-field>
-            <br>
-            <mat-form-field >
-                <mat-label> Town / Barangay </mat-label>
-                <input matInput formControlName = "addressTown"  name = "broker-addressTown" required>
-            </mat-form-field>
-            <br>
-            <mat-form-field >
-                <mat-label> City </mat-label>
-                <input matInput formControlName = "addressCity"  name = "broker-addressCity" required>
-            </mat-form-field>
-            <br>
-            <mat-form-field >
-                <mat-label> Region </mat-label>
-                <input matInput formControlName = "addressRegion"  name = "broker-addressRegion" required>
-            </mat-form-field>
-            <br>
-            <label>
-                Upload Picture File<br>
-                <input hidden type="file" (change)="getFile($event)" id='inputfile' accept=".png,.jpg" >
-                <button class="btn btn-primary" id='uploadbtn' (click)='inputFileClick()'>Upload</button>
-                &nbsp;
-                <span id='qtyinput'></span>
-            </label>
-            <br>
-            <mat-form-field >
-                <mat-label> Password </mat-label>
-                <input matInput type="password" formControlName = "password" autocomplete="off" name = "broker-password"required>
-            </mat-form-field>
-            <br>
+<div mat-dialog-content [formGroup]="addBrokerForm">
+    <mat-form-field>
+        <mat-label> Position </mat-label>
+        <mat-select formControlName="position" name="broker-position" required>
+            <mat-option value="Manager">Manager</mat-option>
+            <mat-option value="Agent">Agent</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <br>
+    <mat-form-field>
+        <mat-label> Username </mat-label>
+        <input matInput formControlName="userName" name="broker-userName" required>
+    </mat-form-field>
+    <br>
+    <mat-form-field>
+        <mat-label> First Name </mat-label>
+        <input matInput formControlName="firstName" name="broker-firstName" required>
+    </mat-form-field>
+    <br>
+    <mat-form-field>
+        <mat-label> Last Name </mat-label>
+        <input matInput formControlName="lastName" name="broker-lastName" required>
+    </mat-form-field>
+    <br>
+    <mat-form-field>
+        <mat-label> Email </mat-label>
+        <input matInput type="email" formControlName="email" name="broker-email" required>
+    </mat-form-field>
+    <br>
+    <mat-form-field>
+        <mat-label> Contact Number </mat-label>
+        <input matInput formControlName="contactNumber" name="broker-contactNumber" required>
+    </mat-form-field>
+    <br>
+    <mat-form-field>
+        <mat-label> Street </mat-label>
+        <input matInput formControlName="addressStreet" name="broker-addressStreet" required>
+    </mat-form-field>
+    <br>
+    <mat-form-field>
+        <mat-label> Town / Barangay </mat-label>
+        <input matInput formControlName="addressTown" name="broker-addressTown" required>
+    </mat-form-field>
+    <br>
+    <mat-form-field>
+        <mat-label> City </mat-label>
+        <input matInput formControlName="addressCity" name="broker-addressCity" required>
+    </mat-form-field>
+    <br>
+    <mat-form-field>
+        <mat-label> Region </mat-label>
+        <input matInput formControlName="addressRegion" name="broker-addressRegion" required>
+    </mat-form-field>
+
+    <br>
+    <mat-form-field>
+        <mat-label> Password </mat-label>
+        <input matInput type="password" formControlName="password" autocomplete="off" name="broker-password" required>
+    </mat-form-field>
+    <br>
+    <label>
+        Upload Picture File<br>
+        <input hidden #file type="file" accept='image/*'  (change)="preview(file.files)" id='inputfile' >
+        <button class="btn btn-primary" id='uploadbtn' (click)='inputFileClick()'>Upload</button>
+        &nbsp;
+        <span id='qtyinput'></span>
+    </label>
+    <br>
+    <span style="color:red;" *ngIf="message">{{message}}</span>
+    <!--<input hidden #file type="file" accept='image/*' (change)="preview(file.files)" />-->
+    <img [src]="imgURL" height="200" *ngIf="imgURL">
+    <br>
 </div>
 <div mat-dialog-actions>
-    <button mat-button (click) = "submitAddBrokerForm()" >Add</button>
-    <button mat-button (click)="onNoClick()">Back</button> 
+    <button mat-button (click)="submitAddBrokerForm()">Add</button>
+    <button mat-button (click)="onNoClick()">Back</button>
 </div>

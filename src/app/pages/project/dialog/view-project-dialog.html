@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>Edit {{data.name}} Project</h2>
+<h2 mat-dialog-title>Edit {{data.name}} Project{{testing}}</h2>
 <div mat-dialog-content [formGroup] = "editProjectForm" class="modalform">
    
             <mat-form-field >
@@ -73,7 +73,12 @@
             <div>
                 <h5>Photo:</h5>
                 <br>
-                <img src='{{data.photoURL}}' class='photoURL'>
+                <div id='viewfile'></div>
+                <div *ngFor='let fl of data.photoURL;let i = index'>
+                    
+                    <img src='{{fl}}' class="photoURL">
+                    
+                </div>
             </div>
 </div>
 <div mat-dialog-actions>
