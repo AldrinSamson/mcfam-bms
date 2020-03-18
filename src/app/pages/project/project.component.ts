@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, OnDestroy,ElementRef} from '@angular/core';
+import { Component, OnInit, Inject, OnDestroy, ElementRef } from '@angular/core';
 import { FirebaseService, AuthService, FileService } from '../../shared/services';
 import { MatDialog, MatDialogRef, MatDialogConfig, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, Validators } from '@angular/forms';
@@ -28,7 +28,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   projects: MatTableDataSource<any>;
 
   public projectSub: Subscription;
-  viewFile='';
+  viewFile = '';
   qtyinput = '';
   userId: string;
 
@@ -93,23 +93,23 @@ export class ProjectComponent implements OnInit, OnDestroy {
     //console.log(this.fileservice.getFiles())
     this.fileslist = this.fileservice.getFiles();
     //console.log(this.fileslist);
-    this.viewFile='sds';
-    var thevf=[];
+    this.viewFile = 'sds';
+    var thevf = [];
     //thevf.innerHTML='asd';
     console.log(thevf);
     for (var i = 0; i < this.fileslist.length; i++) {
       //var x = document.getElementById(value.photoURL[i]);
       //x.src = '';
       var y = this.fileslist[i]
-      for(var j=0; j< value.photoURL.length ;j++)  {
+      for (var j = 0; j < value.photoURL.length; j++) {
         var x = value.photoURL[j];
-        
-        if(x===y.id){
+
+        if (x === y.id) {
           //thevf = x.photoURL+"<br>";
-          thevf.push(y.photoURL); 
+          thevf.push(y);
         }
       }
-      
+
       //jQuery(".image2").attr("src","image1.jpg");
     }
     console.log("(thevf)");
@@ -159,7 +159,7 @@ export class AddProjectDialogComponent implements OnInit, OnDestroy {
   userId: any;
   filestored = [];
   testing = '';
-  viewFile=[];
+  viewFile = [];
   ngOnInit() {
     this.getAgentandClient();
   }
@@ -379,7 +379,18 @@ export class ViewProjectDialogComponent {
       this.dialogRef.close();
     }
   }
-
+  toRemove(event) {
+    console.log(event);
+    var getid = event.target.value.split("|")[0];
+    if (event.target.checked) {
+      //document.getElementById('photoID_' + getid).classList.remove('btn-primary');
+      document.getElementById('photoID_' + getid).classList.add('blurtodelete');
+    
+    } else {
+      document.getElementById('photoID_' + getid).classList.remove('blurtodelete');
+      //document.getElementById('photoID_' + getid).classList.add('btn-success');
+    }
+  }
   openTransaction() {
 
     const dialogConfig = new MatDialogConfig();
