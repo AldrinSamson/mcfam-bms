@@ -11,6 +11,7 @@ import { Subscription, Observable } from 'rxjs';
 
 import { AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask } from 'angularfire2/storage';
 import * as cors from 'cors';
+import * as $ from 'jquery';
 import * as firebase from 'firebase';
 import { finalize } from 'rxjs/operators';
 import { AngularFirestore } from '@angular/fire/firestore';
@@ -229,7 +230,7 @@ export class AddProjectDialogComponent implements OnInit, OnDestroy {
 
 
     }
-    if (this.picFile.length > 0) {
+    if (this.picFile.length > 0 ) {
       this.fileupload();
     } else {
       this.submitFinal();
@@ -376,6 +377,7 @@ export class ViewProjectDialogComponent {
   submitEditProjectForm() {
     if (this.editProjectForm.valid) {
       this.projectService.updateProject(this.data.id, this.editProjectForm.value);
+      
       this.dialogRef.close();
     }
   }
@@ -389,6 +391,23 @@ export class ViewProjectDialogComponent {
     } else {
       document.getElementById('photoID_' + getid).classList.remove('blurtodelete');
       //document.getElementById('photoID_' + getid).classList.add('btn-success');
+    }
+  }
+  choosedelete(){
+    console.log($('#choosedelete').hasClass("btn-danger"))
+    if ($('#choosedelete').hasClass("btn-danger")) {
+      document.getElementById('choosedelete').classList.add('btn-outline-danger');
+      document.getElementById('choosedelete').classList.remove('btn-danger');
+      $('#choosedelete').html("Cancel for deletion")
+      $('.forlabel').wrap( "<label></label>" );
+    } else {
+      document.getElementById('choosedelete').classList.add('btn-danger');
+      document.getElementById('choosedelete').classList.remove('btn-outline-danger');
+      $('#choosedelete').html("Choose photo(s) to delete")
+      //$('forlabel').wrap( "<label></label>" );
+      $('.photoURL').removeClass('blurtodelete');
+       
+      $('.forlabel').unwrap(  );
     }
   }
   openTransaction() {

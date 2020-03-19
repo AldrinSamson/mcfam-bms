@@ -75,14 +75,16 @@
     <br>
     <div>
         <h5>Photo:</h5>
+        
+        <div id=''><button id='choosedelete' class="btn btn-danger btn-sm" (click)='choosedelete()'>Choose photo(s) to delete</button></div>
         <br>
-        <div id='viewfile'></div>
-        <div *ngFor='let fl of data.photoURL;let i = index'>
-            <div class="">
-                <label>
-                <input type="checkbox" (change)='toRemove($event)' value='{{fl.id}}|{{fl.path}}'>&nbsp;&nbsp;
-                <img src='{{fl.photoURL}}' class="photoURL" id='photoID_{{fl.id}}'>
-                </label>
+        <div class="multiphotos">
+            <div class="theinline" *ngFor='let fl of data.photoURL;let i = index'>
+                <span class="forlabel">
+                    <input hidden type="checkbox" (change)='toRemove($event)' value='{{fl.id}}|{{fl.path}}'>&nbsp;&nbsp;
+                    <img src='{{fl.photoURL}}' class="photoURL" id='photoID_{{fl.id}}'>
+                </span>
+                &nbsp;&nbsp;
             </div>
         </div>
     </div>
