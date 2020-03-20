@@ -1,7 +1,13 @@
-<div class="main-box clearfix">
-<div class="search">
-      <input class="form-control" type="text" name="search" [(ngModel)]="clientSearchText" autocomplete="off" placeholder="&#61442;  Search for Client's Name">
-    </div>
+<div class="card">
+	<div class="card-header">
+		 <div *ngIf="authService.isManager()" >  
+			<button mat-raised-button color="primary" (click) = "openAddClient()">Add New Client</button>
+		 </div>
+	</div>
+	<div class="card-body">
+		<div class="search">
+			  <input class="form-control" type="text" name="search" [(ngModel)]="clientSearchText" autocomplete="off" placeholder="&#61442;  Search for Client's Name">
+		</div>
 			<div class="table-responsive">
 				<table class="table user-list">
 					<thead>
@@ -12,7 +18,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr  *ngFor="let client of clients | paginate:{itemsPerPage: 5, currentPage:p} | filter:clientSearchText " (click)="openViewClient(client)">
+						<tr  *ngFor="let client of clients | paginate:{itemsPerPage: 5, currentPage:1} | filter:clientSearchText " (click)="openViewClient(client)">
 							<td>
 								<img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="">
 								<a  class="user-link">{{client.fullName}}</a>
@@ -28,6 +34,8 @@
 				</table>
 					<div id="pagination">
 						<pagination-controls (pageChange)="p=$event"></pagination-controls>
-					</div>  
+					</div>  		
 			</div>
-		</div>
+	</div>
+</div>
+

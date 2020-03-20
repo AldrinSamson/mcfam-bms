@@ -44,10 +44,12 @@
       <span>Archived Projects</span>
     </button>
 
+    <div *ngIf="authService.isManager();">
     <button mat-button routerLink="/audit" (click)="sidenav.close()">
       <mat-icon class="misc">security</mat-icon>
       <span>Audit</span>
     </button>
+    </div>
 
     <hr>
     
@@ -88,9 +90,9 @@
   <!-- Menu -->
   <span class="spacer"></span>
 
-  <div *ngIf="!authService.isAuthenticated();">
+  
     <app-date-pipe></app-date-pipe>
-  </div>
+ 
 
   <span class="spacer-light"></span>
 
@@ -103,7 +105,7 @@
 
   <ng-template #loggedin>
     <div *ngIf="authService.isAuthenticated()">
-    <h4>Welcome {{test}}</h4>
+    <!-- <h4>Welcome {{userDetails.fullName}}</h4> -->
     </div>
 
     

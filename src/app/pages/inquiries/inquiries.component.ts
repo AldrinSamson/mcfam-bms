@@ -16,6 +16,7 @@ export class InquiriesComponent implements OnInit, OnDestroy {
 
     inquiries: Array<any>;
     public inquirySub: Subscription;
+    uid: String;
 
     constructor( public fbs: FirebaseService,
       public inquiryService: InquiriesService,
@@ -23,11 +24,12 @@ export class InquiriesComponent implements OnInit, OnDestroy {
     ) {}
 
     ngOnInit() {
+      this.uid = sessionStorage.getItem('session-user-uid')
       this.getUserInquiries();
     }
 
     getUserInquiries() {
-      this.inquirySub = this.inquiryService.getInquiries(false).subscribe( result => {
+      this.inquirySub = this.inquiryService.getInquiries(this.uid ,false).subscribe( result => {
         this.inquiries = result;
       });
     }

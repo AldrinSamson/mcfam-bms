@@ -1,21 +1,26 @@
+<div class="card">
+	<div class="card-header">
+		 <h3>Customer Inquiries</h3>
+	</div>
+	<div class="card-body">
+		<div class="search">
+			  <input class="form-control" type="text" name="search"  autocomplete="off" placeholder="&#61442;  Search ">
+        </div>
 
-<div class="list-group users-list">
-    <div *ngFor="let inquiry of inquiries" class="list-group-item list-group-item-action flex-column align-items-start">
-      <div class="row">
-        <div class="col col-md-2 image-col">
-				<img class="image" [src]=''>
-			</div>
-        <div class="col col-md-8 text-col">
-        
-          <h5 class="mb-1">{{inquiry.clientName}} </h5>
-          <small>Email: {{inquiry.clientEmail}}</small>
-        </div>
-        <div class="col col-md-2 actions-col">
-          <button class="btn btn-outline-primary action" (click)="openViewInquiry(inquiry)" type="button">
-            <ion-icon class="icon" name="arrow-round-forward"></ion-icon>
-          </button>
-        </div>
-      </div>
+        <table class="table table-inbox table-hover">
+            <thead>
+                <th>Date/Time Sent</th>
+                <th>Project Name</th>
+                <th>Client Name</th>
+            </thead>
+            <tbody>
+                <tr *ngFor="let inquiry of inquiries" (click)="openViewInquiry(inquiry)" >
+                    <td class="view-message  text-left">{{inquiry.dateSent.toDate() | date: 'MMM-dd-yy hh:mm' }}</td>
+                    <td >{{inquiry.projectName}}</td>
+                    <td >{{inquiry.clientName}}</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-</div>
+</div>        
 

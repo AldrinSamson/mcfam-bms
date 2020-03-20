@@ -1,20 +1,17 @@
 import { Component, OnInit, Inject, OnDestroy,ElementRef} from '@angular/core';
-import { FirebaseService, AuthService, FileService } from '../../shared/services';
+import { FirebaseService, AuthService, FileService , ProjectService , Project, BrokerService} from '../../shared';
 import { MatDialog, MatDialogRef, MatDialogConfig, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, Validators } from '@angular/forms';
 // import { Router, Params } from '@angular/router';
-import { ProjectService } from '../../shared';
-import { Project } from '../../shared';
-//import { FileService } from '../../shared/services/file.service';
 import { MatTableDataSource } from '@angular/material';
 import { Subscription, Observable } from 'rxjs';
 
 import { AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask } from 'angularfire2/storage';
 import * as cors from 'cors';
 import * as firebase from 'firebase';
-import { finalize } from 'rxjs/operators';
 import { AngularFirestore } from '@angular/fire/firestore';
 const corsHandler = cors({ origin: true });
+
 @Component({
   // tslint:disable-next-line:component-selector
   selector: 'app-project',
@@ -23,28 +20,35 @@ const corsHandler = cors({ origin: true });
 })
 export class ProjectComponent implements OnInit, OnDestroy {
 
+  public isManager: Boolean;
+
   displayedColumnsProject: string[] = ['name', 'saleType', 'propertyType', 'addressStreet', 'addressTown', 'addressCity', 'addressRegion', 'cost', 'status'];
-
   projects: MatTableDataSource<any>;
-
   public projectSub: Subscription;
+
   viewFile='';
   qtyinput = '';
   userId: string;
-
   fileslist: any[];
   joined$: Observable<any>;
 
-  constructor(public firebaseService: FirebaseService,
+  userDetails: any;
+
+  constructor(
+    public firebaseService: FirebaseService,
     public projectService: ProjectService,
-    public dialog: MatDialog, public fileservice: FileService, authService: AuthService) {
-    try {
+    public dialog: MatDialog, 
+    public fileservice: FileService, 
+    public authService: AuthService) {
+
+      this.isManager = this.authService.isManager();
+    
+      try {
       this.fileslist = this.fileservice.getFiles();
       this.userId = firebase.auth().currentUser.uid
-    } catch (err) {
+      } catch (err) {
       this.userId = '';
-    }
-
+      }
   }
 
   ngOnInit() {
@@ -52,6 +56,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     this.fileslist = this.fileservice.getFiles();
     console.log(this.fileslist);
   }
+  
   getData() {
     this.projectSub = this.projectService.getProjects(false)
       .subscribe(result => {
@@ -170,6 +175,7 @@ export class AddProjectDialogComponent implements OnInit, OnDestroy {
     public fb: FormBuilder,
     public fileservice: FileService,
     private firestore: AngularFirestore,
+    public brokerService: BrokerService,
     @Inject(AngularFireStorage) private afStorage: AngularFireStorage
   ) {
     try {
@@ -204,7 +210,7 @@ export class AddProjectDialogComponent implements OnInit, OnDestroy {
       this.clients = new MatTableDataSource(result);
     });
 
-    this.agentSub = this.firebaseService.getAllData('broker').subscribe(result => {
+    this.agentSub = this.brokerService.getWithPosition('Agent').subscribe(result => {
       this.agents = new MatTableDataSource(result);
     });
   }
@@ -344,8 +350,10 @@ export class AddProjectDialogComponent implements OnInit, OnDestroy {
   styleUrls: ['./project.component.scss'],
 })
 
-export class ViewProjectDialogComponent {
+export class ViewProjectDialogComponent implements OnInit{
   editProjectForm: any;
+  userDetails: any;
+  isManager = false;
 
   constructor(
     public firebaseService: FirebaseService,
@@ -353,8 +361,11 @@ export class ViewProjectDialogComponent {
     public dialogRef: MatDialogRef<ViewProjectDialogComponent>,
     public fb: FormBuilder,
     public dialog: MatDialog,
+    public authService: AuthService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
+    this.isManager = this.authService.isManager();
+
     this.editProjectForm = this.fb.group({
       name: [this.data.name],
       overview: [this.data.overview],
@@ -371,6 +382,13 @@ export class ViewProjectDialogComponent {
       agentName: [this.data.agentName],
       agentUid: [this.data.agentUid]
     });
+  }
+
+  ngOnInit() {
+    this.userDetails = JSON.parse(sessionStorage.getItem('session-user-details'))
+    if(this.userDetails.position == "Manager"){
+      this.isManager = true;
+    }
   }
 
   submitEditProjectForm() {
@@ -437,6 +455,7 @@ export class SaleProjectDialogComponent implements OnInit, OnDestroy {
   constructor(
     public firebaseService: FirebaseService,
     public projectService: ProjectService,
+    public brokerService: BrokerService,
     public dialogRef: MatDialogRef<ViewProjectDialogComponent>,
     public fb: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: any
@@ -457,7 +476,8 @@ export class SaleProjectDialogComponent implements OnInit, OnDestroy {
       dateEnd: [''],
       dateApproved: [''],
       documentCollectionId: [''],
-      status: ['customer stage 2'],
+      status: ['Awaiting Customer Document'],
+      stage: [2],
       isCompleted: [false],
       isManagerApproved: [false],
       isCustomerApproved: [false],
@@ -474,7 +494,7 @@ export class SaleProjectDialogComponent implements OnInit, OnDestroy {
       this.clients = new MatTableDataSource(result);
     });
 
-    this.managerSub = this.firebaseService.getAllData('broker').subscribe(result => {
+    this.managerSub = this.brokerService.getWithPosition('Manager').subscribe(result => {
       this.managers = new MatTableDataSource(result);
     });
   }

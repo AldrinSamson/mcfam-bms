@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>Edit {{data.name}} Project{{testing}}</h2>
+<h2 mat-dialog-title>Edit {{data.name}} Project</h2>
 <div mat-dialog-content [formGroup] = "editProjectForm" class="modalform">
    
             <mat-form-field >
@@ -82,8 +82,10 @@
             </div>
 </div>
 <div mat-dialog-actions>
-    <button mat-button color = "warn" (click) = "archiveProject()" >Archive</button>
-    <button mat-button (click) = "submitEditProjectForm()" >Edit</button>
+    <div *ngIf="authService.isManager()" >  
+        <button mat-button color = "warn" (click) = "archiveProject()" >Archive</button>
+        <button mat-button (click) = "submitEditProjectForm()" >Edit</button>
+    </div>
     <button mat-button (click) = "openTransaction()" >Sell</button>
     <button mat-button (click)="onNoClick()">Back</button> 
 </div>
