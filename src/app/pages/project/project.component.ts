@@ -347,7 +347,8 @@ export class AddProjectDialogComponent implements OnInit, OnDestroy {
 
 export class ViewProjectDialogComponent {
   editProjectForm: any;
-
+  viewFiles: any;
+  arrayphoto= [];
   constructor(
     public firebaseService: FirebaseService,
     public projectService: ProjectService,
@@ -409,6 +410,35 @@ export class ViewProjectDialogComponent {
        
       $('.forlabel').unwrap(  );
     }
+  }
+  addphotoview(){
+    document.getElementById('inputfileview').click();
+  }
+  addphotos(files){
+    this.arrayphoto=[];
+    
+    this.viewFiles= files;
+    for(var i = 0; i< this.viewFiles.length;i++){
+      var reader = new FileReader();
+      /*reader.readAsDataURL(files[i]);
+      reader.onload = (_event) => {
+        //this.imgURL = reader.result;
+        //this.picFile = files;
+        this.arrayphoto.push(reader.result)
+        //console.log( reader.result)
+      }*/
+
+      reader.onload = (event:any) => {
+        console.log(event.target.result);
+        this.arrayphoto.push(event.target.result); 
+      }
+      reader.readAsDataURL(files[i]);
+    }
+
+    
+    console.log(this.viewFiles);
+
+    
   }
   openTransaction() {
 

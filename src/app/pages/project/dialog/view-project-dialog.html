@@ -87,6 +87,21 @@
                 &nbsp;&nbsp;
             </div>
         </div>
+        <br>
+        <div>
+            <h5>Add photo(s)</h5>
+            <button class="btn btn-primary" id='addbutton' (click)='addphotoview()'>Click here to add more photos</button>
+            <input hidden id='inputfileview' #file type="file" accept='image/*' (change)='addphotos(file.files)' multiple>
+            <br>
+            <div id='photoscontain' class="multiphotos">
+                <div *ngFor='let url of arrayphoto'   class="toaddphotosdiv">
+                    <img class="photoURL" [src]="url" >
+                </div>
+                &nbsp;&nbsp;
+            </div>
+
+        </div>
+        <br>
     </div>
 </div>
 <div mat-dialog-actions>
