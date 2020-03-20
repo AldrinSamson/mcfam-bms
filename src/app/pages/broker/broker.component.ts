@@ -255,7 +255,7 @@ export class AddBrokerDialogComponent {
             await x.then(function (result) {
               // do something with result
               console.log(result);
-              //photourl = result.photoURL;
+              photourl = result['photoURL']
             })
           } else {
             //this.insertBroker(''); 

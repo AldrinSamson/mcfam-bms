@@ -8,6 +8,7 @@ import { Subscription, Observable } from 'rxjs';
 
 import { AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask } from 'angularfire2/storage';
 import * as cors from 'cors';
+import * as $ from 'jquery';
 import * as firebase from 'firebase';
 import { AngularFirestore } from '@angular/fire/firestore';
 const corsHandler = cors({ origin: true });
@@ -25,8 +26,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   displayedColumnsProject: string[] = ['name', 'saleType', 'propertyType', 'addressStreet', 'addressTown', 'addressCity', 'addressRegion', 'cost', 'status'];
   projects: MatTableDataSource<any>;
   public projectSub: Subscription;
-
-  viewFile='';
+  viewFile = '';
   qtyinput = '';
   userId: string;
   fileslist: any[];
@@ -98,23 +98,23 @@ export class ProjectComponent implements OnInit, OnDestroy {
     //console.log(this.fileservice.getFiles())
     this.fileslist = this.fileservice.getFiles();
     //console.log(this.fileslist);
-    this.viewFile='sds';
-    var thevf=[];
+    this.viewFile = 'sds';
+    var thevf = [];
     //thevf.innerHTML='asd';
     console.log(thevf);
     for (var i = 0; i < this.fileslist.length; i++) {
       //var x = document.getElementById(value.photoURL[i]);
       //x.src = '';
       var y = this.fileslist[i]
-      for(var j=0; j< value.photoURL.length ;j++)  {
+      for (var j = 0; j < value.photoURL.length; j++) {
         var x = value.photoURL[j];
-        
-        if(x===y.id){
+
+        if (x === y.id) {
           //thevf = x.photoURL+"<br>";
-          thevf.push(y.photoURL); 
+          thevf.push(y);
         }
       }
-      
+
       //jQuery(".image2").attr("src","image1.jpg");
     }
     console.log("(thevf)");
@@ -164,7 +164,7 @@ export class AddProjectDialogComponent implements OnInit, OnDestroy {
   userId: any;
   filestored = [];
   testing = '';
-  viewFile=[];
+  viewFile = [];
   ngOnInit() {
     this.getAgentandClient();
   }
@@ -235,7 +235,7 @@ export class AddProjectDialogComponent implements OnInit, OnDestroy {
 
 
     }
-    if (this.picFile.length > 0) {
+    if (this.picFile.length > 0 ) {
       this.fileupload();
     } else {
       this.submitFinal();
@@ -394,10 +394,39 @@ export class ViewProjectDialogComponent implements OnInit{
   submitEditProjectForm() {
     if (this.editProjectForm.valid) {
       this.projectService.updateProject(this.data.id, this.editProjectForm.value);
+      
       this.dialogRef.close();
     }
   }
-
+  toRemove(event) {
+    console.log(event);
+    var getid = event.target.value.split("|")[0];
+    if (event.target.checked) {
+      //document.getElementById('photoID_' + getid).classList.remove('btn-primary');
+      document.getElementById('photoID_' + getid).classList.add('blurtodelete');
+    
+    } else {
+      document.getElementById('photoID_' + getid).classList.remove('blurtodelete');
+      //document.getElementById('photoID_' + getid).classList.add('btn-success');
+    }
+  }
+  choosedelete(){
+    console.log($('#choosedelete').hasClass("btn-danger"))
+    if ($('#choosedelete').hasClass("btn-danger")) {
+      document.getElementById('choosedelete').classList.add('btn-outline-danger');
+      document.getElementById('choosedelete').classList.remove('btn-danger');
+      $('#choosedelete').html("Cancel for deletion")
+      $('.forlabel').wrap( "<label></label>" );
+    } else {
+      document.getElementById('choosedelete').classList.add('btn-danger');
+      document.getElementById('choosedelete').classList.remove('btn-outline-danger');
+      $('#choosedelete').html("Choose photo(s) to delete")
+      //$('forlabel').wrap( "<label></label>" );
+      $('.photoURL').removeClass('blurtodelete');
+       
+      $('.forlabel').unwrap(  );
+    }
+  }
   openTransaction() {
 
     const dialogConfig = new MatDialogConfig();
