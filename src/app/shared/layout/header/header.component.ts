@@ -10,8 +10,10 @@ import { AuthService, AlertService } from '../../services';
 })
 export class HeaderComponent {
   public isAuthenticated: string;
+  public isManager: Boolean;
   public angularImage: string = '/assets/img/house.png';
   public test = '';
+  public userDetails : any;
 
   public menuItems: Object[] = [
     {
@@ -50,6 +52,10 @@ export class HeaderComponent {
     private alertService: AlertService,
     ) {
       this.isAuthenticated = this.authService.isAuthenticated();
+      this.isManager = this.authService.isManager();
+      if (this.isAuthenticated) {
+        this.userDetails = sessionStorage.getItem('session-user-details');
+      }
   }
 
   public userUid(): string {

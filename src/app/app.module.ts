@@ -32,7 +32,7 @@ import { EmailMeComponent } from './components/email-me/email-me.component';
 import { BrokerComponent, AddBrokerDialogComponent, ViewBrokerDialogComponent } from './pages/broker/broker.component';
 import { ProjectComponent, AddProjectDialogComponent, ViewProjectDialogComponent, SaleProjectDialogComponent } from './pages/project/project.component';
 import { InquiriesComponent , ViewInquiryDialogComponent } from './pages/inquiries/inquiries.component';
-import { SaleTransactionComponent } from './pages/sale-transaction/sale-transaction.component';
+import { SaleTransactionComponent ,ViewSaleTransactionComponent } from './pages/sale-transaction/sale-transaction.component';
 import { ClientComponent, AddClientDialogComponent, ViewClientDialogComponent } from './pages/client/client.component';
 import { SaleReportComponent } from './pages/sale-report/sale-report.component';
 import { ProjectArchiveComponent , ViewProjectArchiveDialogComponent } from './pages/project-archive/project-archive.component';
@@ -49,7 +49,8 @@ import { AuditComponent } from './pages/audit/audit.component';
     ViewProjectArchiveDialogComponent,
     AddClientDialogComponent,
     ViewClientDialogComponent,
-    SaleProjectDialogComponent
+    SaleProjectDialogComponent,
+    ViewSaleTransactionComponent
   ],
   declarations: [
     AppComponent,
@@ -76,6 +77,7 @@ import { AuditComponent } from './pages/audit/audit.component';
     AddClientDialogComponent, 
     ViewClientDialogComponent,
     SaleProjectDialogComponent,
+    ViewSaleTransactionComponent
   ],
   imports: [
     BrowserModule,

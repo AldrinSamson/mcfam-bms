@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
-import { FirebaseService, FileService } from '../../shared/services';
+import { FirebaseService, FileService, AuthService } from '../../shared/services';
 import { BrokerService } from '../../shared/services';
 import { MatDialog, MatDialogRef, MatDialogConfig, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, Validators } from '@angular/forms';
@@ -15,13 +15,21 @@ import { AngularFirestore } from '@angular/fire/firestore';
 })
 export class BrokerComponent implements OnInit, OnDestroy {
 
+  public isManager: Boolean;
+
   brokerSearchText;
   brokers: Array<any>;
   brokerSub: Subscription;
+
   profpic: any;
+
   constructor(public firebaseService: FirebaseService,
     public fileservice: FileService,
-    public dialog: MatDialog) { }
+    public dialog: MatDialog,
+    public authService: AuthService
+    ) { 
+      this.isManager = this.authService.isManager();
+    }
 
   ngOnInit() {
     this.getData();
@@ -295,14 +303,19 @@ export class AddBrokerDialogComponent {
 
 export class ViewBrokerDialogComponent {
   editBrokerForm: any;
+  public isManager: Boolean;
 
   constructor(
     public firebaseService: FirebaseService,
     public BrokerService: BrokerService,
     public dialogRef: MatDialogRef<AddBrokerDialogComponent>,
     public fb: FormBuilder,
+    public authService: AuthService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
+
+    this.isManager = this.authService.isManager();
+
     this.editBrokerForm = this.fb.group({
       brokerId: [this.data.brokerId],
       firstName: [this.data.firstName],

@@ -48,8 +48,13 @@
             <br>
 </div>
 <div mat-dialog-actions>
-    <button mat-button color = "warn" (click) = "deleteBroker()" >Delete</button>
-    <button mat-button color = "warn" (click) = "deleteBroker()" >Change Email or Password</button>
-    <button mat-button (click) = "submitEditBrokerForm()" >Edit</button>
+    <div *ngIf="authService.isManager()">
+        <button mat-button color = "warn" (click) = "deleteBroker()" >Delete</button>
+        <button mat-button color = "warn" (click) = "deleteBroker()" >Change Email or Password</button>
+        <button mat-button (click) = "submitEditBrokerForm()" >Edit</button>
+    </div>
+    <div *ngIf="!authService.isManager()">
+        <p color = "warn" >You only edit your own details in your own profile page</p>
+    </div>
     <button mat-button (click)="onNoClick()">Back</button> 
 </div>

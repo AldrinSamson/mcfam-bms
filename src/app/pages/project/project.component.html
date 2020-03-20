@@ -1,8 +1,10 @@
 
 
 <div class="card">
-   <div class="card-header">  
-        <button mat-raised-button color="primary" (click) = "openAddProject()">Add New Project</button>
+   <div class="card-header">
+        <div *ngIf="authService.isManager()" >  
+            <button mat-raised-button color="primary" (click) = "openAddProject()">Add New Project</button>
+        </div>
    </div>
    <div class="card-body">
         <table mat-table [dataSource]="projects" class="mat-elevation-z8">

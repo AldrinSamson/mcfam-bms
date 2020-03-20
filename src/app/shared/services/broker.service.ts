@@ -19,13 +19,10 @@ export class BrokerService {
   profpic: any;
 
   createProcess(values) {
-    console.log(values.userName);
-    //console.log(xx);
-    var thisclass = this;
     return new Promise(resolve => {
-      thisclass.afAuth.auth.createUserWithEmailAndPassword(values.email, values.password)
+      this.afAuth.auth.createUserWithEmailAndPassword(values.email, values.password)
         .then((authData) => {
-          thisclass.db.collection('broker').add({
+          this.db.collection('broker').add({
             //brokerId: values.brokerId,
             firstName: values.firstName,
             lastName: values.lastName,
@@ -41,8 +38,7 @@ export class BrokerService {
             photoURL: values.photoURL,
             uid: authData.user.uid,
           });
-          thisclass.alertService.showToaster('Create Success');
-          resolve('success');
+          this.alertService.showToaster('Broker Create Success');
         })
         .catch((_error) => {
           console.log('Broker Create Failed!', _error);
@@ -50,11 +46,10 @@ export class BrokerService {
     })
   }
   async existUserNameCheck(values) {
-    var thisclass = this;
     console.log(values);
     try {
       return new Promise(resolve => {
-        thisclass.db.collection('broker', ref =>
+        this.db.collection('broker', ref =>
           ref.where('userName', '==', values)
         ).get().toPromise().then(function (querySnapshot) {
           console.log(querySnapshot.size);
@@ -75,16 +70,17 @@ export class BrokerService {
   }
 
   async createBroker(values) {
-    var thisclass = this;
-    console.log("createBroker");
     return new Promise(async resolve => {
-      console.log('a');
       this.createProcess(values);
       resolve(null);
     }).catch(err=>{
-      //throw new Error(err);
+      console.log('Broker Create Failed!', err);
     })
 
+  }
+
+  getWithPosition(position) {
+    return this.db.collection('broker', ref => ref.where('position', '==', position)).valueChanges({ idField: 'id' });
   }
 
   updateBroker(id, values) {
@@ -101,6 +97,7 @@ export class BrokerService {
       addressRegion: values.addressRegion,
     });
   }
+
   deleteBroker(id) {
     /*
     admin.auth().deleteUser(id)
