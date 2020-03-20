@@ -352,14 +352,11 @@ export class AddProjectDialogComponent implements OnInit, OnDestroy {
 
 export class ViewProjectDialogComponent implements OnInit{
   editProjectForm: any;
-<<<<<<< HEAD
   viewFiles: any;
   arrayphoto= [];
-=======
   userDetails: any;
   isManager = false;
 
->>>>>>> 56236d1b947868fcc324d5c270b2eb74b1ff0eae
   constructor(
     public firebaseService: FirebaseService,
     public projectService: ProjectService,
