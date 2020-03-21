@@ -34,6 +34,7 @@ export class ProjectService {
       addressCity: values.addressCity,
       addressRegion: values.addressRegion, 
       cost: values.cost,
+      photoURL: values.photoURL,
       status: values.status,
       agentName: values.agentName, 
     });

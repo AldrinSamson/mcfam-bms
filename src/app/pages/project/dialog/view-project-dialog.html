@@ -1,98 +1,112 @@
 <h2 mat-dialog-title>Edit {{data.name}} Project</h2>
-<div mat-dialog-content [formGroup] = "editProjectForm" class="modalform">
-   
-            <mat-form-field >
-                <mat-label> Name </mat-label>
-                <input matInput formControlName = "name" value = {{data.name}} name = "project-name" required>
-            </mat-form-field>
-            <br>
-            <mat-form-field >
-                <mat-label> Project Description </mat-label>
-                <input matInput formControlName = "overview" value = {{data.overview}} name = "project-overview" required>
-            </mat-form-field>
-            <br>
-            <mat-form-field >
-            <mat-label> Sale Type </mat-label>
-                <mat-select formControlName = "saleType" name = "project-saleType" required>
-                        <mat-option value="For Sale">For Sale</mat-option>
-                        <mat-option value="For Lease">For Lease</mat-option>
-                        <mat-option value="For Rent">For Rent</mat-option>
-                    </mat-select>
-            </mat-form-field>
-            <br>
-            <mat-form-field >
-            <mat-label> Property Type </mat-label>
-                <mat-select formControlName = "propertyType" name = "project-propertyType" required>
-                        <mat-option value="Condominium">Condominium</mat-option>
-                        <mat-option value="Apartment">Apartment</mat-option>
-                        <mat-option value="House and Lot">House and Lot</mat-option>
-                        <mat-option value="Lot">Lot</mat-option>
-                    </mat-select>
-            </mat-form-field>
-            <br>
-            <mat-form-field >
-                <mat-label> Owner Client Name </mat-label>
-                <input matInput formControlName = "ownerClientName" value = {{data.ownerClientName}} name = "project-ownerClientName" required>
-            </mat-form-field>
-            <br>
-            <mat-form-field >
-                <mat-label> Street </mat-label>
-                <input matInput formControlName = "addressStreet" value = {{data.addressStreet}} name = "project-addressStreet" required>
-            </mat-form-field>
-            <br>
-            <mat-form-field >
-                <mat-label> Town / Barangay </mat-label>
-                <input matInput formControlName = "addressTown" value = {{data.addressTown}} name = "project-addressTown" required>
-            </mat-form-field>
-            <br>
-            <mat-form-field >
-                <mat-label> City </mat-label>
-                <input matInput formControlName = "addressCity" value = {{data.addressCity}} name = "project-addressCity" required>
-            </mat-form-field>
-            <br>
-            <mat-form-field >
-                <mat-label> Region </mat-label>
-                <input matInput formControlName = "addressRegion" value = {{data.addressRegion}} name = "project-addressRegion" required>
-            </mat-form-field>
-            <br>
-            <mat-form-field >
-                <mat-label> Cost </mat-label>
-                <input matInput formControlName = "cost" value = {{data.cost}} name = "project-cost" required>
-            </mat-form-field>
-            <br>
-            <mat-form-field >
-                <mat-label> Status </mat-label>
-                <input matInput formControlName = "status" value = {{data.status}} name = "project-status" required>
-            </mat-form-field>
-            <br>
-            <mat-form-field >
-                <mat-label> Agent Assigned </mat-label>
-                <input matInput formControlName = "agentName" value = {{data.agentName}} name = "project-agentName" required>
-            </mat-form-field>
-            <br>
-            <div>
-                <h5>Photo:</h5>
-        
-        <div id=''><button id='choosedelete' class="btn btn-danger btn-sm" (click)='choosedelete()'>Choose photo(s) to delete</button></div>
+<div mat-dialog-content [formGroup]="editProjectForm" class="modalform">
+
+    <mat-form-field>
+        <mat-label> Name </mat-label>
+        <input matInput formControlName="name" value={{data.name}} name="project-name" required>
+    </mat-form-field>
+    <br>
+    <mat-form-field>
+        <mat-label> Project Description </mat-label>
+        <input matInput formControlName="overview" value={{data.overview}} name="project-overview" required>
+    </mat-form-field>
+    <br>
+    <mat-form-field>
+        <mat-label> Sale Type </mat-label>
+        <mat-select formControlName="saleType" name="project-saleType" required>
+            <mat-option value="For Sale">For Sale</mat-option>
+            <mat-option value="For Lease">For Lease</mat-option>
+            <mat-option value="For Rent">For Rent</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <br>
+    <mat-form-field>
+        <mat-label> Property Type </mat-label>
+        <mat-select formControlName="propertyType" name="project-propertyType" required>
+            <mat-option value="Condominium">Condominium</mat-option>
+            <mat-option value="Apartment">Apartment</mat-option>
+            <mat-option value="House and Lot">House and Lot</mat-option>
+            <mat-option value="Lot">Lot</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <br>
+    <mat-form-field>
+        <mat-label> Owner Client Name </mat-label>
+        <input matInput formControlName="ownerClientName" value={{data.ownerClientName}} name="project-ownerClientName"
+            required>
+    </mat-form-field>
+    <br>
+    <mat-form-field>
+        <mat-label> Street </mat-label>
+        <input matInput formControlName="addressStreet" value={{data.addressStreet}} name="project-addressStreet"
+            required>
+    </mat-form-field>
+    <br>
+    <mat-form-field>
+        <mat-label> Town / Barangay </mat-label>
+        <input matInput formControlName="addressTown" value={{data.addressTown}} name="project-addressTown" required>
+    </mat-form-field>
+    <br>
+    <mat-form-field>
+        <mat-label> City </mat-label>
+        <input matInput formControlName="addressCity" value={{data.addressCity}} name="project-addressCity" required>
+    </mat-form-field>
+    <br>
+    <mat-form-field>
+        <mat-label> Region </mat-label>
+        <input matInput formControlName="addressRegion" value={{data.addressRegion}} name="project-addressRegion"
+            required>
+    </mat-form-field>
+    <br>
+    <mat-form-field>
+        <mat-label> Cost </mat-label>
+        <input matInput formControlName="cost" value={{data.cost}} name="project-cost" required>
+    </mat-form-field>
+    <br>
+    <mat-form-field>
+        <mat-label> Status </mat-label>
+        <input matInput formControlName="status" value={{data.status}} name="project-status" required>
+    </mat-form-field>
+    <br>
+    <mat-form-field>
+        <mat-label> Agent Assigned </mat-label>
+        <input matInput formControlName="agentName" value={{data.agentName}} name="project-agentName" required>
+    </mat-form-field>
+    <br>
+    <div>
+        <h5>Photo:</h5>
+
+        <div id=''><button id='choosedelete' class="btn btn-danger btn-sm" (click)='choosedelete()'>Choose photo(s) to
+                delete</button></div>
         <br>
         <div class="multiphotos">
-            <div class="theinline" *ngFor='let fl of data.photoURL;let i = index'>
+            <div class="theinline center" *ngFor='let fl of data.photoURL;let i = index'>
                 <span class="forlabel">
-                    <input hidden type="checkbox" (change)='toRemove($event)' value='{{fl.id}}|{{fl.path}}'>&nbsp;&nbsp;
-                    <img src='{{fl.photoURL}}' class="photoURL" id='photoID_{{fl.id}}'>
+                    <img src='{{fl.photoURL}}' class="photoURL"  id='photoID_{{fl.id}}'>
+                    <br>
+                    <input type="checkbox" class="checkboxdelete" name='todelete' (change)='toRemove($event)'
+                        value='{{fl.id}}|{{fl.path}}'>
+
                 </span>
-                &nbsp;&nbsp;
+
             </div>
         </div>
         <br>
         <div>
             <h5>Add photo(s)</h5>
-            <button class="btn btn-primary" id='addbutton' (click)='addphotoview()'>Click here to add more photos</button>
-            <input hidden id='inputfileview' #file type="file" accept='image/*' (change)='addphotos(file.files)' multiple>
+            <button class="btn btn-primary" id='addbutton' (click)='addphotoview()'>Click here to add more
+                photos</button>
+            <br><input hidden id='inputfileview' #file type="file" accept='image/*' (change)='addphotos(file.files)'
+                multiple>
             <br>
             <div id='photoscontain' class="multiphotos">
-                <div *ngFor='let url of arrayphoto'   class="toaddphotosdiv">
-                    <img class="photoURL" [src]="url" >
+                <div *ngFor='let url of arrayphoto;let indexOfelement=index;trackBy: trackByFn'
+                    class="toaddphotosdiv center">
+                    <img class="photoURL insidephotoadd" [src]="url">
+                    <br>
+                    <button id='' class="btn btn-sm btn-danger center"
+                        (click)='removephoto(indexOfelement)'>remove</button>
+                    <br>
                 </div>
                 &nbsp;&nbsp;
             </div>
@@ -102,10 +116,10 @@
     </div>
 </div>
 <div mat-dialog-actions>
-    <div *ngIf="authService.isManager()" >  
-        <button mat-button color = "warn" (click) = "archiveProject()" >Archive</button>
-        <button mat-button (click) = "submitEditProjectForm()" >Edit</button>
+    <div *ngIf="authService.isManager()">
+        <button mat-button color="warn" (click)="archiveProject()">Archive</button>
+        <button mat-button (click)="submitEditProjectForm()">Edit</button>
     </div>
-    <button mat-button (click) = "openTransaction()" >Sell</button>
-    <button mat-button (click)="onNoClick()">Back</button> 
+    <button mat-button (click)="openTransaction()">Sell</button>
+    <button mat-button (click)="onNoClick()">Back</button>
 </div>

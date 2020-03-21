@@ -1,5 +1,5 @@
-import { Component, OnInit, Inject, OnDestroy,ElementRef} from '@angular/core';
-import { FirebaseService, AuthService, FileService , ProjectService , Project, BrokerService} from '../../shared';
+import { Component, OnInit, Inject, OnDestroy, ElementRef } from '@angular/core';
+import { FirebaseService, AuthService, FileService, ProjectService, Project, BrokerService } from '../../shared';
 import { MatDialog, MatDialogRef, MatDialogConfig, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, Validators } from '@angular/forms';
 // import { Router, Params } from '@angular/router';
@@ -37,18 +37,18 @@ export class ProjectComponent implements OnInit, OnDestroy {
   constructor(
     public firebaseService: FirebaseService,
     public projectService: ProjectService,
-    public dialog: MatDialog, 
-    public fileservice: FileService, 
+    public dialog: MatDialog,
+    public fileservice: FileService,
     public authService: AuthService) {
 
-      this.isManager = this.authService.isManager();
-    
-      try {
+    this.isManager = this.authService.isManager();
+
+    try {
       this.fileslist = this.fileservice.getFiles();
       this.userId = firebase.auth().currentUser.uid
-      } catch (err) {
+    } catch (err) {
       this.userId = '';
-      }
+    }
   }
 
   ngOnInit() {
@@ -56,7 +56,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     this.fileslist = this.fileservice.getFiles();
     console.log(this.fileslist);
   }
-  
+
   getData() {
     this.projectSub = this.projectService.getProjects(false)
       .subscribe(result => {
@@ -235,7 +235,7 @@ export class AddProjectDialogComponent implements OnInit, OnDestroy {
 
 
     }
-    if (this.picFile.length > 0 ) {
+    if (this.picFile.length > 0) {
       this.fileupload();
     } else {
       this.submitFinal();
@@ -350,24 +350,25 @@ export class AddProjectDialogComponent implements OnInit, OnDestroy {
   styleUrls: ['./project.component.scss'],
 })
 
-export class ViewProjectDialogComponent implements OnInit{
+export class ViewProjectDialogComponent implements OnInit {
   editProjectForm: any;
   viewFiles: any;
-  arrayphoto= [];
+  arrayphoto = [];
   userDetails: any;
   isManager = false;
-
+  userId = '';
   constructor(
     public firebaseService: FirebaseService,
     public projectService: ProjectService,
     public dialogRef: MatDialogRef<ViewProjectDialogComponent>,
     public fb: FormBuilder,
+    public fileservice: FileService,
     public dialog: MatDialog,
     public authService: AuthService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.isManager = this.authService.isManager();
-
+    console.log(this.data);
     this.editProjectForm = this.fb.group({
       name: [this.data.name],
       overview: [this.data.overview],
@@ -381,6 +382,7 @@ export class ViewProjectDialogComponent implements OnInit{
       addressRegion: [this.data.addressRegion],
       cost: [this.data.cost],
       status: [this.data.status],
+      photoURL: [this.data.photoURL],
       agentName: [this.data.agentName],
       agentUid: [this.data.agentUid]
     });
@@ -388,15 +390,63 @@ export class ViewProjectDialogComponent implements OnInit{
 
   ngOnInit() {
     this.userDetails = JSON.parse(sessionStorage.getItem('session-user-details'))
-    if(this.userDetails.position == "Manager"){
+    if (this.userDetails.position == "Manager") {
       this.isManager = true;
+    }
+    try {
+
+      this.userId = firebase.auth().currentUser.uid
+    } catch (err) {
+      this.userId = '';
     }
   }
 
-  submitEditProjectForm() {
+  async submitEditProjectForm() {
+    console.log(this.editProjectForm);
     if (this.editProjectForm.valid) {
-      this.projectService.updateProject(this.data.id, this.editProjectForm.value);
+      console.log(this.editProjectForm.value['photoURL']);
+      //delete existing
+      var savephotos = [];
+      var deletephotos = [];
+
+      $.each($("input[name='todelete']:not(:checked)"), function () {
+        var x = $(this).val().toString().split('|');
+        console.log(x);
+        savephotos.push(x[0]);
+      });
+      $.each($("input[name='todelete']:checked"), function () {
+        var x = $(this).val().toString().split('|');
+        console.log(x);
+        deletephotos.push(x);
+      });
+      /*
+      for (var i = 0; i < deletephotos.length; i++) {
+        this.fileservice.filedelete(deletephotos[i][0]);
+        this.fileservice.delete_in_storage(deletephotos[i][1]);
+      }*/
+      console.log(deletephotos);
       
+      console.log('this.viewFiles.length ' + this.viewFiles.length);
+      var x = [];
+      for (var i = 0; i < this.viewFiles.length; i++) {
+        var fl = this.viewFiles[i];
+        console.log(fl);
+        const path = `project/storeFile${new Date().getTime()}_${fl.name}`;
+
+        let xx = await this.fileservice.upload_in_storage(path, this.viewFiles[i], this.userId, 'project');
+        x.push(xx);
+      }
+      console.log('uploaded file');
+      for (var i = 0; i < this.viewFiles.length; i++) {
+        savephotos.push(x[i]['id'])
+      }
+      console.log('savephotos');
+      console.log(savephotos);
+      console.log(x);
+      this.editProjectForm.value['photoURL'] = savephotos;
+      console.log(this.editProjectForm.value);
+      this.projectService.updateProject(this.data.id, this.editProjectForm.value);
+
       this.dialogRef.close();
     }
   }
@@ -406,57 +456,59 @@ export class ViewProjectDialogComponent implements OnInit{
     if (event.target.checked) {
       //document.getElementById('photoID_' + getid).classList.remove('btn-primary');
       document.getElementById('photoID_' + getid).classList.add('blurtodelete');
-    
+
     } else {
       document.getElementById('photoID_' + getid).classList.remove('blurtodelete');
       //document.getElementById('photoID_' + getid).classList.add('btn-success');
     }
   }
-  choosedelete(){
+  choosedelete() {
     console.log($('#choosedelete').hasClass("btn-danger"))
     if ($('#choosedelete').hasClass("btn-danger")) {
       document.getElementById('choosedelete').classList.add('btn-outline-danger');
       document.getElementById('choosedelete').classList.remove('btn-danger');
-      $('#choosedelete').html("Cancel for deletion")
-      $('.forlabel').wrap( "<label></label>" );
+      $('#choosedelete').html("Cancel the deletion");
+      $('.forlabel').wrap("<label></label>");
+      $(".checkboxdelete").addClass("showbox");
     } else {
       document.getElementById('choosedelete').classList.add('btn-danger');
       document.getElementById('choosedelete').classList.remove('btn-outline-danger');
       $('#choosedelete').html("Choose photo(s) to delete")
       //$('forlabel').wrap( "<label></label>" );
       $('.photoURL').removeClass('blurtodelete');
-       
-      $('.forlabel').unwrap(  );
+      $(".checkboxdelete").removeClass("showbox");
+      $('.forlabel').unwrap();
     }
   }
-  addphotoview(){
+  addphotoview() {
     document.getElementById('inputfileview').click();
   }
-  addphotos(files){
-    this.arrayphoto=[];
-    
-    this.viewFiles= files;
-    for(var i = 0; i< this.viewFiles.length;i++){
-      var reader = new FileReader();
-      /*reader.readAsDataURL(files[i]);
-      reader.onload = (_event) => {
-        //this.imgURL = reader.result;
-        //this.picFile = files;
-        this.arrayphoto.push(reader.result)
-        //console.log( reader.result)
-      }*/
+  addphotos(files) {
+    //this.arrayphoto=[];
 
-      reader.onload = (event:any) => {
-        console.log(event.target.result);
-        this.arrayphoto.push(event.target.result); 
+    this.viewFiles = files;
+    for (var i = 0; i < this.viewFiles.length; i++) {
+      var reader = new FileReader();
+      reader.onload = (event: any) => {
+        //console.log(event.target.result);
+        this.arrayphoto.push(event.target.result);
       }
       reader.readAsDataURL(files[i]);
     }
 
-    
+
     console.log(this.viewFiles);
 
-    
+
+  }
+  removephoto(index) {
+    console.log(index);
+    //delete this.arrayphoto[index];
+    this.arrayphoto.splice(index, 1);
+    console.log(this.arrayphoto)
+  }
+  trackByFn(i: number) {
+    return i
   }
   openTransaction() {
 
@@ -516,6 +568,7 @@ export class SaleProjectDialogComponent implements OnInit, OnDestroy {
     public firebaseService: FirebaseService,
     public projectService: ProjectService,
     public brokerService: BrokerService,
+    public fileservice: FileService,
     public dialogRef: MatDialogRef<ViewProjectDialogComponent>,
     public fb: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: any

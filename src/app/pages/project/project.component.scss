@@ -7,8 +7,15 @@ table {
 .mat-dialog-container{
   font-size: 1.5rem;
 }
+.center{
+  text-align: -webkit-center;
+}
 .modalform{
   font-size: 1.5rem;
+}
+.insidephotoadd{
+  margin-right: 7px;
+  
 }
 #qtyinput{
   font-size: 1rem;
@@ -26,8 +33,14 @@ table {
   white-space: nowrap;
 }
 .theinline{
-  display: inline;
+  display: inline-block;
 }
 .toaddphotosdiv{
-  display: inline;
+  display: inline-block;
+}
+.checkboxdelete{
+  display: none;
+}
+.showbox{
+  display: block !important;
 }
