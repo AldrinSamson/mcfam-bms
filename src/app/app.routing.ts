@@ -28,13 +28,14 @@ import { ViewProjectComponent } from './pages/project/view-project/view-project.
 import { MiscComponent } from './components/misc/misc.component';
 
 // Protected
-import { AuthGuardService , } from '@shared';
+import { AuthGuardService } from '@shared';
+import { EditProjectComponent } from './pages/project/edit-project/edit-project.component';
 
 // Routing
 const appRoutes: Routes = [
 
   // Public pages
-  { path: '', redirectTo: '/auth', pathMatch : 'full' },
+  { path: '', redirectTo: '/auth', pathMatch: 'full' },
   { path: 'about', component: AboutMeComponent },
   { path: 'contact', component: ContactComponent },
   { path: 'misc', component: MiscComponent },
@@ -56,6 +57,8 @@ const appRoutes: Routes = [
   { path: 'projectArchive' , component: ProjectArchiveComponent, canActivate: [AuthGuardService]},
   { path: 'audit' , component: AuditComponent, canActivate: [AuthGuardService]},
   { path: '**', component: PageNotFoundComponent }
+
+
 ];
 
 @NgModule({

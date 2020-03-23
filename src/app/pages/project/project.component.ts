@@ -77,6 +77,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
     this.router.navigate(['/project/add']);
   }
+  
   openViewProject(value): void {
     this.router.navigate(['/project/'+value.id+'']);
     
@@ -360,7 +361,7 @@ export class AddProjectDialogComponent implements OnInit, OnDestroy {
 
 export class ViewProjectDialogComponent implements OnInit {
   editProjectForm: any;
-  viewFiles: any;
+  viewFiles=[];
   arrayphoto = [];
   userDetails: any;
   isManager = false;

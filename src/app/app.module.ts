@@ -39,6 +39,9 @@ import { ClientComponent, AddClientDialogComponent, ViewClientDialogComponent } 
 import { SaleReportComponent } from './pages/sale-report/sale-report.component';
 import { ProjectArchiveComponent , ViewProjectArchiveDialogComponent } from './pages/project-archive/project-archive.component';
 import { AuditComponent } from './pages/audit/audit.component';
+import { EditProjectComponent } from './pages/project/edit-project/edit-project.component';
+import { MatDialogRef } from '@angular/material';
+
 
 
 @NgModule({
@@ -87,7 +90,8 @@ import { AuditComponent } from './pages/audit/audit.component';
     SaleProjectDialogComponent,
     ViewSaleTransactionComponent,
     ViewProjectClientDialogComponent,
-    ViewProjectAgentDialogComponent
+    ViewProjectAgentDialogComponent,
+    EditProjectComponent
   ],
   imports: [
     BrowserModule,
@@ -99,8 +103,7 @@ import { AuditComponent } from './pages/audit/audit.component';
     AuthModule,
     ProfileModule,
     MiscModule,
-    NgxAuthFirebaseUIModule.forRoot(firebaseKeys),
-
+    NgxAuthFirebaseUIModule.forRoot(firebaseKeys)
   ],
   providers: [
     UserService,

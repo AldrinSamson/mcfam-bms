@@ -82,7 +82,7 @@
         <div class="multiphotos">
             <div class="theinline center" *ngFor='let fl of data.photoURL;let i = index'>
                 <span class="forlabel">
-                    <img src='{{fl.photoURL}}' class="photoURL"  id='photoID_{{fl.id}}'>
+                    <img src='{{fl.photoURL}}' class="photoURL" id='photoID_{{fl.id}}'>
                     <br>
                     <input type="checkbox" class="checkboxdelete" name='todelete' (change)='toRemove($event)'
                         value='{{fl.id}}|{{fl.path}}'>
@@ -118,7 +118,9 @@
 <div mat-dialog-actions>
     <div *ngIf="authService.isManager()">
         <button mat-button color="warn" (click)="archiveProject()">Archive</button>
-        <button mat-button (click)="submitEditProjectForm()">Edit</button>
+        <!--<button mat-button (click)="submitEditProjectForm()">Edit</button> -->
+        <button mat-button routerLink="edit-project/{{data.id}}" routerLinkActive="active"
+                >Edit</button>
     </div>
     <button mat-button (click)="openTransaction()">Sell</button>
     <button mat-button (click)="onNoClick()">Back</button>
