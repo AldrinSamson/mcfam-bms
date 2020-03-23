@@ -1,9 +1,8 @@
 import { Component, OnInit, Inject , OnDestroy } from '@angular/core';
-import { FirebaseService, AuthService } from '../../shared/services';
+import { FirebaseService, AuthService,TransactionService } from '../../shared';
 import { MatDialog, MatDialogRef , MatDialogConfig , MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router, Params } from '@angular/router';
-import { TransactionService } from '../../shared';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -17,10 +16,14 @@ export class SaleTransactionComponent implements OnInit , OnDestroy {
   transactions: Array<any>;
   public transactionSub: Subscription;
   uid: String;
+  private isManager: Boolean;
 
   constructor(public fbs: FirebaseService,
     public transactionService: TransactionService,
-    public dialog: MatDialog) { }
+    public dialog: MatDialog, 
+    public authService: AuthService) {
+      this.isManager = this.authService.isManager();
+     }
 
   ngOnInit() {
     this.uid = sessionStorage.getItem('session-user-uid')
@@ -28,7 +31,7 @@ export class SaleTransactionComponent implements OnInit , OnDestroy {
   }
 
   getUserTransactions(){
-    this.transactionSub = this.transactionService.getTransaction(this.uid , false , false).subscribe( res => {
+    this.transactionSub = this.transactionService.getTransaction(this.uid ,this.isManager, false , false).subscribe( res => {
       this.transactions = res;
     })
   }

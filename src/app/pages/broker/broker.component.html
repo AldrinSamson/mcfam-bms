@@ -1,43 +1,47 @@
-<div class="card">
-	<div class="card-header">
-		 <div *ngIf="authService.isManager()" >  
-			<button mat-raised-button color="primary" (click) = "openAddBroker()">Add New Broker</button>
-		 </div>
-	</div>
-	<div class="card-body">
-		<div class="search">
-			<input class="form-control" type="text" name="search" [(ngModel)]="brokerSearchText" autocomplete="off" placeholder="&#61442;  Search for Broker's Name">
+<div class="main">
+	<div class="card">
+		<div class="card-header">
+			<h3>Broker Management</h3>
+			 <div *ngIf="authService.isManager()" style="float:right" >  
+				<button mat-raised-button color="primary" (click) = "openAddBroker()">Add New Broker</button>
+			 </div>
 		</div>
-		<div class="table-responsive">
-			<table class="table user-list">
-				<thead>
-					<tr>
-						<th><span>Broker's Name</span></th>
-						<th><span>Contact Number</span></th>
-						<th><span>Email</span></th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr  *ngFor="let broker of brokers | paginate:{itemsPerPage: 5, currentPage:1} | filter:brokerSearchText " (click)="openViewBroker(broker)">
-						<td>
-							<img src="{{broker.photoURL}}" alt="">
-							<a  class="user-link">{{broker.firstName}} {{broker.lastName}}</a>
-						</td>
-						<td>
-							<a class ="contact-number">{{broker.contactNumber}}</a>
-						</td>
-						<td>
-							<a >{{broker.email}}</a>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-				<div id="pagination">
-					<pagination-controls (pageChange)="p=$event"></pagination-controls>
-				</div>  
-		</div>	
+		<div class="card-body">
+			<div class="search">
+				<input class="form-control" type="text" name="search" [(ngModel)]="brokerSearchText" autocomplete="off" placeholder="&#61442;  Search">
+			</div>
+			<div class="table-responsive">
+				<table class="table user-list">
+					<thead>
+						<tr>
+							<th><span>Broker's Name</span></th>
+							<th><span>Contact Number</span></th>
+							<th><span>Email</span></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr  *ngFor="let broker of brokers | paginate:{itemsPerPage: 5, currentPage:1} | filter:brokerSearchText " (click)="openViewBroker(broker)">
+							<td>
+								<img src="{{broker.photoURL}}" >
+								<a  class="user-link">{{broker.firstName}} {{broker.lastName}}</a>
+							</td>
+							<td>
+								<a class ="contact-number">{{broker.contactNumber}}</a>
+							</td>
+							<td>
+								<a >{{broker.email}}</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+					<div id="pagination">
+						<pagination-controls (pageChange)="p=$event"></pagination-controls>
+					</div>  
+			</div>	
+		</div>
 	</div>
+	
+	
+	
+	
 </div>
-
-
-

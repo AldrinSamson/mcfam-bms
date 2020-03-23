@@ -8,15 +8,15 @@ import { AuthService } from './auth.service';
 })
 export class TransactionService {
   
-  private isManager: Boolean;
+  
 
-  constructor(public db: AngularFirestore, public authService: AuthService) { 
-    this.isManager = this.authService.isManager();
+  constructor(public db: AngularFirestore) { 
+   
   }
 
-  getTransaction(uid: String,isCompleted: Boolean , isDeleted:Boolean) {
+  getTransaction(uid: String,isManager:Boolean,isCompleted: Boolean , isDeleted:Boolean) {
 
-    if(this.isManager == true) {
+    if(isManager == true) {
       return this.db.collection('transaction', ref =>
       ref.where('managerUid', '==', uid).where('isCompleted', '==', isCompleted).where('isDeleted', '==', isDeleted))
       .valueChanges({ idToken: 'id'});

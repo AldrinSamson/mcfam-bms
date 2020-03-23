@@ -11,6 +11,7 @@ import * as cors from 'cors';
 import * as $ from 'jquery';
 import * as firebase from 'firebase';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { Router } from '@angular/router';
 const corsHandler = cors({ origin: true });
 
 @Component({
@@ -23,9 +24,10 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   public isManager: Boolean;
 
-  displayedColumnsProject: string[] = ['name', 'saleType', 'propertyType', 'addressStreet', 'addressTown', 'addressCity', 'addressRegion', 'cost', 'status'];
-  projects: MatTableDataSource<any>;
+  projectSearchText;
+  projects: Array<any>;
   public projectSub: Subscription;
+  
   viewFile = '';
   qtyinput = '';
   userId: string;
@@ -39,7 +41,8 @@ export class ProjectComponent implements OnInit, OnDestroy {
     public projectService: ProjectService,
     public dialog: MatDialog,
     public fileservice: FileService,
-    public authService: AuthService) {
+    public authService: AuthService,
+    public router:Router) {
 
     this.isManager = this.authService.isManager();
 
@@ -60,73 +63,77 @@ export class ProjectComponent implements OnInit, OnDestroy {
   getData() {
     this.projectSub = this.projectService.getProjects(false)
       .subscribe(result => {
-        this.projects = new MatTableDataSource(result);
+        this.projects = result;
       });
   }
 
   openAddProject(): void {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.maxWidth = '100vw';
-    dialogConfig.width = '100vw';
-    this.dialog.open(AddProjectDialogComponent, dialogConfig).afterClosed().subscribe(result => {
+    // const dialogConfig = new MatDialogConfig();
+    // dialogConfig.maxWidth = '100vw';
+    // dialogConfig.width = '100vw';
+    // this.dialog.open(AddProjectDialogComponent, dialogConfig).afterClosed().subscribe(result => {
 
-    });
+    // });
+
+    this.router.navigate(['/project/add']);
   }
   openViewProject(value): void {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.data = {
-      id: value.id,
-      name: value.name,
-      overview: value.overview,
-      saleType: value.saleType,
-      propertyType: value.propertyType,
-      ownerClientName: value.ownerClientName,
-      ownerClientUid: value.ownerClientUid,
-      addressStreet: value.addressStreet,
-      addressTown: value.addressTown,
-      addressCity: value.addressCity,
-      addressRegion: value.addressRegion,
-      cost: value.cost,
-      photoURL: value.photoURL,
-      status: value.status,
-      agentName: value.agentName,
-      agentUid: value.agentUid
-    };
-    console.log("value.photoURL");
-    console.log(value.photoURL);
+    this.router.navigate(['/project/'+value.id+'']);
+    
+  //   const dialogConfig = new MatDialogConfig();
+  //   dialogConfig.data = {
+  //     id: value.id,
+  //     name: value.name,
+  //     overview: value.overview,
+  //     saleType: value.saleType,
+  //     propertyType: value.propertyType,
+  //     ownerClientName: value.ownerClientName,
+  //     ownerClientUid: value.ownerClientUid,
+  //     addressStreet: value.addressStreet,
+  //     addressTown: value.addressTown,
+  //     addressCity: value.addressCity,
+  //     addressRegion: value.addressRegion,
+  //     cost: value.cost,
+  //     photoURL: value.photoURL,
+  //     status: value.status,
+  //     agentName: value.agentName,
+  //     agentUid: value.agentUid
+  //   };
+  //   console.log("value.photoURL");
+  //   console.log(value.photoURL);
 
-    //console.log(this.fileservice.getFiles())
-    this.fileslist = this.fileservice.getFiles();
-    //console.log(this.fileslist);
-    this.viewFile = 'sds';
-    var thevf = [];
-    //thevf.innerHTML='asd';
-    console.log(thevf);
-    for (var i = 0; i < this.fileslist.length; i++) {
-      //var x = document.getElementById(value.photoURL[i]);
-      //x.src = '';
-      var y = this.fileslist[i]
-      for (var j = 0; j < value.photoURL.length; j++) {
-        var x = value.photoURL[j];
+  //   //console.log(this.fileservice.getFiles())
+  //   this.fileslist = this.fileservice.getFiles();
+  //   //console.log(this.fileslist);
+  //   this.viewFile = 'sds';
+  //   var thevf = [];
+  //   //thevf.innerHTML='asd';
+  //   console.log(thevf);
+  //   for (var i = 0; i < this.fileslist.length; i++) {
+  //     //var x = document.getElementById(value.photoURL[i]);
+  //     //x.src = '';
+  //     var y = this.fileslist[i]
+  //     for (var j = 0; j < value.photoURL.length; j++) {
+  //       var x = value.photoURL[j];
 
-        if (x === y.id) {
-          //thevf = x.photoURL+"<br>";
-          thevf.push(y);
-        }
-      }
+  //       if (x === y.id) {
+  //         //thevf = x.photoURL+"<br>";
+  //         thevf.push(y);
+  //       }
+  //     }
 
-      //jQuery(".image2").attr("src","image1.jpg");
-    }
-    console.log("(thevf)");
+  //     //jQuery(".image2").attr("src","image1.jpg");
+  //   }
+  //   console.log("(thevf)");
 
-    console.log((thevf));
-    dialogConfig.data.photoURL = thevf;
-    dialogConfig.maxWidth = '50vw';
-    dialogConfig.width = '50vw';
-    console.log(dialogConfig.data)
-    this.dialog.open(ViewProjectDialogComponent, dialogConfig).afterClosed().subscribe(result => {
-      this.getData();
-    });
+  //   console.log((thevf));
+  //   dialogConfig.data.photoURL = thevf;
+  //   dialogConfig.maxWidth = '50vw';
+  //   dialogConfig.width = '50vw';
+  //   console.log(dialogConfig.data)
+  //   this.dialog.open(ViewProjectDialogComponent, dialogConfig).afterClosed().subscribe(result => {
+  //     this.getData();
+  //   });
   }
 
   ngOnDestroy(): void {
@@ -134,6 +141,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
       this.projectSub.unsubscribe();
     }
   }
+  
 }
 
 @Component({
@@ -507,6 +515,7 @@ export class ViewProjectDialogComponent implements OnInit {
     this.arrayphoto.splice(index, 1);
     console.log(this.arrayphoto)
   }
+
   trackByFn(i: number) {
     return i
   }

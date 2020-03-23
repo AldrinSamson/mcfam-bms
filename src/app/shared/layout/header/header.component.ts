@@ -11,7 +11,7 @@ import { AuthService, AlertService } from '../../services';
 export class HeaderComponent {
   public isAuthenticated: string;
   public isManager: Boolean;
-  public angularImage: string = '/assets/img/house.png';
+  public angularImage: string = '/assets/img/temp-icon.jpg';
   public test = '';
   public userDetails : any;
 

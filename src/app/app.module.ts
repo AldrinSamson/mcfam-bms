@@ -31,6 +31,8 @@ import { PageNotFoundComponent } from './pages/not-found/not-found.component';
 import { EmailMeComponent } from './components/email-me/email-me.component';
 import { BrokerComponent, AddBrokerDialogComponent, ViewBrokerDialogComponent } from './pages/broker/broker.component';
 import { ProjectComponent, AddProjectDialogComponent, ViewProjectDialogComponent, SaleProjectDialogComponent } from './pages/project/project.component';
+import { AddProjectComponent ,ViewProjectClientDialogComponent , ViewProjectAgentDialogComponent } from './pages/project/add-project/add-project.component';
+import { ViewProjectComponent } from './pages/project/view-project/view-project.component';
 import { InquiriesComponent , ViewInquiryDialogComponent } from './pages/inquiries/inquiries.component';
 import { SaleTransactionComponent ,ViewSaleTransactionComponent } from './pages/sale-transaction/sale-transaction.component';
 import { ClientComponent, AddClientDialogComponent, ViewClientDialogComponent } from './pages/client/client.component';
@@ -50,7 +52,9 @@ import { AuditComponent } from './pages/audit/audit.component';
     AddClientDialogComponent,
     ViewClientDialogComponent,
     SaleProjectDialogComponent,
-    ViewSaleTransactionComponent
+    ViewSaleTransactionComponent,
+    ViewProjectClientDialogComponent,
+    ViewProjectAgentDialogComponent
   ],
   declarations: [
     AppComponent,
@@ -68,6 +72,10 @@ import { AuditComponent } from './pages/audit/audit.component';
     ProjectArchiveComponent,
     AuditComponent,
     SaleTransactionComponent,
+
+    AddProjectComponent,
+    ViewProjectComponent,
+
     AddBrokerDialogComponent,
     ViewBrokerDialogComponent,
     AddProjectDialogComponent,
@@ -77,7 +85,9 @@ import { AuditComponent } from './pages/audit/audit.component';
     AddClientDialogComponent, 
     ViewClientDialogComponent,
     SaleProjectDialogComponent,
-    ViewSaleTransactionComponent
+    ViewSaleTransactionComponent,
+    ViewProjectClientDialogComponent,
+    ViewProjectAgentDialogComponent
   ],
   imports: [
     BrowserModule,

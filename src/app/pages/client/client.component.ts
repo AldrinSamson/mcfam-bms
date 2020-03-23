@@ -6,6 +6,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { ClientService } from '@shared/services/client.service';
 
+
 @Component({
   selector: 'app-client',
   templateUrl: './client.component.html',
@@ -151,7 +152,7 @@ export class ViewClientDialogComponent {
     ) {
       this.isManager = this.authService.isManager();
       this.viewClientForm = this.fb.group({
-        firstName: [this.data.firstName],
+        firstName: [{value: this.data.firstName , readOnly:true}],
         lastName: [this.data.lastName],
         fullName: [this.data.firstName +' '+ this.data.lastName],
         userName: [this.data.userName],

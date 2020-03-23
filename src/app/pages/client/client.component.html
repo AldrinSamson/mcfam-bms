@@ -1,41 +1,43 @@
-<div class="card">
-	<div class="card-header">
-		 <div *ngIf="authService.isManager()" >  
-			<button mat-raised-button color="primary" (click) = "openAddClient()">Add New Client</button>
-		 </div>
-	</div>
-	<div class="card-body">
-		<div class="search">
-			  <input class="form-control" type="text" name="search" [(ngModel)]="clientSearchText" autocomplete="off" placeholder="&#61442;  Search for Client's Name">
+<div class="main">
+	<div class="card">
+		<div class="card-header">
+			<h3>Client Management</h3>
+			 <div *ngIf="authService.isManager()" style="float:right">  
+				<button mat-raised-button color="primary" (click) = "openAddClient()">Add New Client</button>
+			 </div>
 		</div>
-			<div class="table-responsive">
-				<table class="table user-list">
-					<thead>
-						<tr>
-							<th><span>Client</span></th>
-							<th><span>Contact Number</span></th>
-							<th><span>Email</span></th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr  *ngFor="let client of clients | paginate:{itemsPerPage: 5, currentPage:1} | filter:clientSearchText " (click)="openViewClient(client)">
-							<td>
-								<img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="">
-								<a  class="user-link">{{client.fullName}}</a>
-							</td>
-							<td>
-								<a class ="contact-number">{{client.contactNumber}}</a>
-							</td>
-							<td>
-								<a >{{client.email}}</a>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-					<div id="pagination">
-						<pagination-controls (pageChange)="p=$event"></pagination-controls>
-					</div>  		
+		<div class="card-body">
+			<div class="search">
+				  <input class="form-control" type="text" name="search" [(ngModel)]="clientSearchText" autocomplete="off" placeholder="&#61442;  Search ">
 			</div>
-	</div>
+				<div class="table-responsive">
+					<table class="table user-list">
+						<thead>
+							<tr>
+								<th><span>Client</span></th>
+								<th><span>Contact Number</span></th>
+								<th><span>Email</span></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr  *ngFor="let client of clients | paginate:{itemsPerPage: 5, currentPage:1} | filter:clientSearchText " (click)="openViewClient(client)">
+								<td>
+									<img src="{{client.photoUrl}}" >
+									<a  class="user-link">{{client.fullName}}</a>
+								</td>
+								<td>
+									<a class ="contact-number">{{client.contactNumber}}</a>
+								</td>
+								<td>
+									<a >{{client.email}}</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+						<div id="pagination">
+							<pagination-controls (pageChange)="p=$event"></pagination-controls>
+						</div>  		
+				</div>
+		</div>
+	</div>	
 </div>
-

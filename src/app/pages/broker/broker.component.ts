@@ -38,7 +38,6 @@ export class BrokerComponent implements OnInit, OnDestroy {
   getData() {
     this.brokerSub = this.firebaseService.getAllData('broker')
       .subscribe(result => {
-        console.log(this.brokers);
         this.brokers = result;
       });
   }

@@ -20,12 +20,15 @@ import { SaleReportComponent } from './pages/sale-report/sale-report.component';
 import { ProjectArchiveComponent } from './pages/project-archive/project-archive.component';
 import { AuditComponent } from './pages/audit/audit.component';
 
+import { AddProjectComponent } from './pages/project/add-project/add-project.component';
+import { ViewProjectComponent } from './pages/project/view-project/view-project.component';
+
 
 // Components
 import { MiscComponent } from './components/misc/misc.component';
 
 // Protected
-import { AuthGuardService } from '@shared';
+import { AuthGuardService , } from '@shared';
 
 // Routing
 const appRoutes: Routes = [
@@ -43,6 +46,8 @@ const appRoutes: Routes = [
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService] },
   { path: 'profile-settings', component: ProfileSettingsComponent, canActivate: [AuthGuardService] },
   { path: 'project' , component: ProjectComponent, canActivate: [AuthGuardService] },
+  { path: 'project/add' , component: AddProjectComponent, canActivate: [AuthGuardService] },
+  { path: 'project/:id' , component: ViewProjectComponent, canActivate: [AuthGuardService] },
   { path: 'broker' , component: BrokerComponent, canActivate: [AuthGuardService]},
   { path: 'inquiries' , component: InquiriesComponent, canActivate: [AuthGuardService]},
   { path: 'client' , component: ClientComponent, canActivate: [AuthGuardService]},
