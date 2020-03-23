@@ -26,12 +26,13 @@ import { MiscComponent } from './components/misc/misc.component';
 
 // Protected
 import { AuthGuardService } from '@shared';
+import { EditProjectComponent } from './pages/project/edit-project/edit-project.component';
 
 // Routing
 const appRoutes: Routes = [
 
   // Public pages
-  { path: '', redirectTo: '/auth', pathMatch : 'full' },
+  { path: '', redirectTo: '/auth', pathMatch: 'full' },
   { path: 'about', component: AboutMeComponent },
   { path: 'contact', component: ContactComponent },
   { path: 'misc', component: MiscComponent },
@@ -42,15 +43,23 @@ const appRoutes: Routes = [
   // { path: 'profile/:uid/:name', component: ProfileComponent, canActivate: [AuthGuardService] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService] },
   { path: 'profile-settings', component: ProfileSettingsComponent, canActivate: [AuthGuardService] },
-  { path: 'project' , component: ProjectComponent, canActivate: [AuthGuardService] },
-  { path: 'broker' , component: BrokerComponent, canActivate: [AuthGuardService]},
-  { path: 'inquiries' , component: InquiriesComponent, canActivate: [AuthGuardService]},
-  { path: 'client' , component: ClientComponent, canActivate: [AuthGuardService]},
-  { path: 'saleTransaction' , component: SaleTransactionComponent, canActivate: [AuthGuardService]},
-  { path: 'saleReport' , component: SaleReportComponent, canActivate: [AuthGuardService]},
-  { path: 'projectArchive' , component: ProjectArchiveComponent, canActivate: [AuthGuardService]},
-  { path: 'audit' , component: AuditComponent, canActivate: [AuthGuardService]},
+  {
+    path: 'project', component: ProjectComponent, canActivate: [AuthGuardService],
+    //loadChildren: () => import('../app/pages/project/project.module')
+      //.then(m => m.ProjectModule)
+  },
+  { path: 'edit-project/:id', component: EditProjectComponent, canActivate: [AuthGuardService],  },
+  { path: 'broker', component: BrokerComponent, canActivate: [AuthGuardService] },
+  { path: 'inquiries', component: InquiriesComponent, canActivate: [AuthGuardService] },
+  { path: 'client', component: ClientComponent, canActivate: [AuthGuardService] },
+  { path: 'saleTransaction', component: SaleTransactionComponent, canActivate: [AuthGuardService] },
+  { path: 'saleReport', component: SaleReportComponent, canActivate: [AuthGuardService] },
+  { path: 'projectArchive', component: ProjectArchiveComponent, canActivate: [AuthGuardService] },
+  { path: 'audit', component: AuditComponent, canActivate: [AuthGuardService] },
+  { path: 'audit', component: AuditComponent, canActivate: [AuthGuardService] },
   { path: '**', component: PageNotFoundComponent }
+
+
 ];
 
 @NgModule({

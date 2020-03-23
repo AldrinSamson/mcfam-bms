@@ -5,6 +5,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { Project } from '../models';
 import { AlertService } from './alert.service';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -12,17 +13,29 @@ export class ProjectService {
 
   constructor(public afAuth: AngularFireAuth,
     public db: AngularFirestore) { }
-  
+
   getProjects(isArchived: Boolean) {
-    return this.db.collection('project' , ref => ref.where('isArchived', '==', isArchived) 
+    return this.db.collection('project', ref => ref.where('isArchived', '==', isArchived)
     ).valueChanges({ idField: 'id' });
   }
 
   createProject(values) {
-    
-  }
 
-  updateProject(id , values) {
+  }
+  getProject(id) {
+    var thisclass = this;
+    return new Promise(function (resolve) {
+      thisclass.db.collection('project').doc(id).ref.get()
+        .then(doc => {
+          var project = {
+            id: doc.id,
+            ...doc.data()
+          }
+          resolve(project)
+        });
+    })
+  }
+  updateProject(id, values) {
     return this.db.collection('project').doc(id).update({
       name: values.name,
       overview: values.overview,
@@ -32,11 +45,11 @@ export class ProjectService {
       addressStreet: values.addressStreet,
       addressTown: values.addressTown,
       addressCity: values.addressCity,
-      addressRegion: values.addressRegion, 
+      addressRegion: values.addressRegion,
       cost: values.cost,
       photoURL: values.photoURL,
       status: values.status,
-      agentName: values.agentName, 
+      agentName: values.agentName,
     });
   }
 

@@ -32,7 +32,19 @@ export class FileService {
   getFilesMultiple() {
 
   }
-
+  getFile(id) {
+    var thisclass = this;
+    return new Promise(function (resolve) {
+      thisclass.firestore.collection('filesStored').doc(id).ref.get()
+        .then(doc => {
+          var project = {
+            id: doc.id,
+            ...doc.data()
+          }
+          resolve(project)
+        });
+    })
+  }
   async createFile(fl: any) {
     //return this.accountCollection.add(acc);
     var thisclass = this;

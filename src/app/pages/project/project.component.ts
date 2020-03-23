@@ -72,6 +72,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
     });
   }
+  
   openViewProject(value): void {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = {
@@ -352,7 +353,7 @@ export class AddProjectDialogComponent implements OnInit, OnDestroy {
 
 export class ViewProjectDialogComponent implements OnInit {
   editProjectForm: any;
-  viewFiles: any;
+  viewFiles=[];
   arrayphoto = [];
   userDetails: any;
   isManager = false;
