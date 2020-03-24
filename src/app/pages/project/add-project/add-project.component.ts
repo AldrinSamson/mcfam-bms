@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject, OnDestroy, ElementRef } from '@angular/core';
-import { FirebaseService,  FileService, ProjectService, Project, BrokerService } from '../../../shared';
+import { FirebaseService, FileService, ProjectService, Project, BrokerService } from '../../../shared';
 import { MatDialog, MatDialogRef, MatDialogConfig, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router, Params } from '@angular/router';
@@ -15,14 +15,14 @@ import { AngularFirestore } from '@angular/fire/firestore';
   templateUrl: './add-project.component.html',
   styleUrls: ['./add-project.component.scss']
 })
-export class AddProjectComponent implements OnInit , OnDestroy {
+export class AddProjectComponent implements OnInit, OnDestroy {
 
   addProjectForm: any;
   selectedClientUid
   selectedClient
   selectedAgentUid
   selectedAgent
-  
+
   picFile: any;
   fileRef: AngularFireStorageReference;
   task: AngularFireUploadTask;
@@ -35,9 +35,16 @@ export class AddProjectComponent implements OnInit , OnDestroy {
 
   viewFiles: any;
   arrayphoto = [];
-  
+  cover_photo: any;
+  cover_photo_file: any
+
   ngOnInit() {
-   
+    try {
+
+      this.userId = firebase.auth().currentUser.uid
+    } catch (err) {
+      this.userId = '';
+    }
   }
 
   constructor(
@@ -50,11 +57,7 @@ export class AddProjectComponent implements OnInit , OnDestroy {
     public router: Router,
     @Inject(AngularFireStorage) private afStorage: AngularFireStorage
   ) {
-    try {
-      this.userId = firebase.auth().currentUser.uid;
-    } catch (err) {
-      this.userId = "";
-    }
+
     localStorage.setItem('user', JSON.stringify(this.userId));
     console.log(this.userId);
     this.addProjectForm = this.fb.group({
@@ -73,6 +76,7 @@ export class AddProjectComponent implements OnInit , OnDestroy {
       'agentUid': [''],
       'agentName': [''],
       'photoURL': [''],
+      'cover_photo':[''],
       isArchived: [false]
     });
   }
@@ -96,7 +100,8 @@ export class AddProjectComponent implements OnInit , OnDestroy {
   }
   submitFinal() {
     //console.log(this.);
-    this.addProjectForm.controls['photoURL'].setValue(this.filestored);
+    //this.addProjectForm.controls['photoURL'].setValue(this.filestored);
+    console.log(this.addProjectForm);
     this.firebaseService.addOne(this.addProjectForm.value, 'project');
     this.router.navigate(['/project']);
   }
@@ -150,15 +155,25 @@ export class AddProjectComponent implements OnInit , OnDestroy {
     });
   }
 
-  fileupload() {
+  async fileupload() {
     try {
       console.log(this.picFile);
       var filestored = [];
       //this.uploadprogress(this.picFile);
+      var savephotos = [];
       for (var i = 0; i < this.picFile.length; i++) {
-        var islast = i == this.picFile.length - 1;
-        this.uploadImageAsPromise(this.picFile[i], islast);
+        var fl = this.picFile[i];
+        //this.uploadImageAsPromise(this.picFile[i], islast);
+        const path = `project/storeFile${new Date().getTime()}_${fl.name}`;
+        var fileprop = await this.fileservice.upload_in_storage(path, fl, this.userId, 'project');
+        savephotos.push({ id: fileprop['id'], photoURL: fileprop['photoURL'] })
       }
+      const path = `project/storeFile${new Date().getTime()}_${fl.name}`;
+      var fileprop = await this.fileservice.upload_in_storage(path, fl, this.userId, 'project');
+      console.log(savephotos);
+      this.addProjectForm.controls['photoURL'].setValue(savephotos);
+      this.addProjectForm.controls['cover_photo'].setValue({ id: fileprop['id'], photoURL: fileprop['photoURL']} );
+      this.submitFinal();
     } catch (err) {
       alert(err.message);
     }
@@ -173,7 +188,22 @@ export class AddProjectComponent implements OnInit , OnDestroy {
     if (this.picFile.length) {
       document.getElementById('uploadbtn').classList.remove('btn-primary');
       document.getElementById('uploadbtn').classList.add('btn-success');
-      this.qtyinput = "a file attached";;
+      this.qtyinput = "a file attached";
+      try {
+        console.log(this.picFile);
+        for (var i = 0; i < this.picFile.length; i++) {
+          var reader = new FileReader();
+          reader.onload = (event: any) => {
+            //console.log(event.target.result);
+            this.arrayphoto.push(event.target.result);
+          }
+          reader.readAsDataURL(this.picFile[i]);
+        }
+      } catch (err) {
+
+      }
+
+
     } else {
       document.getElementById('uploadbtn').classList.remove('btn-success');
       document.getElementById('uploadbtn').classList.add('btn-primary');
@@ -186,6 +216,30 @@ export class AddProjectComponent implements OnInit , OnDestroy {
   }
   addphotoview() {
     document.getElementById('inputfileview').click();
+  }
+  addcoverphoto(file) {
+    try {
+      console.log(file.target.files);
+
+      if (file.target.files.length) {
+        document.getElementById('addbutton').classList.remove('btn-primary');
+        document.getElementById('addbutton').classList.add('btn-success');
+      } else {
+        document.getElementById('addbutton').classList.add('btn-primary');
+        document.getElementById('addbutton').classList.remove('btn-success');
+      }
+
+      this.cover_photo_file = file.target.files[0];
+      var reader = new FileReader();
+      reader.onload = (event: any) => {
+        //console.log(event.target.result);
+        //this.arrayphoto.push(event.target.result);
+        this.cover_photo = event.target.result;
+      }
+      reader.readAsDataURL(this.cover_photo_file);
+    } catch (err) {
+
+    }
   }
   addphotos(files) {
     //this.arrayphoto=[];
@@ -206,26 +260,26 @@ export class AddProjectComponent implements OnInit , OnDestroy {
 
   }
 
-  pickClient(){
+  pickClient() {
     this.dialog.open(ViewProjectClientDialogComponent).afterClosed().subscribe(result => {
       this.selectedClientUid = result[0];
       this.selectedClient = result[1];
     });
   }
 
-  pickAgent(){
+  pickAgent() {
     this.dialog.open(ViewProjectAgentDialogComponent).afterClosed().subscribe(result => {
       this.selectedAgentUid = result[0];
       this.selectedAgent = result[1];
     });
   }
 
-  goBack(){
+  goBack() {
     this.router.navigate(['/project']);
   }
 
   ngOnDestroy(): void {
-    
+
   }
 
 }
@@ -252,7 +306,7 @@ export class ViewProjectClientDialogComponent implements OnInit, OnDestroy {
 
     public brokerService: BrokerService,
 
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.getClient();
@@ -276,7 +330,7 @@ export class ViewProjectClientDialogComponent implements OnInit, OnDestroy {
 
     this.dialogRef.disableClose = true;//disable default close operation
     this.dialogRef.backdropClick().subscribe(result => {
-      this.dialogRef.close(this.selected );
+      this.dialogRef.close(this.selected);
     });
     this.dialogRef.close(this.selected);
   }
@@ -311,7 +365,7 @@ export class ViewProjectAgentDialogComponent implements OnInit, OnDestroy {
 
     public brokerService: BrokerService,
 
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.getAgent();
@@ -335,7 +389,7 @@ export class ViewProjectAgentDialogComponent implements OnInit, OnDestroy {
 
     this.dialogRef.disableClose = true;//disable default close operation
     this.dialogRef.backdropClick().subscribe(result => {
-      this.dialogRef.close(this.selected );
+      this.dialogRef.close(this.selected);
     });
     this.dialogRef.close(this.selected);
   }

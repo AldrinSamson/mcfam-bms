@@ -6,9 +6,8 @@
             <div [formGroup]="addProjectForm">
                 <div class="card-body">
                     <div class="fb-profile">
-                        <div *ngFor='let url of arrayphoto;let indexOfelement=index;trackBy: trackByFn'
-                        class="toaddphotosdiv center">
-                        <img align="left" class="fb-image-lg" [src]="url" alt="Add a cover photo">
+                        <div *ngIf='cover_photo_file' class="toaddphotosdiv center" >
+                        <img align="left" class="fb-image-lg" [src]="cover_photo" alt="Add a cover photo">
                         </div>
                     </div>
                     <div class = "row">
@@ -106,7 +105,7 @@
                         <div class="col-3">
                             <label>
                                 Attach a photo<br>
-                                <input hidden type="file" (change)="getFile($event)" id='inputfile' accept=".png,.jpg" multiple>
+                                <input hidden type="file"  (change)="getFile($event)" id='inputfile' accept=".png,.jpg" multiple>
                                 <div style="vertical-align: bottom;">
                                     <button class="upload btn btn-primary" id='uploadbtn' (click)='inputFileClick()'>Upload</button>
                                     &nbsp;
@@ -117,10 +116,14 @@
                             <label>
                                 Attach a cover photo<br>
                                 <button class="btn btn-primary" id='addbutton' (click)='addphotoview()'>Upload</button>
-                                <br><input hidden id='inputfileview' #file type="file" accept='image/*' (change)='addphotos(file.files)'
-                                    multiple>
+                                <br><input hidden id='inputfileview' type="file" accept='image/*' (change)='addcoverphoto($event)' multiple>
                             </label>
                             <br>
+                            <div *ngFor='let ph of arrayphoto'>
+                                <img [src]='ph' class="photoURL">
+                                <br>
+                                <br>
+                            </div>
                             <br>
                         </div>
                     </div>
