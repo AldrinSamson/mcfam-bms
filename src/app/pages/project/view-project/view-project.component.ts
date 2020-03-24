@@ -15,7 +15,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
   templateUrl: './view-project.component.html',
   styleUrls: ['./view-project.component.scss']
 })
-export class ViewProjectComponent implements OnInit {
+export class ViewProjectComponent implements OnInit , OnDestroy {
 
   tree: UrlTree;
   projectID;
@@ -69,8 +69,10 @@ export class ViewProjectComponent implements OnInit {
     this.tree = this.router.parseUrl(this.router.url);
     this.projectID = this.tree.root.children[PRIMARY_OUTLET].segments[1].path;
     this.projectSub = this.firebaseService.getOne(this.projectID , 'project').subscribe(result => {
-      this.project =(result);
+      this.project = result;
     });
+
+    return true
     
   }
 
@@ -210,6 +212,12 @@ export class ViewProjectComponent implements OnInit {
 
   onNoClick(): void {
     
+  }
+
+  ngOnDestroy(){
+    if(this.projectSub != null) {
+      this.projectSub.unsubscribe();
+    }
   }
 
 }

@@ -104,39 +104,9 @@
 
 
   <ng-template #loggedin>
-    <div *ngIf="authService.isAuthenticated()">
-    <!-- <h4>Welcome {{userDetails.fullName}}</h4> -->
-    </div>
-
-    
-
-    <mat-menu #menu="matMenu" >
-      <a
-        mat-menu-item
-        [routerLink]="'/profile'">
-        <mat-icon class="profile">face</mat-icon>
-        <span>Profile</span>
-      </a>
-
-      <a mat-menu-item *ngFor="let item of menuItems" href="{{item.link}}" target="_blank">
-        <mat-icon class="login">{{item.icon}}</mat-icon>
-        <span>{{item.title}}</span>
-      </a>
-
-      <a
-        mat-menu-item
-        routerLink="/profile-settings"
-        [queryParams]="{profile: '1'}"
-        fragment="editProfile">
-        <mat-icon class="settings">settings</mat-icon>
-        <span>Settings</span>
-      </a>
-
-      <a mat-menu-item (click)="onLogout()">
-        <mat-icon class="logout">lock_outline</mat-icon>
-        <span>Logout</span>
-      </a>
-    </mat-menu>
+    <!-- <div *ngIf="authService.isAuthenticated()">
+    <h4>Welcome {{userDetails.fullName}}</h4>
+    </div> -->
 
   </ng-template>
 </mat-toolbar>
