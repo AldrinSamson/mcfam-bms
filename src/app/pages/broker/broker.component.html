@@ -20,7 +20,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr  *ngFor="let broker of brokers | paginate:{itemsPerPage: 5, currentPage:1} | filter:brokerSearchText " (click)="openViewBroker(broker)">
+						<tr  *ngFor="let broker of brokers | paginate:{itemsPerPage: 5, currentPage:p} | filter:brokerSearchText " (click)="openViewBroker(broker)">
 							<td>
 								<img src="{{broker.photoURL}}" >
 								<a  class="user-link">{{broker.firstName}} {{broker.lastName}}</a>

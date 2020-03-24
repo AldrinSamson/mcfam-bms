@@ -26,6 +26,7 @@
     "reset": "rm -rf ./node_modules ./package-lock.json && npm install",
     "dist": "ng build",
     "prod": "ng build --prod",
+    "buildndeploy": "ng build --prod && firebase deploy --only hosting:mcfam-bpms",
     "prod:hashless": "ng build --prod --output-hashing none",
     "prod:src": "ng build --prod --sourcemaps",
     "compodoc:g": "compodoc -p src/tsconfig.app.json",

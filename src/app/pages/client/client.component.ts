@@ -19,6 +19,7 @@ export class ClientComponent implements OnInit , OnDestroy {
   clientSearchText;
   clients: Array<any>;
   clientSub: Subscription;
+  p
 
   constructor( 
     public firebaseService: FirebaseService,

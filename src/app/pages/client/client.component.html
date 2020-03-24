@@ -20,7 +20,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr  *ngFor="let client of clients | paginate:{itemsPerPage: 5, currentPage:1} | filter:clientSearchText " (click)="openViewClient(client)">
+							<tr  *ngFor="let client of clients | paginate:{itemsPerPage: 5, currentPage:p} | filter:clientSearchText " (click)="openViewClient(client)">
 								<td>
 									<img src="{{client.photoUrl}}" >
 									<a  class="user-link">{{client.fullName}}</a>

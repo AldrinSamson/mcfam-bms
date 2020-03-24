@@ -27,6 +27,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   projectSearchText;
   projects: Array<any>;
   public projectSub: Subscription;
+  p
   
   viewFile = '';
   qtyinput = '';

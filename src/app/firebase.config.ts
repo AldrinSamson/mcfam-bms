@@ -8,4 +8,5 @@ export const firebaseKeys = {
   messagingSenderId: '164025316451',
   appId: '1:164025316451:web:48a5eddbf050a10d7ff456',
   measurementId: 'G-8CW9M8PLSF'
+  
 };

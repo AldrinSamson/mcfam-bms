@@ -1,0 +1,17 @@
+{
+  "hosting": {
+    "site": "mcfam-bpms",
+    "public": "dist/mcfam-bms",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}

@@ -20,6 +20,7 @@ export class BrokerComponent implements OnInit, OnDestroy {
   brokerSearchText;
   brokers: Array<any>;
   brokerSub: Subscription;
+  p
 
   profpic: any;
 

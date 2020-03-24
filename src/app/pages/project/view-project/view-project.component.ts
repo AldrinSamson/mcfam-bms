@@ -39,28 +39,30 @@ export class ViewProjectComponent implements OnInit {
     public authService: AuthService,
     ) {
       this.isManager = this.authService.isManager();
+      this.editProjectForm = this.fb.group({
+        name: [''],
+        overview: [''],
+        saleType: [''],
+        propertyType: [''],
+        ownerClientUid: [''],
+        ownerClientName: [''],
+        addressStreet: [''],
+        addressTown: [''],
+        addressCity: [''],
+        addressRegion: [''],
+        cost: [''],
+        status: [''],
+        agentUi: [''],
+        agentName: [''],
+        photoURL: [''],
+        isArchived: ['']
+      })
       
   }  
 
   ngOnInit() {
     this.getProject();
-    this.editProjectForm = this.fb.group({
-      name: [this.project.name],
-      overview: [this.project.overview],
-      saleType: [this.project.saleType],
-      propertyType: [this.project.propertyType],
-      ownerClientName: [this.project.ownerClientName],
-      ownerClientUid: [this.project.ownerClientUid],
-      addressStreet: [this.project.addressStreet],
-      addressTown: [this.project.addressTown],
-      addressCity: [this.project.addressCity],
-      addressRegion: [this.project.addressRegion],
-      cost: [this.project.cost],
-      status: [this.project.status],
-      photoURL: [this.project.photoURL],
-      agentName: [this.project.agentName],
-      agentUid: [this.project.agentUid]
-    })
+    
   }
 
   getProject() {
