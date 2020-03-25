@@ -29,7 +29,7 @@ import { MiscComponent } from './components/misc/misc.component';
 
 // Protected
 import { AuthGuardService } from '@shared';
-import { EditProjectComponent } from './pages/project/edit-project/edit-project.component';
+
 
 // Routing
 const appRoutes: Routes = [
