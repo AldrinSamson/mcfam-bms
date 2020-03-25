@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject, OnDestroy, ElementRef } from '@angular/core';
-import { FirebaseService,  FileService, ProjectService, AuthService } from '../../../shared';
+import { FirebaseService,  FileService, ProjectService, AuthService, BrokerService } from '../../../shared';
 import { MatDialog, MatDialogRef, MatDialogConfig, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router, UrlTree,PRIMARY_OUTLET } from '@angular/router';
@@ -28,7 +28,11 @@ export class ViewProjectComponent implements OnInit , OnDestroy {
   userDetails: any;
   isManager = false;
   userId = '';
-
+  selectedClientUid: any;
+  selectedClient: any;
+  selectedAgentUid: any;
+  selectedAgent: any;
+  viewphotos=[];
   constructor(
     private router: Router,
     public firebaseService: FirebaseService,
@@ -68,14 +72,43 @@ export class ViewProjectComponent implements OnInit , OnDestroy {
   getProject() {
     this.tree = this.router.parseUrl(this.router.url);
     this.projectID = this.tree.root.children[PRIMARY_OUTLET].segments[1].path;
-    this.projectSub = this.firebaseService.getOne(this.projectID , 'project').subscribe(result => {
+    this.projectSub = this.firebaseService.getOne(this.projectID , 'project').subscribe(async result => {
       this.project = result;
+      console.log(this.project);
+      for(var i = 0; i< result['photoURL'].length;i++){
+        if(result['photoURL'][i]['photoURL']){
+          console.log(result['photoURL'][i]['photoURL'])
+          this.viewphotos.push(result['photoURL'][i]['photoURL'])
+        }else{
+          var x = await this.fileservice.getFile( result['photoURL'][i]);
+          console.log(x);
+          this.viewphotos.push(x['photoURL'])
+        }
+        
+        
+      }
+      console.log(this.viewphotos);
+      //
     });
 
     return true
     
   }
+  pickClient() {
+    this.dialog.open(ViewProjectClientDialogComponent2).afterClosed().subscribe(result => {
+      this.selectedClientUid = result[0];
+      this.project['ownerClientName'] = result[1];
+    });
+  }
 
+  pickAgent() {
+    this.dialog.open(ViewProjectAgentDialogComponent2).afterClosed().subscribe(result => {
+      this.selectedAgentUid = result[0];
+      this.project['agentName'] = result[1];
+
+      //console.log(result);
+    });
+  }
   async submitEditProjectForm() {
     console.log(this.editProjectForm);
     if (this.editProjectForm.valid) {
@@ -217,6 +250,123 @@ export class ViewProjectComponent implements OnInit , OnDestroy {
   ngOnDestroy(){
     if(this.projectSub != null) {
       this.projectSub.unsubscribe();
+    }
+  }
+
+}
+@Component({
+  // tslint:disable-next-line:component-selector
+  selector: 'view-client-dialog',
+  templateUrl: '../dialog/view-client-dialog.html',
+  styleUrls: ['../project.component.scss'],
+})
+
+export class ViewProjectClientDialogComponent2 implements OnInit, OnDestroy {
+
+  clientSub: Subscription;
+  clients: MatTableDataSource<any>;
+  selectedClientUid = '';
+  selectedClient = '';
+  selected = [];
+  displayedColumnsClient: string[] = ['fullName', 'userName', 'email'];
+
+  constructor(
+    public firebaseService: FirebaseService,
+    public dialogRef: MatDialogRef<ViewProjectClientDialogComponent2>,
+
+    public brokerService: BrokerService,
+
+  ) { }
+
+  ngOnInit() {
+    this.getClient();
+  }
+
+  getClient() {
+    this.clientSub = this.firebaseService.getAllData('client').subscribe(result => {
+      this.clients = new MatTableDataSource(result);
+    });
+  }
+
+  selectClient(value) {
+    this.selectedClientUid = value.uid;
+    this.selectedClient = value.fullName;
+  }
+
+  onNoClick(): void {
+
+    this.selected.push(this.selectedClientUid);
+    this.selected.push(this.selectedClient);
+
+    this.dialogRef.disableClose = true;//disable default close operation
+    this.dialogRef.backdropClick().subscribe(result => {
+      this.dialogRef.close(this.selected);
+    });
+    this.dialogRef.close(this.selected);
+  }
+
+  ngOnDestroy() {
+    if (this.clientSub != null) {
+      this.clientSub.unsubscribe();
+    }
+  }
+
+}
+
+@Component({
+  // tslint:disable-next-line:component-selector
+  selector: 'view-agent-dialog',
+  templateUrl: '../dialog/view-agent-dialog.html',
+  styleUrls: ['../project.component.scss'],
+})
+
+export class ViewProjectAgentDialogComponent2 implements OnInit, OnDestroy {
+
+  agentSub: Subscription;
+  agents: MatTableDataSource<any>;
+  selectedAgenttUid = '';
+  selectedAgent = '';
+  selected = [];
+  displayedColumnsAgent: string[] = ['fullName', 'userName', 'email'];
+
+  constructor(
+    public firebaseService: FirebaseService,
+    public dialogRef: MatDialogRef<ViewProjectAgentDialogComponent2>,
+
+    public brokerService: BrokerService,
+
+  ) { }
+
+  ngOnInit() {
+    this.getAgent();
+  }
+
+  getAgent() {
+    this.agentSub = this.brokerService.getWithPosition('Agent').subscribe(result => {
+      this.agents = new MatTableDataSource(result);
+    });
+  }
+
+  selectAgent(value) {
+    this.selectedAgenttUid = value.uid;
+    this.selectedAgent = value.fullName;
+  }
+
+  onNoClick(): void {
+
+    this.selected.push(this.selectedAgenttUid);
+    this.selected.push(this.selectedAgent);
+
+    this.dialogRef.disableClose = true;//disable default close operation
+    this.dialogRef.backdropClick().subscribe(result => {
+      this.dialogRef.close(this.selected);
+    });
+    this.dialogRef.close(this.selected);
+  }
+
+  ngOnDestroy() {
+    if (this.agentSub != null) {
+      this.agentSub.unsubscribe();
     }
   }
 

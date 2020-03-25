@@ -61,12 +61,12 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-9">
+                        <div class="col-3">
 
                             <mat-form-field>
                                 <mat-label> Owner Client Name</mat-label>
                                 <input matInput formControlName="ownerClientName" name="project-ownerClientName"
-                                    value={{project.ownerClientName}} readonly>
+                                    value={{project.ownerClientName}} (click)="pickClient()" readonly>
                             </mat-form-field>
                             <br>
                 
@@ -92,10 +92,11 @@
                             <br>
                             <mat-form-field>
                                 <mat-label> Agent Assigned </mat-label>
-                                <input matInput formControlName="agentName" value={{project.agentName}} name="project-agentName" required>
+                                <input matInput formControlName="agentName" value={{project.agentName}}
+                                 name="project-agentName" (click)="pickAgent()" required readonly>
                             </mat-form-field>
                         </div>
-                        <div class="col-3">
+                        <div class="col-9">
                             <!-- <label>
                                 Attach a photo<br>
                                 <input hidden type="file" (change)="getFile($event)" id='inputfile' accept=".png,.jpg" multiple>
@@ -112,6 +113,13 @@
                                 <br><input hidden id='inputfileview' #file type="file" accept='image/*' (change)='addphotos(file.files)'
                                     multiple>
                             </label> -->
+                            <h4>Photo/s added</h4>
+                            <div *ngFor='let vp of viewphotos;' class="divpic">
+                                <input type="checkbox" class="imgchkbox">
+                                <img [src]='vp' class="photoURL">
+                                <br>
+                            </div>
+
                             <br>
                             <br>
                         </div>
