@@ -1,103 +1,110 @@
-<p *ngIf="!project" > loading data waits  </p>
+<p *ngIf="!project"> loading data waits </p>
 
-<div class = "main" *ngIf="project">
-    <div class="card" >
+<div class="main" *ngIf="project">
+    <div class="card">
         <div class="card-header">
-            <h4 >Edit {{project.name}} Project</h4>
+            <h4>Edit {{project.name}} Project</h4>
         </div>
-            <div [formGroup]="editProjectForm">
-                <div class="card-body">
-                    <div class="fb-profile">
-                        <!-- <div *ngFor='let url of arrayphoto;let indexOfelement=index;trackBy: trackByFn'
+        <div [formGroup]="editProjectForm">
+            <div class="card-body">
+                <div class="fb-profile">
+                    <!-- <div *ngFor='let url of arrayphoto;let indexOfelement=index;trackBy: trackByFn'
                         class="toaddphotosdiv center">
                         <img align="left" class="fb-image-lg" [src]="url" alt="Add a cover photo">
                         </div> -->
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <h3>
+                            <mat-form-field>
+                                <mat-label> Name </mat-label>
+                                <input matInput formControlName="name" value={{project.name}} name="project-name"
+                                    required>
+                            </mat-form-field>
+                        </h3>
+                        <mat-form-field>
+                            <mat-label>Overview Description </mat-label>
+                            <textarea matInput formControlName="overview" name="project-overview"
+                                value={{project.overview}} cols="1000" required></textarea>
+                        </mat-form-field>
                     </div>
-                    <div class = "row">
-                        <div class = "col-6">
-                            <h3>
-                                <mat-form-field>
-                                    <mat-label> Name </mat-label>
-                                    <input matInput formControlName="name" value={{project.name}} name="project-name" required>
-                                </mat-form-field>
-                            </h3>
-                            <mat-form-field>
-                                <mat-label>Overview Description </mat-label>
-                                <textarea matInput formControlName="overview" name="project-overview" value={{project.overview}} cols="1000" required></textarea>
-                            </mat-form-field>
-                        </div>
-                        <div class = "col-6">
-                            <mat-form-field>
-                                <mat-label> Property Type </mat-label>
-                                <mat-select formControlName="propertyType" name="project-propertyType" required>
-                                    <mat-option value="Condominium">Condominium</mat-option>
-                                    <mat-option value="Apartment">Apartment</mat-option>
-                                    <mat-option value="House and Lot">House and Lot</mat-option>
-                                    <mat-option value="Lot">Lot</mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                            <br>
+                    <div class="col-6">
+                        <mat-form-field>
+                            <mat-label> Property Type </mat-label>
+                            <mat-select formControlName="propertyType" name="project-propertyType" required>
+                                <mat-option value="Condominium">Condominium</mat-option>
+                                <mat-option value="Apartment">Apartment</mat-option>
+                                <mat-option value="House and Lot">House and Lot</mat-option>
+                                <mat-option value="Lot">Lot</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <br>
 
-                            <mat-form-field>
-                                <mat-label> Street </mat-label>
-                                <input matInput formControlName="addressStreet" value={{project.addressStreet}} name="project-addressStreet" required>
-                            </mat-form-field>
-                            <br>
-                            <mat-form-field>
-                                <mat-label> Town / Barangay </mat-label>
-                                <input matInput formControlName="addressTown" value={{project.addressTown}} name="project-addressTown" required>
-                            </mat-form-field>
-                            <br>
-                            <mat-form-field>
-                                <mat-label> City </mat-label>
-                                <input matInput formControlName="addressCity" value={{project.addressCity}} name="project-addressCity" required>
-                            </mat-form-field>
-                            <br>
-                            <mat-form-field>
-                                <mat-label> Region </mat-label>
-                                <input matInput formControlName="addressRegion" value={{project.addressRegion}} name="project-addressRegion" required>
-                            </mat-form-field>
-                            <br>
-                        </div>
+                        <mat-form-field>
+                            <mat-label> Street </mat-label>
+                            <input matInput formControlName="addressStreet" value={{project.addressStreet}}
+                                name="project-addressStreet" required>
+                        </mat-form-field>
+                        <br>
+                        <mat-form-field>
+                            <mat-label> Town / Barangay </mat-label>
+                            <input matInput formControlName="addressTown" value={{project.addressTown}}
+                                name="project-addressTown" required>
+                        </mat-form-field>
+                        <br>
+                        <mat-form-field>
+                            <mat-label> City </mat-label>
+                            <input matInput formControlName="addressCity" value={{project.addressCity}}
+                                name="project-addressCity" required>
+                        </mat-form-field>
+                        <br>
+                        <mat-form-field>
+                            <mat-label> Region </mat-label>
+                            <input matInput formControlName="addressRegion" value={{project.addressRegion}}
+                                name="project-addressRegion" required>
+                        </mat-form-field>
+                        <br>
                     </div>
-                    <div class="row">
-                        <div class="col-3">
+                </div>
+                <div class="row">
+                    <div class="col-3">
 
-                            <mat-form-field>
-                                <mat-label> Owner Client Name</mat-label>
-                                <input matInput formControlName="ownerClientName" name="project-ownerClientName"
-                                    value={{project.ownerClientName}} (click)="pickClient()" readonly>
-                            </mat-form-field>
-                            <br>
-                
-                            <mat-form-field>
-                                <mat-label> Sale Type </mat-label>
-                                <mat-select formControlName="saleType" name="project-saleType" required>
-                                    <mat-option value="For Sale">For Sale</mat-option>
-                                    <mat-option value="For Lease">For Lease</mat-option>
-                                    <mat-option value="For Rent">For Rent</mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                            <br>
+                        <mat-form-field>
+                            <mat-label> Owner Client Name</mat-label>
+                            <input matInput formControlName="ownerClientName" name="project-ownerClientName"
+                                value={{project.ownerClientName}} (click)="pickClient()" readonly>
+                        </mat-form-field>
+                        <br>
 
-                            <mat-form-field>
-                                <mat-label> Cost </mat-label>
-                                <input matInput formControlName="cost" value={{project.cost}} name="project-cost" required>
-                            </mat-form-field>
-                            <br>
-                            <mat-form-field>
-                                <mat-label> Status </mat-label>
-                                <input matInput formControlName="status" value={{project.status}} name="project-status" required>
-                            </mat-form-field>
-                            <br>
-                            <mat-form-field>
-                                <mat-label> Agent Assigned </mat-label>
-                                <input matInput formControlName="agentName" value={{project.agentName}}
-                                 name="project-agentName" (click)="pickAgent()" required readonly>
-                            </mat-form-field>
-                        </div>
-                        <div class="col-9">
-                            <!-- <label>
+                        <mat-form-field>
+                            <mat-label> Sale Type </mat-label>
+                            <mat-select formControlName="saleType" name="project-saleType" required>
+                                <mat-option value="For Sale">For Sale</mat-option>
+                                <mat-option value="For Lease">For Lease</mat-option>
+                                <mat-option value="For Rent">For Rent</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <br>
+
+                        <mat-form-field>
+                            <mat-label> Cost </mat-label>
+                            <input matInput formControlName="cost" value={{project.cost}} name="project-cost" required>
+                        </mat-form-field>
+                        <br>
+                        <mat-form-field>
+                            <mat-label> Status </mat-label>
+                            <input matInput formControlName="status" value={{project.status}} name="project-status"
+                                required>
+                        </mat-form-field>
+                        <br>
+                        <mat-form-field>
+                            <mat-label> Agent Assigned </mat-label>
+                            <input matInput formControlName="agentName" value={{project.agentName}}
+                                name="project-agentName" (click)="pickAgent()" required readonly>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-9">
+                        <!-- <label>
                                 Attach a photo<br>
                                 <input hidden type="file" (change)="getFile($event)" id='inputfile' accept=".png,.jpg" multiple>
                                 <div style="vertical-align: bottom;">
@@ -113,21 +120,41 @@
                                 <br><input hidden id='inputfileview' #file type="file" accept='image/*' (change)='addphotos(file.files)'
                                     multiple>
                             </label> -->
-                            <h4>Photo/s added</h4>
-                            <div *ngFor='let vp of viewphotos;' class="divpic">
-                                <input type="checkbox" class="imgchkbox">
-                                <img [src]='vp' class="photoURL">
-                                <br>
-                            </div>
-
-                            <br>
+                        <h4>Photo/s added<button class="btn btn-sm btn-danger delbutton" id='delbutton'
+                                (click)="selectdelete($event)" value='0'>Delete some photo(s)</button></h4>
+                        <div *ngFor='let vp of viewphotos;let indexOfelement=index;' class="divpic">
+                            <span class="outlabel">
+                                <input type="checkbox" class="spotchkbox" style="display: none;"
+                                    id='box_{{indexOfelement}}' (click)='select_del_photo(indexOfelement)' value="vp.id"
+                                    name='todelete'>
+                                <img [src]='vp.photoURL' class="photoURL" id='photo_{{indexOfelement}}'>
+                            </span>
                             <br>
                         </div>
+                        <br>
+                        <h5>Add More Photo/s<button class="btn btn-sm btn-success" id='addbutton'
+                                (click)='addphotoview()'>Click here to add more
+                                photos</button></h5>
+                        <input hidden id='inputfileview' #file type="file" accept='image/*'
+                            (change)='addphotos(file.files)' multiple>
+                        <div id='photoscontain' class="multiphotos">
+                            <div *ngFor='let url of arrayphoto;let indexOfelement=index;trackBy: trackByFn'
+                                class="toaddphotosdiv center">
+                                <img class="photoURL insidephotoadd" [src]="url">
+                                <button id='' class="btn btn-sm btn-danger center remove_button"
+                                    (click)='removephoto(indexOfelement)'>x</button>
+                                <br>
+                            </div>
+                            &nbsp;&nbsp;
+                        </div>
+                        <br>
+                        <br>
                     </div>
-    
+                </div>
+
             </div>
-            <div class = "card-footer" >
-                <div >
+            <div class="card-footer">
+                <div>
                     <div *ngIf="authService.isManager()">
                         <button mat-button color="warn" (click)="archiveProject()">Archive</button>
                         <button mat-button (click)="submitEditProjectForm()">Edit</button>
@@ -140,7 +167,7 @@
     </div>
 </div>
 
-    
+
 
 <!-- <h2 >Edit {{project.name}} Project</h2>
 <div  [formGroup]="editProjectForm" class="modalform">
