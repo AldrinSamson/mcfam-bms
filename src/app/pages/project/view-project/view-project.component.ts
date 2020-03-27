@@ -23,7 +23,7 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
   project
 
   editProjectForm: any;
-  viewFiles: any;
+  viewFiles=[];
   arrayphoto = [];
   userDetails: any;
   isManager = false;
@@ -75,38 +75,47 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
     this.projectSub = this.firebaseService.getOne(this.projectID, 'project').subscribe(async result => {
       this.project = result;
       console.log(this.project);
+      var photoid = [];
       for (var i = 0; i < result['photoURL'].length; i++) {
         if (result['photoURL'][i]['photoURL']) {
           console.log(result['photoURL'][i]['photoURL'])
           this.viewphotos.push(result['photoURL'][i])
+          photoid.push(result['photoURL'][i]['id']);
         } else {
           try {
             var x = await this.fileservice.getFile(result['photoURL'][i]);
             console.log(x);
-            this.viewphotos.push({id: x['id'], photoURL: x['photoURL']})
+            this.viewphotos.push({ id: x['id'], photoURL: x['photoURL'] })
+            photoid.push(x['id']);
           } catch (err) {
-            
+
           }
         }
-        this.editProjectForm.value['name']=result['name'];
-        this.editProjectForm.value['overview']=result['overview'];
-        this.editProjectForm.value['saleType']=result['saleType'];
-        this.editProjectForm.value['propertyType']=result['propertyType'];
-        this.editProjectForm.value['ownerClientUid']=result['ownerClientUid'];
-        this.editProjectForm.value['ownerClientName']=result['ownerClientName'];
-        this.editProjectForm.value['addressStreet']=result['addressStreet'];
-        this.editProjectForm.value['addressTown']=result['addressTown'];
-        this.editProjectForm.value['addressCity']=result['addressCity'];
-        this.editProjectForm.value['addressRegion']=result['addressRegion'];
-        this.editProjectForm.value['cost']=result['cost'];
-        this.editProjectForm.value['status']=result['status'];
-        this.editProjectForm.value['agentUid']=result['agentUid'];
-        this.editProjectForm.value['agentName']=result['agentName'];
-        this.editProjectForm.value['photoURL']='w';
-        this.editProjectForm.value['isArchived']=result['isArchived'];
+
 
       }
-      console.log(this.viewphotos);
+
+      this.editProjectForm = this.fb.group({
+        name: result['name'],
+        overview: result['overview'],
+        saleType: result['saleType'],
+        propertyType: result['propertyType'],
+        ownerClientUid: result['ownerClientUid'],
+        ownerClientName: result['ownerClientName'],
+        addressStreet: result['addressStreet'],
+        addressTown: result['addressTown'],
+        addressCity: result['addressCity'],
+        addressRegion: result['addressRegion'],
+        cost: result['cost'],
+        status: result['status'],
+        agentUid: result['agentUid'],
+        agentName: result['agentName'],
+        photoURL: [photoid],
+        isArchived: result['isArchived']
+      })
+      console.log(result);
+      console.log(this.editProjectForm);
+
       //
     });
 
@@ -119,33 +128,34 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
       this.project['ownerClientName'] = result[1];
     });
   }
-  selectdelete(event){
+  selectdelete(event) {
     console.log(event.target.value);
-    if(event.target.value ==0){
+    if (event.target.value == 0) {
       event.target.value = 1
       document.getElementById('delbutton').classList.remove('btn-danger');
       $('#delbutton').addClass('btn-outline-danger');
       $('#delbutton').text('Cancel deletion');
       $('.spotchkbox').addClass('imgchkbox');
-      $( ".outlabel" ).wrap( "<label></label>" );
+      $(".outlabel").wrap("<label></label>");
 
-    }else{
+    } else {
       event.target.value = 0
       document.getElementById('delbutton').classList.add('btn-danger');
       $('#delbutton').removeClass('btn-outline-danger');
       $('#delbutton').text('Delete some photo(s)');
       $('.spotchkbox').removeClass('imgchkbox');
-      $( ".outlabel" ).unwrap(  );
-
+      $(".outlabel").unwrap();
+      
+      $('.photoURL').removeClass('blurtodelete');
     }
   }
-  select_del_photo(photoindex){
-    console.log($('#box_'+photoindex).is(':checked'))
-    if($('#box_'+photoindex).is(':checked')){
-      $('#photo_'+photoindex).addClass('blurtodelete');
-      
-    }else{
-      $('#photo_'+photoindex).removeClass('blurtodelete');
+  select_del_photo(photoindex) {
+    console.log($('#box_' + photoindex).is(':checked'))
+    if ($('#box_' + photoindex).is(':checked')) {
+      $('#photo_' + photoindex).addClass('blurtodelete');
+
+    } else {
+      $('#photo_' + photoindex).removeClass('blurtodelete');
     }
 
 
@@ -167,50 +177,61 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
       //delete existing
       var savephotos = [];
       var deletephotos = [];
+      if ($('#delbutton').val() == 0) {
+        $("input[name='todelete']:checkbox").prop('checked', false);
+      }
 
       $.each($("input[name='todelete']:not(:checked)"), function () {
-        var x = $(this).val().toString().split('|');
+        var x = $(this).val().toString();
         console.log(x);
-        savephotos.push(x[0]);
+        savephotos.push(x);
       });
-      if($('#delbutton').val()==1 ){
+      if ($('#delbutton').val() == 1) {
         $.each($("input[name='todelete']:checked"), function () {
-          var x = $(this).val().toString().split('|');
+          var x = $(this).val().toString();
           console.log(x);
           deletephotos.push(x);
         });
+        for (var i = 0; i < deletephotos.length; i++) {
+          //await this.fileservice.filedelete(deletephotos[i][0]);
+          await this.fileservice.delete_in_storage(deletephotos[i]);
+        }
       }
 
-      
-      /*
-      for (var i = 0; i < deletephotos.length; i++) {
-        this.fileservice.filedelete(deletephotos[i][0]);
-        this.fileservice.delete_in_storage(deletephotos[i][1]);
-      }*/
+
       console.log(deletephotos);
+      console.log(savephotos);
 
-      console.log('this.viewFiles.length ' + this.viewFiles.length);
-      var x = [];
-      for (var i = 0; i < this.viewFiles.length; i++) {
-        var fl = this.viewFiles[i];
-        console.log(fl);
-        const path = `project/storeFile${new Date().getTime()}_${fl.name}`;
 
-        let xx = await this.fileservice.upload_in_storage(path, this.viewFiles[i], this.userId, 'project');
-        x.push(xx);
+
+
+      //console.log('this.viewFiles.length ' + this.viewFiles.length);
+      if (this.viewFiles) {
+        var x = [];
+        for (var i = 0; i < this.viewFiles.length; i++) {
+          var fl = this.viewFiles[i];
+          console.log(fl);
+          const path = `project/storeFile${new Date().getTime()}_${fl.name}`;
+
+          let xx = await this.fileservice.upload_in_storage(path, this.viewFiles[i], this.userId, 'project');
+          x.push(xx);
+        }
+        console.log('uploaded file');
+        for (var i = 0; i < this.viewFiles.length; i++) {
+          savephotos.push(x[i]['id'])
+        }
       }
-      console.log('uploaded file');
-      for (var i = 0; i < this.viewFiles.length; i++) {
-        savephotos.push(x[i]['id'])
-      }
+
       console.log('savephotos');
       console.log(savephotos);
       console.log(x);
-      this.editProjectForm.value['photoURL'] = savephotos;
+
+      this.editProjectForm.controls['photoURL'].setValue(savephotos);
       console.log(this.editProjectForm.value);
-      //this.projectService.updateProject(this.data.id, this.editProjectForm.value);
-
-
+      this.projectService.updateProject(this.projectID, this.editProjectForm.value);
+      console.log($('#delbutton').val())
+      /**/
+      this.router.navigate(['/project']);
     }
   }
   toRemove(event) {
@@ -249,13 +270,14 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
   addphotos(files) {
     //this.arrayphoto=[];
 
-    this.viewFiles = files;
-    for (var i = 0; i < this.viewFiles.length; i++) {
+    //this.viewFiles = files;
+    for (var i = 0; i < files.length; i++) {
       var reader = new FileReader();
       reader.onload = (event: any) => {
         //console.log(event.target.result);
         this.arrayphoto.push(event.target.result);
       }
+      this.viewFiles.push(files[i])
       reader.readAsDataURL(files[i]);
     }
 
@@ -267,8 +289,21 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
   removephoto(index) {
     console.log(index);
     //delete this.arrayphoto[index];
+    //console.log(this.arrayphoto)
+    //console.log(this.viewFiles)
+    var getthefiles = [];
+    for (var i = 0; i < this.viewFiles.length; i++) {
+      console.log(index,i)
+      if (index != i) {
+        getthefiles.push(this.viewFiles[i]);
+      }
+
+    }
+
     this.arrayphoto.splice(index, 1);
+    this.viewFiles = getthefiles;
     console.log(this.arrayphoto)
+    console.log(this.viewFiles)
   }
 
   trackByFn(i: number) {

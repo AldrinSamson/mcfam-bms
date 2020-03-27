@@ -125,7 +125,7 @@
                         <div *ngFor='let vp of viewphotos;let indexOfelement=index;' class="divpic">
                             <span class="outlabel">
                                 <input type="checkbox" class="spotchkbox" style="display: none;"
-                                    id='box_{{indexOfelement}}' (click)='select_del_photo(indexOfelement)' value="vp.id"
+                                    id='box_{{indexOfelement}}' (click)='select_del_photo(indexOfelement)' value="{{vp.id}}"
                                     name='todelete'>
                                 <img [src]='vp.photoURL' class="photoURL" id='photo_{{indexOfelement}}'>
                             </span>
@@ -142,7 +142,7 @@
                                 class="toaddphotosdiv center">
                                 <img class="photoURL insidephotoadd" [src]="url">
                                 <button id='' class="btn btn-sm btn-danger center remove_button"
-                                    (click)='removephoto(indexOfelement)'>x</button>
+                                    (click)='removephoto(indexOfelement)' value='{{indexOfelement}}'>x</button>
                                 <br>
                             </div>
                             &nbsp;&nbsp;

@@ -34,6 +34,7 @@ export class FileService {
   }
   getFile(id) {
     var thisclass = this;
+    console.log(id)
     return new Promise(function (resolve) {
       thisclass.firestore.collection('filesStored').doc(id).ref.get()
         .then(doc => {
@@ -49,7 +50,7 @@ export class FileService {
     //return this.accountCollection.add(acc);
     var thisclass = this;
     return new Promise(function (resolve, reject) {
-      console.log(fl);
+    
       const f: FileModel = {
         id: fl.id,
         //id: id,
@@ -61,28 +62,33 @@ export class FileService {
         photoURL: fl.photoURL,
         path: fl.path
       };
-      console.log(fl.id + ' = fggjhh');
-      console.log(f);
+      
       thisclass.fileCollection.doc(fl.id).set(f);
       resolve(f);
     })
   }
   filedelete(id) {
-    console.log(id);
+    //console.log(id);
     let deleteDoc = this.afs.collection('filesStored').doc(id).delete();
-    console.log(deleteDoc)
+    //console.log(deleteDoc)
   }
-  delete_in_storage(path) {
+  async delete_in_storage(id) {
     // Create a reference to the file to delete
-    var storageRef = firebase.storage().ref(path);
-    var desertRef = storageRef.child(path);
-
-    // Delete the file
-    desertRef.delete().then(function () {
-      // File deleted successfully
-    }).catch(function (error) {
-      // Uh-oh, an error occurred!
-    });
+    //console.log(id)
+    var x = await this.getFile(id);
+    var path = x['path'];
+    this.filedelete(id);
+    //console.log(x)
+    
+        var storageRef = firebase.storage().ref(path);
+        var desertRef = storageRef.child(path);
+    
+        // Delete the file
+        desertRef.delete().then(function () {
+          // File deleted successfully
+        }).catch(function (error) {
+          // Uh-oh, an error occurred!
+        });
   }
   async upload_in_storage(path, file, uid, category) {
 
@@ -94,13 +100,13 @@ export class FileService {
       size: file.size,
       type: file.type
     };
-    var thisclass=this;
+    var thisclass = this;
 
     return new Promise(function (resolve, reject) {
       console.log(file);
-      
+
       var storageRef = firebase.storage().ref(path);
-      
+
       var task = storageRef.put(file);
       task.then(function (snapshot) {
         snapshot.ref.getDownloadURL().then(async function (url) {
