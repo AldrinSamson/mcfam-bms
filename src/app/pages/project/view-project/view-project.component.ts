@@ -56,10 +56,9 @@ export class ViewProjectComponent implements OnInit , OnDestroy {
         addressRegion: [''],
         cost: [''],
         status: [''],
-        agentUi: [''],
+        agentUid: [''],
         agentName: [''],
-        photoURL: [''],
-        isArchived: ['']
+        photoURL: ['']
       })
       
   }  
@@ -84,15 +83,29 @@ export class ViewProjectComponent implements OnInit , OnDestroy {
           console.log(x);
           this.viewphotos.push(x['photoURL'])
         }
-        
-        
       }
       console.log(this.viewphotos);
-      //
     });
 
+    // this.editProjectForm = this.fb.group({
+    //   name: [this.project.name],
+    //   overview: [this.project.overview],
+    //   saleType: [this.project.saleType],
+    //   propertyType: [this.project.propertyType],
+    //   ownerClientName: [this.project.ownerClientName],
+    //   ownerClientUid: [this.project.ownerClientUid],
+    //   addressStreet: [this.project.addressStreet],
+    //   addressTown: [this.project.addressTown],
+    //   addressCity: [this.project.addressCity],
+    //   addressRegion: [this.project.addressRegion],
+    //   cost: [this.project.cost],
+    //   status: [this.project.status],
+    //   photoURL: [this.project.photoURL],
+    //   agentName: [this.project.agentName],
+    //   agentUid: [this.project.agentUid]
+    //   });
+
     return true
-    
   }
   pickClient() {
     this.dialog.open(ViewProjectClientDialogComponent2).afterClosed().subscribe(result => {
