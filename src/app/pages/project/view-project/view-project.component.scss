@@ -1,13 +1,41 @@
 .photoURL{
-    max-width: 100%;
     max-height: 200px;
+    max-width: 200px;
   }
 .divpic{
     display: inline-block;
     margin-right: 5px;
     margin-bottom: 5px;
+    position: relative;
 }
 .imgchkbox{
-    float: right;
+    right: 0;
     position: absolute;
+}
+.delbutton{
+    float: right;
+    font-size: xx-small;
+}
+.imgchkbox{
+    width: 20px;
+    height: 20px;
+    display: block !important;
+}
+.blurtodelete{
+    opacity: 0.5;
+}
+#addbutton{
+    float: right;
+    font-size: xx-small;
+}
+.toaddphotosdiv {
+    display: inline-block;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    position: relative;
+}
+.remove_button{
+    font-size: xx-small;
+    position: absolute;
+    right: 0;
 }
