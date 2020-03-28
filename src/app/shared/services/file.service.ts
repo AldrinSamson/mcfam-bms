@@ -74,21 +74,24 @@ export class FileService {
   }
   async delete_in_storage(id) {
     // Create a reference to the file to delete
-    //console.log(id)
+    console.log(id)
     var x = await this.getFile(id);
     var path = x['path'];
-    this.filedelete(id);
-    //console.log(x)
-    
-        var storageRef = firebase.storage().ref(path);
-        var desertRef = storageRef.child(path);
-    
-        // Delete the file
-        desertRef.delete().then(function () {
-          // File deleted successfully
-        }).catch(function (error) {
-          // Uh-oh, an error occurred!
-        });
+    //this.filedelete(id);
+    console.log(x)
+    if(path){
+      var storageRef = firebase.storage().ref(path);
+      var desertRef = storageRef.child(path);
+  
+      // Delete the file
+      desertRef.delete().then(function () {
+        // File deleted successfully
+      }).catch(function (error) {
+        // Uh-oh, an error occurred!
+      });
+    }
+    /*
+        */
   }
   async upload_in_storage(path, file, uid, category) {
 

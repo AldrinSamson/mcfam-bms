@@ -168,8 +168,8 @@ export class AddProjectComponent implements OnInit, OnDestroy {
         var fileprop = await this.fileservice.upload_in_storage(path, fl, this.userId, 'project');
         savephotos.push({ id: fileprop['id'], photoURL: fileprop['photoURL'] })
       }
-      const path = `project/storeFile${new Date().getTime()}_${fl.name}`;
-      var fileprop = await this.fileservice.upload_in_storage(path, fl, this.userId, 'project');
+      const path = `project/storeFile${new Date().getTime()}_${this.cover_photo_file.name}`;
+      var fileprop = await this.fileservice.upload_in_storage(path, this.cover_photo_file, this.userId, 'project');
       console.log(savephotos);
       this.addProjectForm.controls['photoURL'].setValue(savephotos);
       this.addProjectForm.controls['cover_photo'].setValue({ id: fileprop['id'], photoURL: fileprop['photoURL']} );
@@ -216,6 +216,9 @@ export class AddProjectComponent implements OnInit, OnDestroy {
   }
   addphotoview() {
     document.getElementById('inputfileview').click();
+  }
+  addcoverphotoview(){
+    
   }
   addcoverphoto(file) {
     try {

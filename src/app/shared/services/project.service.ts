@@ -50,6 +50,7 @@ export class ProjectService {
       photoURL: values.photoURL,
       status: values.status,
       agentName: values.agentName,
+      cover_photo: values.cover_photo
     });
   }
 

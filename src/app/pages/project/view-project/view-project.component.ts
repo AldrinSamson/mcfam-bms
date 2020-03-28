@@ -23,7 +23,7 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
   project
 
   editProjectForm: any;
-  viewFiles=[];
+  viewFiles = [];
   arrayphoto = [];
   userDetails: any;
   isManager = false;
@@ -33,6 +33,9 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
   selectedAgentUid: any;
   selectedAgent: any;
   viewphotos = [];
+  cover_photo_file: any;
+  cover_photo: any;
+  cov_photo_change=false;
   constructor(
     private router: Router,
     public firebaseService: FirebaseService,
@@ -59,7 +62,8 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
       agentUid: [''],
       agentName: [''],
       photoURL: [''],
-      isArchived: ['']
+      isArchived: [''],
+      cover_photo:['']
     })
 
   }
@@ -77,6 +81,7 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
       console.log(this.project);
       var photoid = [];
       for (var i = 0; i < result['photoURL'].length; i++) {
+        console.log( result['photoURL'][i])
         if (result['photoURL'][i]['photoURL']) {
           console.log(result['photoURL'][i]['photoURL'])
           this.viewphotos.push(result['photoURL'][i])
@@ -94,7 +99,11 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
 
 
       }
-
+      console.log(this.viewphotos);
+      if (result['cover_photo']) {
+        this.cover_photo_file = result['cover_photo']
+        this.cover_photo = result['cover_photo']['photoURL']
+      }
       this.editProjectForm = this.fb.group({
         name: result['name'],
         overview: result['overview'],
@@ -110,7 +119,8 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
         status: result['status'],
         agentUid: result['agentUid'],
         agentName: result['agentName'],
-        photoURL: [photoid],
+        photoURL: [this.viewphotos],
+        cover_photo : result['cover_photo'],
         isArchived: result['isArchived']
       })
       console.log(result);
@@ -145,7 +155,7 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
       $('#delbutton').text('Delete some photo(s)');
       $('.spotchkbox').removeClass('imgchkbox');
       $(".outlabel").unwrap();
-      
+
       $('.photoURL').removeClass('blurtodelete');
     }
   }
@@ -172,20 +182,31 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
   }
   async submitEditProjectForm() {
     console.log(this.editProjectForm);
+    var thisclass = this;
     if (this.editProjectForm.valid) {
       console.log(this.editProjectForm.value['photoURL']);
       //delete existing
+      var savephotos0 = [];
       var savephotos = [];
       var deletephotos = [];
       if ($('#delbutton').val() == 0) {
         $("input[name='todelete']:checkbox").prop('checked', false);
       }
 
-      $.each($("input[name='todelete']:not(:checked)"), function () {
+      await $.each($("input[name='todelete']:not(:checked)"), async function () {
         var x = $(this).val().toString();
         console.log(x);
-        savephotos.push(x);
+
+        //var phtURL = await thisclass.fileservice.getFile(x);
+        //console.log(phtURL);
+        //savephotos.push({ id: x, photoURL: phtURL['photoURL'] });
+        savephotos0.push(x);
       });
+      for(var i = 0; i< savephotos0.length ;i++){
+        var phtURL = await this.fileservice.getFile(savephotos0[i]);
+        //console.log(phtURL);
+        savephotos.push({ id: savephotos0[i], photoURL: phtURL['photoURL'] });
+      }
       if ($('#delbutton').val() == 1) {
         $.each($("input[name='todelete']:checked"), function () {
           var x = $(this).val().toString();
@@ -215,11 +236,11 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
 
           let xx = await this.fileservice.upload_in_storage(path, this.viewFiles[i], this.userId, 'project');
           x.push(xx);
+          console.log(xx);
+          savephotos.push({ id: xx['id'], photoURL: xx['photoURL'] })
         }
         console.log('uploaded file');
-        for (var i = 0; i < this.viewFiles.length; i++) {
-          savephotos.push(x[i]['id'])
-        }
+        
       }
 
       console.log('savephotos');
@@ -228,8 +249,20 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
 
       this.editProjectForm.controls['photoURL'].setValue(savephotos);
       console.log(this.editProjectForm.value);
+      console.log(this.cov_photo_change)
+      if (this.cov_photo_change) {
+        try{
+        const path = `project/storeFile${new Date().getTime()}_${this.cover_photo_file.name}`;
+        var fileprop = await this.fileservice.upload_in_storage(path, this.cover_photo_file, this.userId, 'project');
+        this.editProjectForm.controls['cover_photo'].setValue({ id: fileprop['id'], photoURL: fileprop['photoURL']} );
+        }catch(err){
+
+        }
+      }
+      console.log( this.editProjectForm);
       this.projectService.updateProject(this.projectID, this.editProjectForm.value);
-      console.log($('#delbutton').val())
+
+      
       /**/
       this.router.navigate(['/project']);
     }
@@ -267,6 +300,36 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
   addphotoview() {
     document.getElementById('inputfileview').click();
   }
+  addcoverphotoview(){
+    document.getElementById('inputcoverphotofileview').click();
+    
+  }
+  addcoverphoto(file) {
+    try {
+      console.log(file.target.files);
+
+      if (file.target.files.length) {
+        document.getElementById('addbutton').classList.remove('btn-primary');
+        document.getElementById('addbutton').classList.add('btn-success');
+      } else {
+        document.getElementById('addbutton').classList.add('btn-primary');
+        document.getElementById('addbutton').classList.remove('btn-success');
+        this.cov_photo_change = false;
+      }
+
+      this.cover_photo_file = file.target.files[0];
+      var reader = new FileReader();
+      reader.onload = (event: any) => {
+        //console.log(event.target.result);
+        //this.arrayphoto.push(event.target.result);
+        this.cover_photo = event.target.result;
+        this.cov_photo_change = true;
+      }
+      reader.readAsDataURL(this.cover_photo_file);
+    } catch (err) {
+
+    }
+  }
   addphotos(files) {
     //this.arrayphoto=[];
 
@@ -280,7 +343,7 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
       this.viewFiles.push(files[i])
       reader.readAsDataURL(files[i]);
     }
-
+    console.log(this.arrayphoto)
 
     console.log(this.viewFiles);
 
@@ -293,7 +356,7 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
     //console.log(this.viewFiles)
     var getthefiles = [];
     for (var i = 0; i < this.viewFiles.length; i++) {
-      console.log(index,i)
+      console.log(index, i)
       if (index != i) {
         getthefiles.push(this.viewFiles[i]);
       }
