@@ -33,6 +33,20 @@
             <br>
             <p>{{data.dateStart.toDate() | date: 'MMM-dd-yy hh:mm'}}</p>
             <br>
+            <h5> Document Status: </h5>
+            <br>
+            <p>{{data.doc_status}}</p>
+            <br>
+            <div *ngIf="stage == 4">
+                <h5> Commission Rate: </h5>
+                <br>
+                <p>{{data.commissionRate}}</p>
+                <br>
+                <h5> Commission Total: </h5>
+                <br>
+                <p>{{data.commissionTotal}}</p>
+                <br>
+            </div>
 
             
             
@@ -41,23 +55,28 @@
     <div *ngIf="buttonConfig == 'Active'"> 
         <div *ngIf="stage == 3">
             <div *ngIf="authService.isManager()">
-                <button mat-button >Approve and set agent rate</button>
-                <button mat-button >Disaprove</button>
-                <button mat-button >Delete</button>
+                <button mat-button (click)="downloadDocs()" >Download Documents</button>
+                <button mat-button (click)="approveAndSetRate()">Approve and set commission</button>
+                <button mat-button (click)="disapprove()" >Disapprove</button>
             </div>
         </div>
         <div *ngIf="stage == 4">
             <div *ngIf="!authService.isManager()">
-                <button mat-button >Finalize</button>
+                <button mat-button (click)="finalizeAndGenerateReport()">Finalize</button>
             </div>
         </div>
     </div>
     <div *ngIf="buttonConfig == 'Manager Disapprove'">
-        <button mat-button >Reactivate</button>
-        <button mat-button >Delete</button>
+        <div *ngIf="authService.isManager()">
+            <button mat-button (click)="reactivate()">Reactivate</button>
+        </div>
+        <button mat-button (click)="delete()">Delete</button>
     </div>
     <div *ngIf="buttonConfig == 'Completed'">
-        <button mat-button >Delete</button>
+        <button mat-button (click)="delete()">Delete</button>
+    </div>
+    <div *ngIf="buttonConfig == 'Cancelled'">
+        <button mat-button (click)="delete()">Delete</button>
     </div>
 
     <button mat-button (click)="onNoClick()">Back</button> 
