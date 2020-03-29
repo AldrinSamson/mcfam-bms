@@ -2,16 +2,24 @@
 
 <div class="main" *ngIf="project">
     <div class="card">
+        
         <div class="card-header">
             <h4>Edit {{project.name}} Project</h4>
         </div>
         <div [formGroup]="editProjectForm">
             <div class="card-body">
                 <div class="fb-profile">
-                    <!-- <div *ngFor='let url of arrayphoto;let indexOfelement=index;trackBy: trackByFn'
-                        class="toaddphotosdiv center">
-                        <img align="left" class="fb-image-lg" [src]="url" alt="Add a cover photo">
-                        </div> -->
+                    <div class="fb-profile">
+                        <label class="coverphoto_button">
+                            Edit cover photo<br>
+                            <button class="btn btn-primary btn-sm" id='addbutton' (click)='addcoverphotoview()'>Upload</button>
+                            <br><input hidden id='inputcoverphotofileview' type="file" accept='image/*' (change)='addcoverphoto($event)' multiple>
+                        </label>
+                        <div *ngIf='cover_photo_file' class="toaddphotosdiv center" >
+                        <img  class="fb-image-lg" [src]="cover_photo" alt="Add a cover photo">
+                        </div>
+                        
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-6">
@@ -125,7 +133,7 @@
                         <div *ngFor='let vp of viewphotos;let indexOfelement=index;' class="divpic">
                             <span class="outlabel">
                                 <input type="checkbox" class="spotchkbox" style="display: none;"
-                                    id='box_{{indexOfelement}}' (click)='select_del_photo(indexOfelement)' value="vp.id"
+                                    id='box_{{indexOfelement}}' (click)='select_del_photo(indexOfelement)' value="{{vp.id}}"
                                     name='todelete'>
                                 <img [src]='vp.photoURL' class="photoURL" id='photo_{{indexOfelement}}'>
                             </span>
@@ -142,7 +150,7 @@
                                 class="toaddphotosdiv center">
                                 <img class="photoURL insidephotoadd" [src]="url">
                                 <button id='' class="btn btn-sm btn-danger center remove_button"
-                                    (click)='removephoto(indexOfelement)'>x</button>
+                                    (click)='removephoto(indexOfelement)' value='{{indexOfelement}}'>x</button>
                                 <br>
                             </div>
                             &nbsp;&nbsp;

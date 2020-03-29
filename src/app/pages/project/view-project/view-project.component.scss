@@ -24,6 +24,11 @@
 .blurtodelete{
     opacity: 0.5;
 }
+.coverphoto_button{
+    right: 0;
+    width: 100%;
+    text-align: right;
+}
 #addbutton{
     float: right;
     font-size: xx-small;
@@ -38,4 +43,15 @@
     font-size: xx-small;
     position: absolute;
     right: 0;
+}
+.fb-profile img.fb-image-lg{
+    z-index: 0;
+    width: 100%;  
+    margin-bottom: 10px;
+    max-height: 400px;
+}
+    
+.fb-profile-text>h1{
+    font-weight: 700;
+    font-size:40px;
 }
