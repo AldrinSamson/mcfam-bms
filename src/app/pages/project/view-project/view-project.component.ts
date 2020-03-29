@@ -9,6 +9,7 @@ import { Subscription, Observable } from 'rxjs';
 import { AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask } from 'angularfire2/storage';
 import * as firebase from 'firebase';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { SaleProjectDialogComponent } from '../project.component';
 
 @Component({
   selector: 'app-view-project',
@@ -385,9 +386,9 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
     };
     dialogConfig.maxWidth = '50vw';
     dialogConfig.width = '50vw';
-    // this.dialog.open(SaleProjectDialogComponent, dialogConfig).afterClosed().subscribe(result => {
+     this.dialog.open(SaleProjectDialogComponent, dialogConfig).afterClosed().subscribe(result => {
     //   this.dialogRef.close();
-    // });
+     });
 
   }
 
