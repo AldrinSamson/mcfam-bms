@@ -19,14 +19,6 @@ export class AuthService {
     private db: AngularFirestore,
     private alert: AlertService) { }
 
-  // public onSuccess(): void {
-  //   sessionStorage.setItem('session-alive', 'true');
-  //   sessionStorage.setItem('currentUid', firebase.auth().currentUser.uid);
-  //   this.token = 'some-temporary-token';
-  //   this.router.navigate(['/project']);
-  //   console.log('AUTH: ', this.auth);
-  // }
-
   async login(email: string, password: string) {
     //console.log(" user auth "+this.isAuthenticated());
     try {

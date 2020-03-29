@@ -4,6 +4,8 @@ import { AngularFireAuth } from '@angular/fire/auth';
 
 import { Project } from '../models';
 import { AlertService } from './alert.service';
+import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs'
 
 
 @Injectable({
@@ -22,19 +24,40 @@ export class ProjectService {
   createProject(values) {
 
   }
+
   getProject(id) {
-    var thisclass = this;
-    return new Promise(function (resolve) {
-      thisclass.db.collection('project').doc(id).ref.get()
-        .then(doc => {
-          var project = {
-            id: doc.id,
-            ...doc.data()
-          }
-          resolve(project)
-        });
-    })
+    return this.db.collection('project').doc(id).snapshotChanges()
   }
+
+  // //   //return this.db.collection('project').doc(id).valueChanges();
+  // // }
+
+  // getProject(id: string) {
+  //   return this.db.collection('projects').where("capital", "==", true)
+  //   .get()
+  //   .then(function(querySnapshot) {
+  //       querySnapshot.forEach(function(doc) {
+  //           // doc.data() is never undefined for query doc snapshots
+  //           console.log(doc.id, " => ", doc.data());
+  //       });
+  //   })
+  //   .catch(function(error) {
+  //       console.log("Error getting documents: ", error);
+  //   });
+  // }
+
+  // db.collection("cities").where("capital", "==", true)
+  //   .get()
+  //   .then(function(querySnapshot) {
+  //       querySnapshot.forEach(function(doc) {
+  //           // doc.data() is never undefined for query doc snapshots
+  //           console.log(doc.id, " => ", doc.data());
+  //       });
+  //   })
+  //   .catch(function(error) {
+  //       console.log("Error getting documents: ", error);
+  //   });
+
   updateProject(id, values) {
     return this.db.collection('project').doc(id).update({
       name: values.name,

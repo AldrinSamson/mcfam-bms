@@ -14,6 +14,10 @@ import { Subscription } from 'rxjs';
 export class SaleTransactionComponent implements OnInit , OnDestroy {
 
   transactions: Array<any>;
+  activeTransactions: Array<any>;
+  managerDisapprovedTransactions : Array<any>;
+  cancelledTransactions : Array<any>;
+  completedTransactions: Array<any>;
   public transactionSub: Subscription;
   uid: String;
   private isManager: Boolean;
@@ -31,12 +35,17 @@ export class SaleTransactionComponent implements OnInit , OnDestroy {
   }
 
   getUserTransactions(){
-    this.transactionSub = this.transactionService.getTransaction(this.uid ,this.isManager, false , false).subscribe( res => {
+    this.transactionSub = this.transactionService.getTransaction(this.uid ,this.isManager).subscribe( res => {
       this.transactions = res;
-    })
+      this.activeTransactions = this.transactions.filter( res => res.isCompleted === false && res.isApproved === false && res.isCancelled === false );
+      this.managerDisapprovedTransactions = this.transactions.filter( res => res.isCompleted === true && res.isApproved === false && res.isCancelled === true );
+      this.cancelledTransactions = this.transactions.filter( res => res.isCompleted === true && res.isApproved === false && res.isCancelled === false );
+      this.completedTransactions = this.transactions.filter( res => res.isCompleted === true && res.isApproved === true && res.isCancelled === true );
+    });
   }
 
-  openViewTransaction(value): void {
+
+  openViewTransaction(value , status): void {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = {
       id: value.id,
@@ -52,11 +61,13 @@ export class SaleTransactionComponent implements OnInit , OnDestroy {
       isCompleted: value.isCompleted,
       isManagerApproved: value.isManagerApproved,
       isCustomerApproved: value.isCustomerApproved,
-      isDeleted: value.isDeleted
+      isDeleted: value.isDeleted,
+      buttonConfig: status
     };
     this.dialog.open(ViewSaleTransactionComponent, dialogConfig).afterClosed().subscribe(result => {
       this.getUserTransactions();
     });
+    
   }
 
   ngOnDestroy() {
@@ -78,6 +89,7 @@ export class ViewSaleTransactionComponent {
 
   public isManager: Boolean;
   public stage : number;
+  public buttonConfig : string;
 
   constructor(
     public trasactionService: TransactionService,
@@ -88,6 +100,19 @@ export class ViewSaleTransactionComponent {
     ) {
       this.isManager = this.authService.isManager();
       this.stage = this.data.stage;
+      this.buttonConfig = this.data.buttonConfig;
+    }
+
+    approveAndSetRate(){
+
+    }
+
+    disaaprove(){
+
+    }
+
+    finalizeAndGenerateReport(){
+
     }
 
     onNoClick(): void {
