@@ -14,16 +14,16 @@ export class TransactionService {
    
   }
 
-  getTransaction(uid: String,isManager:Boolean,isCompleted: Boolean , isDeleted:Boolean) {
+  getTransaction(uid: String,isManager:Boolean) {
 
     if(isManager == true) {
       return this.db.collection('transaction', ref =>
-      ref.where('managerUid', '==', uid).where('isCompleted', '==', isCompleted).where('isDeleted', '==', isDeleted))
-      .valueChanges({ idToken: 'id'});
+      ref.where('managerUid', '==', uid))
+      .valueChanges({ idField: 'id' });
     }else{
       return this.db.collection('transaction', ref =>
-      ref.where('agentUid', '==', uid).where('isCompleted', '==', isCompleted).where('isDeleted', '==', isDeleted))
-      .valueChanges({ idToken: 'id'});
+      ref.where('agentUid', '==', uid))
+      .valueChanges({ idField: 'id' });
     }
   }
 }

@@ -20,6 +20,6 @@ export class InquiriesService {
 
     return this.db.collection('inquiry', ref =>
     ref.where('agentUid', '==', uid).where('isArchived', '==', isArchived))
-    .valueChanges({ idToken: 'id'});
+    .valueChanges({ idField: 'id' });
   }
 }

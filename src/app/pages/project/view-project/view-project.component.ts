@@ -44,6 +44,7 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
   ) {
     this.isManager = this.authService.isManager();
     this.editProjectForm = this.fb.group({
+      id: [''],
       name: [''],
       overview: [''],
       saleType: [''],
@@ -72,8 +73,9 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
   getProject() {
     this.tree = this.router.parseUrl(this.router.url);
     this.projectID = this.tree.root.children[PRIMARY_OUTLET].segments[1].path;
-    this.projectSub = this.firebaseService.getOne(this.projectID, 'project').subscribe(async result => {
-      this.project = result;
+    this.projectSub = this.projectService.getProject(this.projectID).subscribe(async result => {
+      this.project = result.payload.data();
+      this.project.id = result.payload.id;
       console.log(this.project);
       for (var i = 0; i < result['photoURL'].length; i++) {
         if (result['photoURL'][i]['photoURL']) {
@@ -88,7 +90,8 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
             
           }
         }
-        this.editProjectForm.value['name']=result['name'];
+        this.editProjectForm.controls['id'].setValue(this.project.id);
+        this.editProjectForm.controls['name'].setValue(this.project.name);
         this.editProjectForm.value['overview']=result['overview'];
         this.editProjectForm.value['saleType']=result['saleType'];
         this.editProjectForm.value['propertyType']=result['propertyType'];
@@ -178,7 +181,7 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
   }
   async submitEditProjectForm() {
     console.log(this.editProjectForm);
-    if (this.editProjectForm.valid) {
+    if (!this.editProjectForm.valid) {
       console.log(this.editProjectForm.value['photoURL']);
       //delete existing
       var savephotos = [];
@@ -303,9 +306,9 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
     };
     dialogConfig.maxWidth = '50vw';
     dialogConfig.width = '50vw';
-    // this.dialog.open(SaleProjectDialogComponent, dialogConfig).afterClosed().subscribe(result => {
-    //   this.dialogRef.close();
-    // });
+    this.dialog.open(SaleProjectDialogComponent, dialogConfig).afterClosed().subscribe(result => {
+      this.router.navigate(['/project']);
+    });
 
   }
 
@@ -315,7 +318,7 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
   }
 
   onNoClick(): void {
-
+    this.router.navigate(['/project']);
   }
 
   ngOnDestroy() {
@@ -441,4 +444,123 @@ export class ViewProjectAgentDialogComponent2 implements OnInit, OnDestroy {
     }
   }
 
+}
+
+@Component({
+  // tslint:disable-next-line:component-selector
+  selector: 'sale-project-dialog',
+  templateUrl: '../dialog/sale-project-dialog.html',
+  styleUrls: ['../project.component.scss'],
+})
+
+export class SaleProjectDialogComponent implements OnInit, OnDestroy {
+
+  public dateNow = Date.toString();
+
+  saleProjectForm: any;
+
+  clientSub: Subscription;
+  clients: MatTableDataSource<any>;
+  selectedClientUid = '';
+  selectedClient = '';
+  displayedColumnsClient: string[] = ['fullName', 'userName', 'email'];
+
+  managerSub: Subscription;
+  managers: MatTableDataSource<any>;
+  selectedManagerUid = '';
+  selectedManager = '';
+  displayedColumnsManager: string[] = ['fullName', 'userName', 'email'];
+
+  constructor(
+    public firebaseService: FirebaseService,
+    public projectService: ProjectService,
+    public brokerService: BrokerService,
+    public fileservice: FileService,
+    public dialogRef: MatDialogRef<SaleProjectDialogComponent>,
+    public fb: FormBuilder,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {
+    this.saleProjectForm = this.fb.group({
+      projectID: [this.data.projectUid],
+      projectName: [this.data.projectName],
+      projectCost: [this.data.projectCost],
+      projectSaleType: [this.data.projectSaleType],
+      agentName: [this.data.agentName],
+      agentUid: [this.data.agentUid],
+      'clientName': [''],
+      'clientUid': [''],
+      'managerName': [''],
+      'managerUid': [''],
+      dateStart: [new Date()],
+      dateUpload: [''],
+      dateApprove: [''],
+      dateEnd: [''],
+      dateCancel: [''],
+      doc_BIS: [''],
+      doc_RF: [''],
+      doc_RA: [''],
+      doc_VG1: [''],
+      doc_VG2: [''],
+      doc_POI: [''],
+      doc_POB: [''],
+      doc_PSS: [''],
+      doc_others: [''],
+      commission: [''],
+      status: ['Awaiting Customer Document'],
+      stage: [2],
+      isCompleted: [false],
+      isApproved: [false],
+      isDisapproved: [false],
+      isCancelled: [false],
+    });
+  }
+
+  ngOnInit() {
+    this.getClientAndManager();
+  }
+
+  getClientAndManager() {
+    this.clientSub = this.firebaseService.getAllData('client').subscribe(result => {
+      this.clients = new MatTableDataSource(result);
+    });
+
+    this.managerSub = this.brokerService.getWithPosition('Manager').subscribe(result => {
+      this.managers = new MatTableDataSource(result);
+    });
+  }
+
+  selectClient(value) {
+    this.selectedClientUid = value.uid;
+    this.selectedClient = value.fullName;
+  }
+
+  selectManager(value) {
+    this.selectedManagerUid = value.uid;
+    this.selectedManager = value.fullName;
+  }
+
+  submitSaleProjectForm() {
+    if (this.saleProjectForm.valid) {
+      this.saleProjectForm.controls['clientName'].setValue(this.selectedClient);
+      this.saleProjectForm.controls['clientUid'].setValue(this.selectedClientUid);
+      this.saleProjectForm.controls['managerName'].setValue(this.selectedManager);
+      this.saleProjectForm.controls['managerUid'].setValue(this.selectedManagerUid);
+      this.firebaseService.addOne(this.saleProjectForm.value, 'transaction');
+      this.dialogRef.close();
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.clientSub != null) {
+      this.clientSub.unsubscribe();
+    }
+
+    if (this.managerSub != null) {
+      this.managerSub.unsubscribe();
+    }
+  }
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
 }
