@@ -9,6 +9,7 @@ import { Subscription, Observable } from 'rxjs';
 import { AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask } from 'angularfire2/storage';
 import * as firebase from 'firebase';
 import { AngularFirestore } from '@angular/fire/firestore';
+//import { SaleProjectDialogComponent } from '../project.component';
 
 @Component({
   selector: 'app-view-project',
