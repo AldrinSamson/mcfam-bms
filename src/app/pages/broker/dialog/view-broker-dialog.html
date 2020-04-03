@@ -46,6 +46,17 @@
                 <input matInput formControlName = "addressRegion" value = {{data.addressRegion}} name = "broker-addressRegion" required>
             </mat-form-field>
             <br>
+            <div>
+                <h4>Current Profile picture</h4>
+                <img [src]='previewphoto' id='profpic'>
+                <br>
+                <br>
+                <button class="btn btn-primary btn-sm" (click)='btnclickphoto()' >Change profile picture</button>
+                <br>
+                
+                <input hidden type="file" id='photochange' (change)='changephoto($event)' >
+            </div>
+            <br>
 </div>
 <div mat-dialog-actions>
     <div *ngIf="authService.isManager()">

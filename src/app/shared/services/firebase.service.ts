@@ -12,7 +12,7 @@ export class FirebaseService {
   constructor(public db: AngularFirestore , public alertService: AlertService) {}
 
   getOne(id , tableName) {
-    return this.db.collection(tableName).doc(id).valueChanges();
+    return this.db.collection(tableName).doc(id).snapshotChanges();
   }
 
   // DONUT USE unless you're submitting the full form data

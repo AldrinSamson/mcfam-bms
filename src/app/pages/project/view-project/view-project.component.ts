@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject, OnDestroy, ElementRef } from '@angular/core';
-import { FirebaseService, FileService, ProjectService, AuthService, BrokerService } from '../../../shared';
+import { FirebaseService, FileService, ProjectService, AuthService, BrokerService , MailerService } from '../../../shared';
 import { MatDialog, MatDialogRef, MatDialogConfig, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router, UrlTree, PRIMARY_OUTLET } from '@angular/router';
@@ -17,26 +17,30 @@ import { AngularFirestore } from '@angular/fire/firestore';
   styleUrls: ['./view-project.component.scss']
 })
 export class ViewProjectComponent implements OnInit, OnDestroy {
-
-  tree: UrlTree;
+  //Project Data
   projectID;
   projectSub: Subscription;
   project
-
-  editProjectForm: any;
-  viewFiles = [];
-  arrayphoto = [];
-  userDetails: any;
-  isManager = false;
   userId = '';
-  selectedClientUid: any;
-  selectedClient: any;
-  selectedAgentUid: any;
-  selectedAgent: any;
   viewphotos = [];
   cover_photo_file: any;
   cover_photo: any;
   cov_photo_change=false;
+  viewFiles = [];
+  arrayphoto = [];
+  editProjectForm: any;
+  //Auth Data
+  tree: UrlTree;
+  userDetails: any;
+  isManager = false;
+  //Selector Data
+  selectedClientUid: any;
+  selectedClient: any;
+  selectedAgentUid: any;
+  selectedAgent: any;
+
+
+
   constructor(
     private router: Router,
     public firebaseService: FirebaseService,
@@ -126,8 +130,8 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
         cover_photo : this.project['cover_photo'],
         isArchived: this.project['isArchived']
       })
-      console.log(this.project);
-      console.log(this.editProjectForm);
+
+
 
       //
     });
@@ -576,6 +580,7 @@ export class SaleProjectDialogComponent implements OnInit, OnDestroy {
     public fileservice: FileService,
     public dialogRef: MatDialogRef<SaleProjectDialogComponent>,
     public fb: FormBuilder,
+    public mailerService: MailerService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.saleProjectForm = this.fb.group({
@@ -603,7 +608,9 @@ export class SaleProjectDialogComponent implements OnInit, OnDestroy {
       doc_POB: [''],
       doc_PSS: [''],
       doc_others: [''],
-      commission: [''],
+      doc_status:['No Documents Uploaded'],
+      commissionRate: [0],
+      commissionTotal: [0],
       status: ['Awaiting Customer Document'],
       stage: [2],
       isCompleted: [false],

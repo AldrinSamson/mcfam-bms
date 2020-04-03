@@ -37,10 +37,10 @@ export class SaleTransactionComponent implements OnInit , OnDestroy {
   getUserTransactions(){
     this.transactionSub = this.transactionService.getTransaction(this.uid ,this.isManager).subscribe( res => {
       this.transactions = res;
-      this.activeTransactions = this.transactions.filter( res => res.isCompleted === false && res.isApproved === false && res.isCancelled === false );
-      this.managerDisapprovedTransactions = this.transactions.filter( res => res.isCompleted === true && res.isApproved === false && res.isCancelled === true );
-      this.cancelledTransactions = this.transactions.filter( res => res.isCompleted === true && res.isApproved === false && res.isCancelled === false );
-      this.completedTransactions = this.transactions.filter( res => res.isCompleted === true && res.isApproved === true && res.isCancelled === true );
+      this.activeTransactions = this.transactions.filter( res => res.isCompleted === false  && res.isDisapproved === false && res.isCancelled === false );
+      this.managerDisapprovedTransactions = this.transactions.filter( res => res.isCompleted === false && res.isDisapproved === true);
+      this.cancelledTransactions = this.transactions.filter( res => res.isCompleted === false  && res.isCancelled === true );
+      this.completedTransactions = this.transactions.filter( res => res.isCompleted === true && res.isApproved === true && res.isDisapproved === false && res.isCancelled === false );
     });
   }
 
@@ -62,7 +62,10 @@ export class SaleTransactionComponent implements OnInit , OnDestroy {
       isManagerApproved: value.isManagerApproved,
       isCustomerApproved: value.isCustomerApproved,
       isDeleted: value.isDeleted,
-      buttonConfig: status
+      buttonConfig: status,
+      doc_status: value.doc_status,
+      commissionRate : value.commissionRate,
+      commissionTotal : value.commissionTotal
     };
     this.dialog.open(ViewSaleTransactionComponent, dialogConfig).afterClosed().subscribe(result => {
       this.getUserTransactions();
@@ -94,7 +97,7 @@ export class ViewSaleTransactionComponent {
   constructor(
     public trasactionService: TransactionService,
     public dialogRef: MatDialogRef<ViewSaleTransactionComponent>,
-    public fb: FormBuilder,
+    public dialog: MatDialog, 
     public authService: AuthService,
     @Inject(MAT_DIALOG_DATA) public data: any
     ) {
@@ -104,15 +107,73 @@ export class ViewSaleTransactionComponent {
     }
 
     approveAndSetRate(){
-
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.data = {
+      id: this.data.id,
+      agentName: this.data.agentName,
+      projectCost : this.data.projectCost
+    };
+    this.dialog.open(SetAgentRateComponent, dialogConfig).afterClosed().subscribe(result => {
+      this.dialogRef.close();
+    });
     }
 
-    disaaprove(){
+    disapprove(){
+      this.trasactionService.disapprove(this.data.id)
+      this.dialogRef.close();
+    }
 
+    downloadDocs(){
+      
+    }
+
+    reactivate(){
+      this.trasactionService.restoreDisapproved(this.data.id)
+      this.dialogRef.close();
     }
 
     finalizeAndGenerateReport(){
+      //this.trasactionService.finalizeAndReport(this.data.id , )
+      this.dialogRef.close();
+    }
 
+    delete(){
+      this.trasactionService.deleteTransaction(this.data.id)
+      this.dialogRef.close();
+    }
+
+    onNoClick(): void {
+      this.dialogRef.close();
+    }
+  
+}
+
+@Component({
+  // tslint:disable-next-line:component-selector
+  selector : 'set-agent-rate-dialog',
+  templateUrl : './dialog/set-agent-rate-dialog.html',
+  styleUrls: ['./sale-transaction.component.scss'],
+})
+
+export class SetAgentRateComponent {
+
+  commission
+  total
+  percentage
+
+  constructor(
+    public trasactionService: TransactionService,
+    public dialogRef: MatDialogRef<SetAgentRateComponent>,
+    public authService: AuthService,
+    @Inject(MAT_DIALOG_DATA) public data: any
+    ) {
+    }
+
+    setCommission(){
+      this.percentage = parseInt(this.commission)/100;
+      this.total = parseInt(this.data.projectCost)*this.percentage
+      this.trasactionService.approveAndSetCommission(this.data.id , this.commission , this.total)
+      this.dialogRef.close();
     }
 
     onNoClick(): void {

@@ -27,6 +27,7 @@ export class AuthService {
         this.userUid = res.user.uid
         this.db.collection('broker', ref => ref.where('uid', '==', res.user.uid)).valueChanges().forEach( result => {
         this.userDetails = result
+        console.log(this.userDetails)
         sessionStorage.setItem('session-alive', 'true');
         sessionStorage.setItem('session-user-uid', this.userUid)
         sessionStorage.setItem('session-user-details', JSON.stringify(this.userDetails[0]));    

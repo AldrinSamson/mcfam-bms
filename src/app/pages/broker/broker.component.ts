@@ -28,9 +28,9 @@ export class BrokerComponent implements OnInit, OnDestroy {
     public fileservice: FileService,
     public dialog: MatDialog,
     public authService: AuthService
-    ) { 
-      this.isManager = this.authService.isManager();
-    }
+  ) {
+    this.isManager = this.authService.isManager();
+  }
 
   ngOnInit() {
     this.getData();
@@ -39,7 +39,17 @@ export class BrokerComponent implements OnInit, OnDestroy {
   getData() {
     this.brokerSub = this.firebaseService.getAllData('broker')
       .subscribe(result => {
-        this.brokers = result;
+        var tempbrokers = result;
+        console.log(result)
+        for (var i = 0; i < result.length; i++) {
+          if (!result[i]['photoURL']) {
+            tempbrokers[i]['photoURL'] = {photoURL:''}
+            
+          }
+        }
+        this.brokers = tempbrokers;
+        //console.log(this.brokers)
+        //console.log(this.brokers)
       });
   }
 
@@ -52,6 +62,7 @@ export class BrokerComponent implements OnInit, OnDestroy {
 
   openViewBroker(value): void {
     const dialogConfig = new MatDialogConfig();
+    console.log(value)
     dialogConfig.data = {
       id: value.id,
       brokerId: value.brokerId,
@@ -68,6 +79,7 @@ export class BrokerComponent implements OnInit, OnDestroy {
       photoURL: value.photoURL,
       uid: value.uid,
     };
+    //console.log(dialogConfig)
     this.dialog.open(ViewBrokerDialogComponent, dialogConfig).afterClosed().subscribe(result => {
       this.getData();
     });
@@ -304,16 +316,23 @@ export class AddBrokerDialogComponent {
 export class ViewBrokerDialogComponent {
   editBrokerForm: any;
   public isManager: Boolean;
-
+  previewphoto: any;
+  thepreviewphoto: any;
+  userId: string;
   constructor(
     public firebaseService: FirebaseService,
     public BrokerService: BrokerService,
     public dialogRef: MatDialogRef<AddBrokerDialogComponent>,
     public fb: FormBuilder,
     public authService: AuthService,
+    public fileservice: FileService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-
+    try {
+      this.userId = firebase.auth().currentUser.uid;
+    } catch (err) {
+      this.userId = "";
+    }
     this.isManager = this.authService.isManager();
 
     this.editBrokerForm = this.fb.group({
@@ -327,19 +346,42 @@ export class ViewBrokerDialogComponent {
       addressTown: [this.data.addressTown],
       addressCity: [this.data.addressCity],
       addressRegion: [this.data.addressRegion],
+
       uid: [this.data.uid]
     });
+    //console.log(this.data.photoURL)
+    this.previewphoto = this.data.photoURL.photoURL;
   }
 
-  submitEditBrokerForm() {
+  async submitEditBrokerForm() {
+    console.log(this.editBrokerForm)
     if (this.editBrokerForm.valid) {
+      var photoURL;
+      if (this.thepreviewphoto) {
+        var path = `broker/storeFile${new Date().getTime()}_${this.thepreviewphoto.name}`
+        var fileprop = await this.fileservice.upload_in_storage(path, this.thepreviewphoto, this.userId, 'broker');
+        photoURL = { id: fileprop['id'], photoURL: fileprop['photoURL'] };
+      }
       const fullName = this.data.firstName + ' ' + this.data.lastName;
       this.editBrokerForm.controls['fullName'].setValue(fullName);
-      this.BrokerService.updateBroker(this.data.id, this.editBrokerForm.value);
+      this.BrokerService.updateBroker(this.data.id, this.editBrokerForm.value, photoURL);
       this.dialogRef.close();
     }
   }
-
+  btnclickphoto() {
+    jQuery('#photochange').click()
+  }
+  changephoto(event) {
+    console.log(event)
+    this.thepreviewphoto = event.target.files[0];
+    var reader = new FileReader();
+    reader.onload = (event: any) => {
+      //console.log(event.target.result);
+      //this.arrayphoto.push(event.target.result);
+      this.previewphoto = event.target.result;
+    }
+    reader.readAsDataURL(this.thepreviewphoto);
+  }
   deleteBroker() {
     this.firebaseService.deleteOne(this.data.id, 'broker')
     this.firebaseService.deleteOne(this.data.uid, 'users')

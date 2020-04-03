@@ -83,7 +83,13 @@ export class BrokerService {
     return this.db.collection('broker', ref => ref.where('position', '==', position)).valueChanges({ idField: 'id' });
   }
 
-  updateBroker(id, values) {
+  updateBroker(id, values, photoURL) {
+    if(photoURL){
+      this.db.collection('broker').doc(id).update({
+        photoURL: photoURL
+      });
+    }
+
     return this.db.collection('broker').doc(id).update({
       brokerId: values.brokerId,
       firstName: values.firstName,

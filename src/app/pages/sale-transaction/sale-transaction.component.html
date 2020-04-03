@@ -76,7 +76,7 @@
                             <th>Status</th>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let transaction of cancelledTransactions" (click)="openViewTransaction(transaction , 'Customer Cancelled')" >
+                            <tr *ngFor="let transaction of cancelledTransactions" (click)="openViewTransaction(transaction , 'Cancelled')" >
                                 <td class="view-message  text-left">{{transaction.dateStart.toDate() | date: 'MMM-dd-yy hh:mm' }}</td>
                                 <td >{{transaction.projectName}}</td>
                                 <td >{{transaction.clientName}}</td>
