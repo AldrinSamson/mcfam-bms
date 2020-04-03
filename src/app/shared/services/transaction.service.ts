@@ -29,16 +29,31 @@ export class TransactionService {
     }
   }
 
-  approveAndSetCommission(tid , rate , total){
+  approveAndSetCommission(tid , rate , total , saleTotal){
     return this.db.collection('transaction').doc(tid).update({
       commissionRate: rate,
       commissionTotal: total,
+      saleTotal: saleTotal,
       isApproved: true,
       dateApproved: new Date(),
       stage: 4,
       doc_status: 'Manager have read and approved them',
       status: 'Approved, Awaiting Finalization'
 
+    })
+  }
+
+  approveAndSetLease(tid , yearsToLease , leaseTotal , commissionTotal , saleTotal ) {
+    return this.db.collection('transaction').doc(tid).update({
+      yearsToLease: yearsToLease,
+      leaseTotal: leaseTotal,
+      commissionTotal: commissionTotal,
+      saleTotal: saleTotal,
+      isApproved: true,
+      dateApproved: new Date(),
+      stage: 4,
+      doc_status: 'Manager have read and approved them',
+      status: 'Approved, Awaiting Finalization'
     })
   }
 
@@ -52,19 +67,15 @@ export class TransactionService {
 
   restoreDisapproved(tid){
     return this.db.collection('transaction').doc(tid).update({
+      stage: 2,
       isDisapproved: false,
       dateDisapproved: null,
       status: 'Awaiting Manager Approval'
     })
   }
 
-  finalizeAndReport(tid , values){
+  finalize(tid , values){
     return this.db.collection('transaction').doc(tid).update({
-
-    }).then( res => {
-      this.db.collection('saleReport').add({
-        date: new Date()
-      })
 
     })
   }

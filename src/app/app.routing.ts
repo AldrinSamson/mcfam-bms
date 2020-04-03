@@ -16,7 +16,6 @@ import { BrokerComponent } from './pages/broker/broker.component';
 import { InquiriesComponent } from './pages/inquiries/inquiries.component';
 import { SaleTransactionComponent } from './pages/sale-transaction/sale-transaction.component';
 import { ClientComponent } from './pages/client/client.component';
-import { SaleReportComponent } from './pages/sale-report/sale-report.component';
 import { ProjectArchiveComponent } from './pages/project-archive/project-archive.component';
 import { AuditComponent } from './pages/audit/audit.component';
 
@@ -53,7 +52,6 @@ const appRoutes: Routes = [
   { path: 'inquiries' , component: InquiriesComponent, canActivate: [AuthGuardService]},
   { path: 'client' , component: ClientComponent, canActivate: [AuthGuardService]},
   { path: 'saleTransaction' , component: SaleTransactionComponent, canActivate: [AuthGuardService]},
-  { path: 'saleReport' , component: SaleReportComponent, canActivate: [AuthGuardService]},
   { path: 'projectArchive' , component: ProjectArchiveComponent, canActivate: [AuthGuardService]},
   { path: 'audit' , component: AuditComponent, canActivate: [AuthGuardService]},
   { path: '**', component: PageNotFoundComponent }
