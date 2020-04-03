@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AuthService } from './auth.service';
+import { MailerService } from './mailer.service'
 
 
 @Injectable({
@@ -10,7 +11,8 @@ export class TransactionService {
   
   
 
-  constructor(public db: AngularFirestore) { 
+  constructor(public db: AngularFirestore,
+    public mailerService: MailerService) { 
    
   }
 

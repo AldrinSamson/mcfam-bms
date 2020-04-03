@@ -128,14 +128,17 @@
                                 <br><input hidden id='inputfileview' #file type="file" accept='image/*' (change)='addphotos(file.files)'
                                     multiple>
                             </label> -->
-                        <h4>Photo/s added<button class="btn btn-sm btn-danger delbutton" id='delbutton'
-                                (click)="selectdelete($event)" value='0'>Delete some photo(s)</button></h4>
+                        <h4> Photo/s added <button class="btn btn-sm btn-danger delbutton" id='delbutton' 
+                        (click)="selectdelete($event)" value='0'>Delete some photo(s)</button> </h4>
+
                         <div *ngFor='let vp of viewphotos;let indexOfelement=index;' class="divpic">
                             <span class="outlabel">
-                                <input type="checkbox" class="spotchkbox" style="display: none;"
-                                    id='box_{{indexOfelement}}' (click)='select_del_photo(indexOfelement)' value="{{vp.id}}"
-                                    name='todelete'>
+
+                                <input type="checkbox" class="spotchkbox" style="display: none;" id='box_{{indexOfelement}}'
+                                (click)='select_del_photo(indexOfelement)' value="{{vp.id}}" name='todelete'>
+
                                 <img [src]='vp.photoURL' class="photoURL" id='photo_{{indexOfelement}}'>
+                                
                             </span>
                             <br>
                         </div>

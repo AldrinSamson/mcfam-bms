@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject, OnDestroy, ElementRef } from '@angular/core';
-import { FirebaseService, FileService, ProjectService, AuthService, BrokerService } from '../../../shared';
+import { FirebaseService, FileService, ProjectService, AuthService, BrokerService , MailerService } from '../../../shared';
 import { MatDialog, MatDialogRef, MatDialogConfig, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router, UrlTree, PRIMARY_OUTLET } from '@angular/router';
@@ -17,26 +17,30 @@ import { AngularFirestore } from '@angular/fire/firestore';
   styleUrls: ['./view-project.component.scss']
 })
 export class ViewProjectComponent implements OnInit, OnDestroy {
-
-  tree: UrlTree;
+  //Project Data
   projectID;
   projectSub: Subscription;
   project
-
-  editProjectForm: any;
-  viewFiles = [];
-  arrayphoto = [];
-  userDetails: any;
-  isManager = false;
   userId = '';
-  selectedClientUid: any;
-  selectedClient: any;
-  selectedAgentUid: any;
-  selectedAgent: any;
   viewphotos = [];
   cover_photo_file: any;
   cover_photo: any;
   cov_photo_change=false;
+  viewFiles = [];
+  arrayphoto = [];
+  editProjectForm: any;
+  //Auth Data
+  tree: UrlTree;
+  userDetails: any;
+  isManager = false;
+  //Selector Data
+  selectedClientUid: any;
+  selectedClient: any;
+  selectedAgentUid: any;
+  selectedAgent: any;
+
+
+
   constructor(
     private router: Router,
     public firebaseService: FirebaseService,
@@ -83,15 +87,15 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
       this.project.id = result.payload.id;
       console.log(this.project);
       var photoid = [];
-      for (var i = 0; i < result['photoURL'].length; i++) {
-        console.log( result['photoURL'][i])
-        if (result['photoURL'][i]['photoURL']) {
-          console.log(result['photoURL'][i]['photoURL'])
-          this.viewphotos.push(result['photoURL'][i])
-          photoid.push(result['photoURL'][i]['id']);
+      for (var i = 0; i < this.project['photoURL'].length; i++) {
+        console.log( this.project['photoURL'][i])
+        if (this.project['photoURL'][i]['photoURL']) {
+          console.log(this.project['photoURL'][i]['photoURL'])
+          this.viewphotos.push(this.project['photoURL'][i])
+          photoid.push(this.project['photoURL'][i]['id']);
         } else {
           try {
-            var x = await this.fileservice.getFile(result['photoURL'][i]);
+            var x = await this.fileservice.getFile(this.project['photoURL'][i]);
             console.log(x);
             this.viewphotos.push({ id: x['id'], photoURL: x['photoURL'] })
             photoid.push(x['id']);
@@ -103,31 +107,29 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
 
       }
       console.log(this.viewphotos);
-      if (result['cover_photo']) {
-        this.cover_photo_file = result['cover_photo']
-        this.cover_photo = result['cover_photo']['photoURL']
+      if (this.project['cover_photo']) {
+        this.cover_photo_file = this.project['cover_photo']
+        this.cover_photo = this.project['cover_photo']['photoURL']
       }
       this.editProjectForm = this.fb.group({
-        name: result['name'],
-        overview: result['overview'],
-        saleType: result['saleType'],
-        propertyType: result['propertyType'],
-        ownerClientUid: result['ownerClientUid'],
-        ownerClientName: result['ownerClientName'],
-        addressStreet: result['addressStreet'],
-        addressTown: result['addressTown'],
-        addressCity: result['addressCity'],
-        addressRegion: result['addressRegion'],
-        cost: result['cost'],
-        status: result['status'],
-        agentUid: result['agentUid'],
-        agentName: result['agentName'],
+        name: this.project['name'],
+        overview: this.project['overview'],
+        saleType: this.project['saleType'],
+        propertyType: this.project['propertyType'],
+        ownerClientUid: this.project['ownerClientUid'],
+        ownerClientName: this.project['ownerClientName'],
+        addressStreet: this.project['addressStreet'],
+        addressTown: this.project['addressTown'],
+        addressCity: this.project['addressCity'],
+        addressRegion: this.project['addressRegion'],
+        cost: this.project['cost'],
+        status: this.project['status'],
+        agentUid: this.project['agentUid'],
+        agentName: this.project['agentName'],
         photoURL: [this.viewphotos],
-        cover_photo : result['cover_photo'],
-        isArchived: result['isArchived']
+        cover_photo : this.project['cover_photo'],
+        isArchived: this.project['isArchived']
       })
-      console.log(result);
-      console.log(this.editProjectForm);
 
       //
     });
@@ -576,6 +578,7 @@ export class SaleProjectDialogComponent implements OnInit, OnDestroy {
     public fileservice: FileService,
     public dialogRef: MatDialogRef<SaleProjectDialogComponent>,
     public fb: FormBuilder,
+    public mailerService: MailerService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.saleProjectForm = this.fb.group({

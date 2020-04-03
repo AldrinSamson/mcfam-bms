@@ -37,7 +37,7 @@
             <br>
             <p>{{data.doc_status}}</p>
             <br>
-            <div *ngIf="stage == 4">
+            <div *ngIf="stage === 4 || stage === 5 ">
                 <h5> Commission Rate: </h5>
                 <br>
                 <p>{{data.commissionRate}}</p>

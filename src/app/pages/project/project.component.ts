@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject, OnDestroy, ElementRef } from '@angular/core';
-import { FirebaseService, AuthService, FileService, ProjectService, Project, BrokerService } from '../../shared';
+import { FirebaseService, AuthService, FileService, ProjectService, Project, BrokerService , MailerService } from '../../shared';
 import { MatDialog, MatDialogRef, MatDialogConfig, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, Validators } from '@angular/forms';
 // import { Router, Params } from '@angular/router';
@@ -43,6 +43,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     public fileservice: FileService,
     public authService: AuthService,
+    public mailerService: MailerService,
     public router:Router) {
 
     this.isManager = this.authService.isManager();
@@ -69,7 +70,8 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   openAddProject(): void {
-    this.router.navigate(['/project/add']);
+    //this.router.navigate(['/project/add']);
+    this.mailerService.mailTransactionMessage('XZC4hex11seS7uUDdqxiVPQSply1' ,'manager' , 1 ,'Sorento Oasis', ['arara' , 'boom'] )
   }
   
   openViewProject(value): void {
