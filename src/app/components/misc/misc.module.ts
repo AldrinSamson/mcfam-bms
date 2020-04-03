@@ -15,7 +15,6 @@ import { CarouselComponent } from './carousel/carousel.component';
 import { MiscComponent } from './misc.component';
 import { ChangeDetectionComponent } from './change/change-detection.component';
 import { ChangeDetailComponent } from './change/change-detail.component';
-import { VirtRealComponent } from './virtual-reality/virtreal.component';
 import { TableComponent } from './table/table.component';
 import { StepperComponent } from './stepper/stepper.component';
 import { DragDropComponent } from './drag-drop/drag-drop.component';
@@ -27,7 +26,6 @@ import { ExpansionPanelComponent } from './expansion-panel/expansion-panel.compo
     MiscComponent,
     ChangeDetectionComponent,
     ChangeDetailComponent,
-    VirtRealComponent,
     TableComponent,
     StepperComponent,
     DragDropComponent,
@@ -48,7 +46,6 @@ import { ExpansionPanelComponent } from './expansion-panel/expansion-panel.compo
     MiscComponent,
     ChangeDetectionComponent,
     ChangeDetailComponent,
-    VirtRealComponent,
     TableComponent,
     StepperComponent,
     ExpansionPanelComponent

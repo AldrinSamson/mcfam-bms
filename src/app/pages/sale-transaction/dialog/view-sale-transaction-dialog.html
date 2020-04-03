@@ -62,7 +62,7 @@
         </div>
         <div *ngIf="stage == 4">
             <div *ngIf="!authService.isManager()">
-                <button mat-button (click)="finalizeAndGenerateReport()">Finalize</button>
+                <button mat-button (click)="finalize()">Finalize</button>
             </div>
         </div>
     </div>

@@ -9,7 +9,7 @@ import { Subscription, Observable } from 'rxjs';
 import { AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask } from 'angularfire2/storage';
 import * as firebase from 'firebase';
 import { AngularFirestore } from '@angular/fire/firestore';
-//import { SaleProjectDialogComponent } from '../project.component';
+// import { SaleProjectDialogComponent } from '../project.component';
 
 @Component({
   selector: 'app-view-project',
@@ -17,23 +17,23 @@ import { AngularFirestore } from '@angular/fire/firestore';
   styleUrls: ['./view-project.component.scss']
 })
 export class ViewProjectComponent implements OnInit, OnDestroy {
-  //Project Data
+  // Project Data
   projectID;
   projectSub: Subscription;
-  project
+  project;
   userId = '';
   viewphotos = [];
   cover_photo_file: any;
   cover_photo: any;
-  cov_photo_change=false;
+  cov_photo_change = false;
   viewFiles = [];
   arrayphoto = [];
   editProjectForm: any;
-  //Auth Data
+  // Auth Data
   tree: UrlTree;
   userDetails: any;
   isManager = false;
-  //Selector Data
+  // Selector Data
   selectedClientUid: any;
   selectedClient: any;
   selectedAgentUid: any;
@@ -69,8 +69,8 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
       agentName: [''],
       photoURL: [''],
       isArchived: [''],
-      cover_photo:['']
-    })
+      cover_photo: ['']
+    });
 
   }
 
@@ -86,18 +86,18 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
       this.project = result.payload.data();
       this.project.id = result.payload.id;
       console.log(this.project);
-      var photoid = [];
-      for (var i = 0; i < this.project['photoURL'].length; i++) {
-        console.log( this.project['photoURL'][i])
+      const photoid = [];
+      for (let i = 0; i < this.project['photoURL'].length; i++) {
+        console.log( this.project['photoURL'][i]);
         if (this.project['photoURL'][i]['photoURL']) {
-          console.log(this.project['photoURL'][i]['photoURL'])
-          this.viewphotos.push(this.project['photoURL'][i])
+          console.log(this.project['photoURL'][i]['photoURL']);
+          this.viewphotos.push(this.project['photoURL'][i]);
           photoid.push(this.project['photoURL'][i]['id']);
         } else {
           try {
-            var x = await this.fileservice.getFile(this.project['photoURL'][i]);
+            const x = await this.fileservice.getFile(this.project['photoURL'][i]);
             console.log(x);
-            this.viewphotos.push({ id: x['id'], photoURL: x['photoURL'] })
+            this.viewphotos.push({ id: x['id'], photoURL: x['photoURL'] });
             photoid.push(x['id']);
           } catch (err) {
 
@@ -108,8 +108,8 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
       }
       console.log(this.viewphotos);
       if (this.project['cover_photo']) {
-        this.cover_photo_file = this.project['cover_photo']
-        this.cover_photo = this.project['cover_photo']['photoURL']
+        this.cover_photo_file = this.project['cover_photo'];
+        this.cover_photo = this.project['cover_photo']['photoURL'];
       }
       this.editProjectForm = this.fb.group({
         name: this.project['name'],
@@ -129,7 +129,7 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
         photoURL: [this.viewphotos],
         cover_photo : this.project['cover_photo'],
         isArchived: this.project['isArchived']
-      })
+      });
 
       //
     });
@@ -152,7 +152,7 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
     //   agentUid: [this.project.agentUid]
     //   });
 
-    return true
+    return true;
   }
   pickClient() {
     this.dialog.open(ViewProjectClientDialogComponent2).afterClosed().subscribe(result => {
@@ -168,7 +168,7 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
       $('#delbutton').addClass('btn-outline-danger');
       $('#delbutton').text('Cancel deletion');
       $('.spotchkbox').addClass('imgchkbox');
-      $(".outlabel").wrap("<label></label>");
+      $('.outlabel').wrap('<label></label>');
 
     } else {
       event.target.value = 0
@@ -176,13 +176,13 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
       $('#delbutton').removeClass('btn-outline-danger');
       $('#delbutton').text('Delete some photo(s)');
       $('.spotchkbox').removeClass('imgchkbox');
-      $(".outlabel").unwrap();
+      $('.outlabel').unwrap();
 
       $('.photoURL').removeClass('blurtodelete');
     }
   }
   select_del_photo(photoindex) {
-    console.log($('#box_' + photoindex).is(':checked'))
+    console.log($('#box_' + photoindex).is(':checked'));
     if ($('#box_' + photoindex).is(':checked')) {
       $('#photo_' + photoindex).addClass('blurtodelete');
 
@@ -198,24 +198,22 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
     this.dialog.open(ViewProjectAgentDialogComponent2).afterClosed().subscribe(result => {
       this.selectedAgentUid = result[0];
       this.project['agentName'] = result[1];
-      console.log(this.editProjectForm);
-      //console.log(result);
     });
   }
   async submitEditProjectForm() {
     console.log(this.editProjectForm);
     if (!this.editProjectForm.valid) {
       console.log(this.editProjectForm.value['photoURL']);
-      //delete existing
-      var savephotos0 = [];
-      var savephotos = [];
-      var deletephotos = [];
-      if ($('#delbutton').val() == 0) {
+      // delete existing
+      const savephotos0 = [];
+      const savephotos = [];
+      const deletephotos = [];
+      if ($('#delbutton').val() === 0) {
         $("input[name='todelete']:checkbox").prop('checked', false);
       }
 
       await $.each($("input[name='todelete']:not(:checked)"), async function () {
-        var x = $(this).val().toString();
+        const x = $(this).val().toString();
         console.log(x);
 
         //var phtURL = await thisclass.fileservice.getFile(x);
