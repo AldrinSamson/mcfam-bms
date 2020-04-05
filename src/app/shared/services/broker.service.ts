@@ -31,9 +31,9 @@ export class BrokerService {
             position: values.position,
             email: values.email,
             contactNumber: values.contactNumber,
-            addressStreet: values.addressStreet,
+           // addressStreet: values.addressStreet,
             addressTown: values.addressTown,
-            addressCity: values.addressCity,
+          //  addressCity: values.addressCity,
             addressRegion: values.addressRegion,
             photoURL: values.photoURL,
             uid: authData.user.uid,
@@ -97,9 +97,9 @@ export class BrokerService {
       fullName: values.fullName,
       userName: values.userName,
       contactNumber: values.contactNumber,
-      addressStreet: values.addressStreet,
+     // addressStreet: values.addressStreet,
       addressTown: values.addressTown,
-      addressCity: values.addressCity,
+     // addressCity: values.addressCity,
       addressRegion: values.addressRegion,
     });
   }
