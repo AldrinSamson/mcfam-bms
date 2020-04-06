@@ -24,7 +24,7 @@ export class InquiriesComponent implements OnInit, OnDestroy {
     ) {}
 
     ngOnInit() {
-      this.uid = sessionStorage.getItem('session-user-uid')
+      this.uid = sessionStorage.getItem('session-user-uid');
       this.getUserInquiries();
     }
 

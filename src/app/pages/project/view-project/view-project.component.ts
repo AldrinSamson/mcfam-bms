@@ -118,9 +118,9 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
         propertyType: this.project['propertyType'],
         ownerClientUid: this.project['ownerClientUid'],
         ownerClientName: this.project['ownerClientName'],
-        //addressStreet: this.project['addressStreet'],
+        addressStreet: this.project['addressStreet'],
         addressTown: this.project['addressTown'],
-        //addressCity: this.project['addressCity'],
+        addressCity: this.project['addressCity'],
         addressRegion: this.project['addressRegion'],
         cost: this.project['cost'],
         status: this.project['status'],
@@ -414,7 +414,7 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
 
   archiveProject() {
     this.firebaseService.archiveOne(this.project.id, 'project');
-
+    this.router.navigate(['/project']);
   }
 
   onNoClick(): void {

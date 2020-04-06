@@ -54,9 +54,9 @@ export class ClientComponent implements OnInit , OnDestroy {
       lastName : value.lastName,
       userName : value.userName,
       contactNumber : value.contactNumber,
-      //addressStreet : value.addressStreet,
-      addressTown : value.addressTown,
-      //addressCity : value.addressCity,
+      // addressStreet : value.addressStreet,
+      // addressTown : value.addressTown,
+      addressCity : value.addressCity,
       addressRegion : value.addressRegion,
       email : value.email,
       photoURL : value.photoURL,
@@ -95,9 +95,9 @@ export class AddClientDialogComponent {
       userName: [''],
       contactNumber: [''],
       email : [''],
-      //addressStreet: [''],
-      addressTown: [''],
-      //addressCity: [''],
+      // addressStreet: [''],
+      // addressTown: [''],
+      addressCity: [''],
       addressRegion: [''],
       photoURL: [''],
       uid: [''],
@@ -114,9 +114,9 @@ export class AddClientDialogComponent {
         userName: [this.addClientForm.value.userName],
         contactNumber: [this.addClientForm.value.contactNumber],
         email : [this.addClientForm.value.email],
-        //addressStreet: [this.addClientForm.value.addressStreet],
-        addressTown: [this.addClientForm.value.addressTown],
-        //addressCity: [this.addClientForm.value.addressCity],
+        // addressStreet: [this.addClientForm.value.addressStreet],
+        // addressTown: [this.addClientForm.value.addressTown],
+        addressCity: [this.addClientForm.value.addressCity],
         addressRegion: [this.addClientForm.value.addressRegion],
         photoURL: [''],
         uid: [this.addClientForm.value.uid],
@@ -153,16 +153,16 @@ export class ViewClientDialogComponent {
     ) {
       this.isManager = this.authService.isManager();
       this.viewClientForm = this.fb.group({
-        firstName: [{value: this.data.firstName , readOnly:true}],
+        firstName: [{value: this.data.firstName , readOnly: true}],
         lastName: [this.data.lastName],
-        fullName: [this.data.firstName +' '+ this.data.lastName],
+        fullName: [this.data.firstName + ' ' + this.data.lastName],
         userName: [this.data.userName],
         contactNumber: [this.data.contactNumber],
-        //addressStreet: [this.data.addressStreet],
-        addressTown: [this.data.addressTown],
-        //addressCity: [this.data.addressCity],
+        // addressStreet: [this.data.addressStreet],
+        // addressTown: [this.data.addressTown],
+        addressCity: [this.data.addressCity],
         addressRegion: [this.data.addressRegion],
-        uid: [this.data.uid] 
+        uid: [this.data.uid]
       })
     }
     deleteClient(){

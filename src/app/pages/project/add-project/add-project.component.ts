@@ -18,10 +18,10 @@ import { AngularFirestore } from '@angular/fire/firestore';
 export class AddProjectComponent implements OnInit, OnDestroy {
 
   addProjectForm: any;
-  selectedClientUid
-  selectedClient
-  selectedAgentUid
-  selectedAgent
+  selectedClientUid;
+  selectedClient;
+  selectedAgentUid;
+  selectedAgent;
 
   picFile: any;
   fileRef: AngularFireStorageReference;
@@ -36,12 +36,12 @@ export class AddProjectComponent implements OnInit, OnDestroy {
   viewFiles: any;
   arrayphoto = [];
   cover_photo: any;
-  cover_photo_file: any
+  cover_photo_file: any;
 
   ngOnInit() {
     try {
 
-      this.userId = firebase.auth().currentUser.uid
+      this.userId = sessionStorage.getItem('session-user-uid');
     } catch (err) {
       this.userId = '';
     }
@@ -64,9 +64,9 @@ export class AddProjectComponent implements OnInit, OnDestroy {
       propertyType: [''],
       'ownerClientUid': [''],
       'ownerClientName': [''],
-      //addressStreet: [''],
+      addressStreet: [''],
       addressTown: [''],
-      //addressCity: [''],
+      addressCity: [''],
       addressRegion: [''],
       cost: [''],
       status: [''],
@@ -76,7 +76,7 @@ export class AddProjectComponent implements OnInit, OnDestroy {
       'photoURL': [''],
       'cover_photo': [''],
       isArchived: [false],
-      'isFeatured' : [false]
+      isFeatured : [false]
     });
   }
 
@@ -100,7 +100,7 @@ export class AddProjectComponent implements OnInit, OnDestroy {
       this.addProjectForm.controls['agentUid'].setValue(this.selectedAgentUid);
       this.addProjectForm.controls['ownerClientName'].setValue(this.selectedClient);
       this.addProjectForm.controls['agentName'].setValue(this.selectedAgent);
-      this.addProjectForm.controls['isFeatured'].setValue(this);
+      // this.addProjectForm.controls['isFeatured'].setValue(this);
       // this.fileupload();
 
 
@@ -114,7 +114,7 @@ export class AddProjectComponent implements OnInit, OnDestroy {
   }
   submitFinal() {
     // console.log(this.);
-    //t his.addProjectForm.controls['photoURL'].setValue(this.filestored);
+    // this.addProjectForm.controls['photoURL'].setValue(this.filestored);
     console.log(this.addProjectForm);
     this.firebaseService.addOne(this.addProjectForm.value, 'project');
     this.router.navigate(['/project']);
@@ -122,13 +122,12 @@ export class AddProjectComponent implements OnInit, OnDestroy {
 
   uploadImageAsPromise(fl, islast) {
     console.log(fl);
-    var thisclass = this;
-    var fs = this.fileservice;
+    // var fs = this.fileservice;
     const path = `project/storeFile${new Date().getTime()}_${fl.name}`;
     return new Promise(function (resolvse, reject) {
       var storageRef = firebase.storage().ref(path);
 
-      //Upload file
+      //Upload file 
       var task = storageRef.put(fl);
       console.log(JSON.stringify(fl));
       task.then(function (snapshot) {
@@ -141,11 +140,11 @@ export class AddProjectComponent implements OnInit, OnDestroy {
             size: fl.size,
             type: fl.type
           };
-          const id = await thisclass.firestore.createId();
+          const id = await this.firestore.createId();
           var fileprop = {
             id: id,
             fileProperties: file1,
-            uidUploaded: thisclass.userId,
+            uidUploaded: this.userId,
             section: 'BMS',
             fileName: `storeFile${new Date().getTime()}_${fl.name}`,
             category: 'project',
@@ -153,17 +152,17 @@ export class AddProjectComponent implements OnInit, OnDestroy {
             path: path
           };
           console.log(fileprop);
-          var fileID = await thisclass.fileservice.createFile(fileprop);
+          var fileID = await this.fileservice.createFile(fileprop);
           console.log('fileid');
 
-          thisclass.filestored.push(id);
+          this.filestored.push(id);
 
 
           if (islast) {
 
-            thisclass.submitFinal();
+            this.submitFinal();
           }
-          console.log(thisclass.filestored);
+          console.log(this.filestored);
         });
       });
     });
