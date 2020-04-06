@@ -9,9 +9,9 @@ export class Broker {
         position: String,
         contactNumber: Number,
         email: String,
-        addressStreet: String,
+        //addressStreet: String,
         addressTown: String,
-        addressCity: String,
+       // addressCity: String,
         addressRegion: String,
         photoURL: String,
         uid: String

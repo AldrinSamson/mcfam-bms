@@ -15,7 +15,7 @@ import { Subscription } from 'rxjs';
 })
 export class ProjectArchiveComponent implements OnInit, OnDestroy {
 
-  displayedColumnsProject: string[] = ['name' , 'saleType' , 'propertyType' , 'addressStreet' , 'addressTown' , 'addressCity' , 'addressRegion' , 'cost' , 'status'];
+  displayedColumnsProject: string[] = ['name' , 'saleType' , 'propertyType' ,  'addressTown' ,  'addressRegion' , 'cost' , 'status'];
 
   projects: MatTableDataSource<any>;
 
@@ -45,9 +45,9 @@ export class ProjectArchiveComponent implements OnInit, OnDestroy {
       saleType : value.saleType,
       propertyType : value.propertyType,
       ownerClientName : value.ownerClientName,
-      addressStreet : value.addressStreet,
+     // addressStreet : value.addressStreet,
       addressTown : value.addressTown,
-      addressCity : value.addressCity,
+     // addressCity : value.addressCity,
       addressRegion : value.addressRegion,
       cost : value.cost,
       status : value.status,
@@ -92,9 +92,9 @@ export class ViewProjectArchiveDialogComponent {
         saleType: [this.data.saleType],
         propertyType: [this.data.propertyType],
         ownerClientName: [this.data.ownerClientName],
-        addressStreet: [this.data.addressStreet],
+       // addressStreet: [this.data.addressStreet],
         addressTown: [this.data.addressTown],
-        addressCity: [this.data.addressCity],
+      //  addressCity: [this.data.addressCity],
         addressRegion: [this.data.addressRegion],
         cost: [this.data.cost],
         status: [this.data.status],
