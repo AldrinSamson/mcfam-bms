@@ -70,8 +70,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   openAddProject(): void {
-    //this.router.navigate(['/project/add']);
-    this.mailerService.mailTransactionMessage('XZC4hex11seS7uUDdqxiVPQSply1' ,'manager' , 1 ,'Sorento Oasis', ['arara' , 'boom'] )
+    // this.router.navigate(['/project/add']);
+    this.mailerService.mailTransactionMessage('XZC4hex11seS7uUDdqxiVPQSply1' ,'manager' , 1 ,'Sorento Oasis', ['arara' , 'boom'] );
+    this.mailerService.sendEmail('aldrinbautistasamson@gmail.com', 'Sorento Oasis', 'Sorento Oasis');
   }
   
   openViewProject(value): void {

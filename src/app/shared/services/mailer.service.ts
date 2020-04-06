@@ -16,6 +16,7 @@ export class MailerService {
 
   sendEmail(email: any , subject: any , message: any ) {
     const url = 'https://us-central1-mcfam-systems.cloudfunctions.net/sendMail';
+    // const url = 'http://localhost:5000/mcfam-systems/us-central1/sendMail';
     const body : any = {
       'email' : email,
       'subject' : subject,
@@ -27,7 +28,7 @@ export class MailerService {
     }
     return this.http.post<any>(url , <JSON>output , httpOptions ).subscribe({
       error: error => console.error('There was an error!', error)
-    }).unsubscribe();
+    })
   }
 
   genTransactionMessage(role: any, stage: any, project:String, otherValues?: Array<any>){
@@ -169,9 +170,10 @@ export class MailerService {
     }
 
     getEmail = this.db.collection(table, ref => ref.where('uid', '==', uid)).valueChanges().subscribe( (res: any) => {
-      email = res[0].email
+      email = res[0].email;
       this.sendEmail(email , content[0] , content[1])
       getEmail.unsubscribe();
-    })
+      //sendEmail.unsubscribe();
+    });
   }
 }

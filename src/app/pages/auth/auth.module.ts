@@ -5,7 +5,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule, MatInputModule, MatProgressBarModule,
          MatCardModule, MatIconModule } from '@angular/material';
-import { NgxAuthFirebaseUIModule } from 'ngx-auth-firebaseui';
 
 // Components
 import { AuthComponent } from './auth.component';
@@ -22,7 +21,6 @@ import { PhoneSigninComponent } from './phone-signin/phone-signin.component';
     FormsModule,
     MatButtonModule, MatInputModule, MatProgressBarModule,
     MatCardModule, MatIconModule,
-    NgxAuthFirebaseUIModule
   ],
   providers: [
   ],

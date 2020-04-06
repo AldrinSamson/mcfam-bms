@@ -62,7 +62,6 @@
     "ionicons": "^5.0.1",
     "jquery": "^3.4.1",
     "ng2-search-filter": "^0.5.1",
-    "ngx-auth-firebaseui": "^2.2.1",
     "ngx-paginate": "^2.0.1",
     "ngx-pagination": "^5.0.0",
     "popper.js": "^1.16.1",

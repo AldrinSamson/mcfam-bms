@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material.module';
 import { HttpClientModule } from '@angular/common/http';
-import { NgxAuthFirebaseUIModule } from 'ngx-auth-firebaseui';
+
 import { AngularFireStorage } from 'angularfire2/storage';
 
 
@@ -41,6 +41,9 @@ import { ProjectArchiveComponent , ViewProjectArchiveDialogComponent } from './p
 import { AuditComponent } from './pages/audit/audit.component';
 
 import { MatDialogRef } from '@angular/material';
+import { AngularFireAuth, AngularFireAuthModule } from '@angular/fire/auth';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
 
 
 
@@ -105,7 +108,9 @@ import { MatDialogRef } from '@angular/material';
     AuthModule,
     ProfileModule,
     MiscModule,
-    NgxAuthFirebaseUIModule.forRoot(firebaseKeys)
+    AngularFireModule.initializeApp(firebaseKeys),
+    AngularFirestoreModule,
+    AngularFireAuthModule
   ],
   providers: [
     UserService,
@@ -113,7 +118,8 @@ import { MatDialogRef } from '@angular/material';
     AuthGuardService,
     AuthService,
     WindowService,
-    AngularFireStorage
+    AngularFireStorage,
+    
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA
