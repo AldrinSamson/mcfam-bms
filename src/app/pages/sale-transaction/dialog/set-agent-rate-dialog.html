@@ -9,11 +9,22 @@
             <br>
             <input type="text" class="form-control" placeholder="Enter without %"[(ngModel)]='commission'>
             <br>
-
-            
-            
+            <h5> Project Cost: </h5>
+            <br>
+            <p>{{data.projectCost}}</p>
+            <br>
+            <h5> Total Commission: </h5>
+            <br>
+            <p>{{total}}</p>
+            <br>
+            <h5> Project Sale Total: </h5>
+            <br>
+            <p>{{saleTotal}}</p>         
 </div>
 <div mat-dialog-actions>
-    <button mat-button (click)="setCommission()">Confirm</button> 
+    <div *ngIf="computed === true">
+        <button mat-button (click)="setCommission()">Confirm</button> 
+    </div>
+    <button mat-button (click)="compute()">Compute</button>
     <button mat-button (click)="onNoClick()">Back</button> 
 </div>

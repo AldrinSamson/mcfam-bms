@@ -6,6 +6,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 
 import { Broker } from '../models';
 import { AlertService } from './alert.service';
+import { HttpClient } from '@angular/common/http';
 
 
 @Injectable({
@@ -15,7 +16,8 @@ export class ClientService {
 
   constructor(public afAuth: AngularFireAuth,
     public db: AngularFirestore,
-    public alertService: AlertService) { }
+    public alertService: AlertService,
+    public http: HttpClient) { }
 
   createClient(values) {
     return this.afAuth.auth.createUserWithEmailAndPassword(values.email, values.password)
@@ -41,7 +43,7 @@ export class ClientService {
                 });
   }
 
-  updateClient(id ,values) {
+  updateClient(id, values) {
     return this.db.collection('client').doc(id).update({
                     firstName: values.firstName,
                     lastName: values.lastName,
@@ -52,17 +54,20 @@ export class ClientService {
                     addressTown: values.addressTown,
                     addressCity: values.addressCity,
                     addressRegion: values.addressRegion,
-    }) 
-  }
-  deleteClient(id) {
-    /*
-    admin.auth().deleteUser(id)
-    .then(function() {
-      console.log("Successfully deleted user");
-      })
-    .catch(function(error) {
-      console.log("Error deleting user:", error);
     });
-    */
+  }
+
+  deleteClientAuth(uid) {
+    const url = 'https://us-central1-mcfam-systems.cloudfunctions.net/terminateUser';
+    const body: any = {
+      'uid' : uid,
+    };
+    const output = <JSON>body;
+    const httpOptions = {
+      responseType: 'text' as 'json'
+    };
+    return this.http.post<any>(url , <JSON>output , httpOptions ).subscribe({
+      error: error => console.error('There was an error!', error)
+    }).unsubscribe();
   }
 }

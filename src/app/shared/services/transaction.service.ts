@@ -39,30 +39,33 @@ export class TransactionService {
       stage: 4,
       doc_status: 'Manager have read and approved them',
       status: 'Approved, Awaiting Finalization'
-
-    })
+    });
   }
 
-  approveAndSetLease(tid , yearsToLease , leaseTotal , commissionTotal , saleTotal ) {
+  approveAndSetLease(tid , yearsToLease , leaseTotal , commissionTotal , saleTotal , leaseMonth , leaseYearStart , leaseYearEnd ) {
     return this.db.collection('transaction').doc(tid).update({
       yearsToLease: yearsToLease,
       leaseTotal: leaseTotal,
       commissionTotal: commissionTotal,
       saleTotal: saleTotal,
+      leaseMonth: leaseMonth,
+      leaseYearStart: leaseYearStart,
+      leaseYearEnd : leaseYearEnd,
       isApproved: true,
       dateApproved: new Date(),
       stage: 4,
       doc_status: 'Manager have read and approved them',
       status: 'Approved, Awaiting Finalization'
-    })
+    });
   }
 
   disapprove(tid){
     return this.db.collection('transaction').doc(tid).update({
       isDisapproved: true,
       dateDisapproved: new Date(),
+      doc_status: 'No Documents Uploaded , Deleted',
       status: 'Manager Disapproved'
-    })
+    });
   }
 
   restoreDisapproved(tid){
@@ -70,14 +73,37 @@ export class TransactionService {
       stage: 2,
       isDisapproved: false,
       dateDisapproved: null,
-      status: 'Awaiting Manager Approval'
-    })
+      status: 'Awaiting Client Documents'
+    });
   }
 
-  finalize(tid , values){
+  finalizeSale(tid ){
     return this.db.collection('transaction').doc(tid).update({
+      stage: 5,
+      isCompleted: true,
+      status: 'Completed , No Feedback Yet',
+      doc_status: 'Deleted',
+      dateCompleted: new Date()
+    });
+  }
 
-    })
+  finalizeLease(tid ) {
+    return this.db.collection('transaction').doc(tid).update({
+      stage: 5,
+      isLeased: true,
+      isCompleted: true,
+      status: 'Leased, No Feedback Yet',
+      doc_status: 'Deleted',
+      dateFinalizedLease: new Date()
+    });
+  }
+
+  endLease(tid) {
+    return this.db.collection('transaction').doc(tid).update({
+      isLeased: false,
+      status: 'Completed, Was Leased',
+      dateCompleted: new Date()
+    });
   }
 
   deleteTransaction(tid){

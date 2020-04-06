@@ -20,7 +20,7 @@ export class BrokerComponent implements OnInit, OnDestroy {
   brokerSearchText;
   brokers: Array<any>;
   brokerSub: Subscription;
-  p
+  p;
 
   profpic: any;
 
@@ -39,17 +39,14 @@ export class BrokerComponent implements OnInit, OnDestroy {
   getData() {
     this.brokerSub = this.firebaseService.getAllData('broker')
       .subscribe(result => {
-        var tempbrokers = result;
-        console.log(result)
-        for (var i = 0; i < result.length; i++) {
+        const tempbrokers = result;
+        console.log(result);
+        for (let i = 0; i < result.length; i++) {
           if (!result[i]['photoURL']) {
-            tempbrokers[i]['photoURL'] = {photoURL:''}
-            
+            tempbrokers[i]['photoURL'] = {photoURL: '' };
           }
         }
         this.brokers = tempbrokers;
-        //console.log(this.brokers)
-        //console.log(this.brokers)
       });
   }
 
@@ -62,13 +59,14 @@ export class BrokerComponent implements OnInit, OnDestroy {
 
   openViewBroker(value): void {
     const dialogConfig = new MatDialogConfig();
-    console.log(value)
+    console.log(value);
     dialogConfig.data = {
       id: value.id,
       brokerId: value.brokerId,
       firstName: value.firstName,
       lastName: value.lastName,
       userName: value.userName,
+      aveRating: value.aveRating,
       contactNumber: value.contactNumber,
       addressStreet: value.addressStreet,
       addressTown: value.addressTown,
@@ -79,7 +77,7 @@ export class BrokerComponent implements OnInit, OnDestroy {
       photoURL: value.photoURL,
       uid: value.uid,
     };
-    //console.log(dialogConfig)
+    // console.log(dialogConfig)
     this.dialog.open(ViewBrokerDialogComponent, dialogConfig).afterClosed().subscribe(result => {
       this.getData();
     });
@@ -120,7 +118,7 @@ export class AddBrokerDialogComponent {
     try {
       this.userId = firebase.auth().currentUser.uid;
     } catch (err) {
-      this.userId = "";
+      this.userId = '';
     }
     this.addBrokerForm = this.fb.group({
       brokerId: [''],
@@ -136,33 +134,34 @@ export class AddBrokerDialogComponent {
       addressRegion: [''],
       photoURL: [''],
       uid: [''],
-      password: ['']
+      password: [''],
+      aveRating: [0]
     });
   }
   preview(files) {
     if (files.length === 0) {
       document.getElementById('uploadbtn').classList.remove('btn-success');
       document.getElementById('uploadbtn').classList.add('btn-primary');
-      this.imgURL = null
+      this.imgURL = null;
       return;
     } else {
       document.getElementById('uploadbtn').classList.remove('btn-primary');
       document.getElementById('uploadbtn').classList.add('btn-success');
     }
     console.log(files);
-    var mimeType = files[0].type;
+    const mimeType = files[0].type;
     if (mimeType.match(/image\/*/) == null) {
-      this.message = "Only images are supported.";
+      this.message = 'Only images are supported.';
       return;
     }
 
-    var reader = new FileReader();
+    const reader = new FileReader();
     this.imagePath = files;
     reader.readAsDataURL(files[0]);
     reader.onload = (_event) => {
       this.imgURL = reader.result;
       this.picFile = files;
-    }
+    };
 
   }
   submitFinal() {
@@ -170,18 +169,18 @@ export class AddBrokerDialogComponent {
   }
   uploadImageAsPromise(fl, islast) {
     console.log(fl);
-    var thisclass = this;
-    var fs = this.fileservice;
+    const thisclass = this;
+    const fs = this.fileservice;
     const path = `broker/storeFile${new Date().getTime()}_${fl.name}`;
     return new Promise(function (resolve, reject) {
-      var storageRef = firebase.storage().ref(path);
+      const storageRef = firebase.storage().ref(path);
 
-      //Upload file
-      var task = storageRef.put(fl);
+      // Upload file
+      const task = storageRef.put(fl);
       console.log(JSON.stringify(fl));
       task.then(function (snapshot) {
         snapshot.ref.getDownloadURL().then(async function (url) {  // Now I can use url
-          var file1 = {
+          const file1 = {
             name: fl.name,
             lastModified: fl.lastModified,
             lastModifiedDate: fl.lastModifiedDate,
@@ -190,7 +189,7 @@ export class AddBrokerDialogComponent {
             type: fl.type
           };
           const id = await thisclass.firestore.createId();
-          var fileprop = {
+          const fileprop = {
             id: id,
             fileProperties: file1,
             uidUploaded: thisclass.userId,
@@ -202,15 +201,15 @@ export class AddBrokerDialogComponent {
           };
           console.log(fileprop);
 
-          //var fileID = await thisclass.fileservice.createFile(fileprop);
+          // var fileID = await thisclass.fileservice.createFile(fileprop);
           console.log('fileid');
 
           thisclass.filestored.push(id);
-          console.log(islast)
+          console.log(islast);
 
           if (islast) {
-            //thisclass.insertBroker(url);
-            //resolve(url);
+            // thisclass.insertBroker(url);
+            // resolve(url);
             resolve(fileprop);
           }
           console.log(thisclass.filestored);
@@ -245,40 +244,40 @@ export class AddBrokerDialogComponent {
 
   }
   async submitAddBrokerForm() {
-    //if (this.addBrokerForm.valid) {
-    var thisclass = this;
+    // if (this.addBrokerForm.valid) {
+    const thisclass = this;
     {
-      var photourl = '';
-      //console.log('b');
+      let photourl = '';
+      // console.log('b');
 
 
       console.log(photourl);
-      var hasaccount = this.BrokerService.existUserNameCheck(this.addBrokerForm.value.userName)
-      //console.log('a');
+      const hasaccount = this.BrokerService.existUserNameCheck(this.addBrokerForm.value.userName);
+      // console.log('a');
       await hasaccount.then(async function (result) {
         console.log(result);
         if (result + '' === 'username already exist') {
           throw new Error(result + '');
-          //resolve(result+'')
+          // resolve(result+'')
         } else {
           if (thisclass.picFile) {
 
-            var x = thisclass.uploadImageAsPromise(thisclass.picFile[0], true);
+            const x = thisclass.uploadImageAsPromise(thisclass.picFile[0], true);
             await x.then(function (result) {
               // do something with result
               console.log(result);
-              photourl = result['photoURL']
-            })
+              photourl = result['photoURL'];
+            });
           } else {
-            //this.insertBroker(''); 
+            // this.insertBroker('');
           }
 
           thisclass.insertBroker(photourl);
         }
       }).catch(err => {
-        //throw new Error(err); 
-        alert(err)
-      })
+        // throw new Error(err);
+        alert(err);
+      });
 
       this.dialogRef.close();
     }
@@ -289,7 +288,7 @@ export class AddBrokerDialogComponent {
     if (this.picFile.length) {
       document.getElementById('uploadbtn').classList.remove('btn-primary');
       document.getElementById('uploadbtn').classList.add('btn-success');
-      this.qtyinput = "a file attached";;
+      this.qtyinput = 'a file attached'; 
     } else {
       document.getElementById('uploadbtn').classList.remove('btn-success');
       document.getElementById('uploadbtn').classList.add('btn-primary');
@@ -331,7 +330,7 @@ export class ViewBrokerDialogComponent {
     try {
       this.userId = firebase.auth().currentUser.uid;
     } catch (err) {
-      this.userId = "";
+      this.userId = '';
     }
     this.isManager = this.authService.isManager();
 
@@ -341,6 +340,7 @@ export class ViewBrokerDialogComponent {
       lastName: [this.data.lastName],
       'fullName': [''],
       userName: [this.data.userName],
+      aveRating: [this.data.aveRating],
       contactNumber: [this.data.contactNumber],
       addressStreet: [this.data.addressStreet],
       addressTown: [this.data.addressTown],
@@ -349,17 +349,17 @@ export class ViewBrokerDialogComponent {
 
       uid: [this.data.uid]
     });
-    //console.log(this.data.photoURL)
+    // console.log(this.data.photoURL)
     this.previewphoto = this.data.photoURL.photoURL;
   }
 
   async submitEditBrokerForm() {
-    console.log(this.editBrokerForm)
+    console.log(this.editBrokerForm);
     if (this.editBrokerForm.valid) {
-      var photoURL;
+      let photoURL;
       if (this.thepreviewphoto) {
-        var path = `broker/storeFile${new Date().getTime()}_${this.thepreviewphoto.name}`
-        var fileprop = await this.fileservice.upload_in_storage(path, this.thepreviewphoto, this.userId, 'broker');
+        const path = `broker/storeFile${new Date().getTime()}_${this.thepreviewphoto.name}`;
+        const fileprop = await this.fileservice.upload_in_storage(path, this.thepreviewphoto, this.userId, 'broker');
         photoURL = { id: fileprop['id'], photoURL: fileprop['photoURL'] };
       }
       const fullName = this.data.firstName + ' ' + this.data.lastName;
@@ -368,25 +368,32 @@ export class ViewBrokerDialogComponent {
       this.dialogRef.close();
     }
   }
+
   btnclickphoto() {
-    jQuery('#photochange').click()
+    jQuery('#photochange').click();
   }
+
   changephoto(event) {
-    console.log(event)
+    console.log(event);
     this.thepreviewphoto = event.target.files[0];
-    var reader = new FileReader();
+    const reader = new FileReader();
     reader.onload = (event: any) => {
-      //console.log(event.target.result);
-      //this.arrayphoto.push(event.target.result);
+      // console.log(event.target.result);
+      // this.arrayphoto.push(event.target.result);
       this.previewphoto = event.target.result;
-    }
+    };
     reader.readAsDataURL(this.thepreviewphoto);
   }
+
   deleteBroker() {
-    this.firebaseService.deleteOne(this.data.id, 'broker')
-    this.firebaseService.deleteOne(this.data.uid, 'users')
-    //this.BrokerService.deleteBroker(this.data.uid)
+    this.firebaseService.deleteOne(this.data.id, 'broker');
+    this.firebaseService.deleteOne(this.data.uid, 'users');
+    // this.BrokerService.deleteBroker(this.data.uid)
     this.dialogRef.close();
+  }
+
+  updateRating() {
+    this.BrokerService.computeRating(this.data.uid);
   }
 
   onNoClick(): void {

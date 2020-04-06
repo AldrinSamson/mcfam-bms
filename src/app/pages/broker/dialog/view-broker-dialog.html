@@ -7,6 +7,11 @@
             </mat-form-field>
             <br>
             <mat-form-field >
+                <mat-label> Customer Rating </mat-label>
+                <input matInput formControlName = "aveRating" value = {{data.aveRating}} name = "broker-aveRating" readonly>
+            </mat-form-field>
+            <br>
+            <mat-form-field >
                 <mat-label> ID </mat-label>
                 <input matInput formControlName = "brokerId" value = {{data.brokerId}} name = "broker-brokerId" required>
             </mat-form-field>
@@ -67,5 +72,6 @@
     <div *ngIf="!authService.isManager()">
         <p color = "warn" >You only edit your own details in your own profile page</p>
     </div>
+    <button mat-button (click) = "updateRating()" >Update Rating</button>
     <button mat-button (click)="onNoClick()">Back</button> 
 </div>

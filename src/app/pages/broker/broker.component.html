@@ -15,6 +15,7 @@
 					<thead>
 						<tr>
 							<th><span>Broker's Name</span></th>
+							<th><span>Rating</span></th>
 							<th><span>Contact Number</span></th>
 							<th><span>Email</span></th>
 						</tr>
@@ -24,6 +25,9 @@
 							<td>
 								<img [src]="broker.photoURL.photoURL" >
 								<a  class="user-link">{{broker.firstName}} {{broker.lastName}}</a>
+							</td>
+							<td>
+								<a >{{broker.aveRating}}</a>
 							</td>
 							<td>
 								<a class ="contact-number">{{broker.contactNumber}}</a>

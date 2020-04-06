@@ -218,9 +218,9 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
         const x = $(this).val().toString();
         console.log(x);
 
-        //var phtURL = await thisclass.fileservice.getFile(x);
-        //console.log(phtURL);
-        //savephotos.push({ id: x, photoURL: phtURL['photoURL'] });
+        // var phtURL = await thisclass.fileservice.getFile(x);
+        // console.log(phtURL);
+        // savephotos.push({ id: x, photoURL: phtURL['photoURL'] });
         savephotos0.push(x);
       });
       for(var i = 0; i< savephotos0.length ;i++){
@@ -593,10 +593,6 @@ export class SaleProjectDialogComponent implements OnInit, OnDestroy {
       'managerName': [''],
       'managerUid': [''],
       dateStart: [new Date()],
-      dateUpload: [''],
-      dateApprove: [''],
-      dateEnd: [''],
-      dateCancel: [''],
       doc_BIS: [''],
       doc_RF: [''],
       doc_RA: [''],
@@ -606,15 +602,14 @@ export class SaleProjectDialogComponent implements OnInit, OnDestroy {
       doc_POB: [''],
       doc_PSS: [''],
       doc_others: [''],
-      doc_status:['No Documents Uploaded'],
-      commissionRate: [0],
-      commissionTotal: [0],
+      doc_status: ['No Documents Uploaded'],
       status: ['Awaiting Customer Document'],
       stage: [2],
       isCompleted: [false],
       isApproved: [false],
       isDisapproved: [false],
-      isCancelled: [false],
+	  isCancelled: [false],
+	  isLeased: [false]
     });
   }
 
@@ -648,14 +643,15 @@ export class SaleProjectDialogComponent implements OnInit, OnDestroy {
       this.saleProjectForm.controls['clientUid'].setValue(this.selectedClientUid);
       this.saleProjectForm.controls['managerName'].setValue(this.selectedManager);
       this.saleProjectForm.controls['managerUid'].setValue(this.selectedManagerUid);
-      this.firebaseService.addOne(this.saleProjectForm.value, 'transaction');
+	  this.firebaseService.addOne(this.saleProjectForm.value, 'transaction');
+	  // this.mailerService.mailTransactionMessage()  stage 1 client
       this.dialogRef.close();
     }
   }
 
   ngOnDestroy() {
     if (this.clientSub != null) {
-      this.clientSub.unsubscribe();
+	  this.clientSub.unsubscribe();
     }
 
     if (this.managerSub != null) {

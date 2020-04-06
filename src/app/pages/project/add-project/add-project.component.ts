@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject, OnDestroy, ElementRef } from '@angular/core';
 import { FirebaseService, FileService, ProjectService, Project, BrokerService } from '../../../shared';
 import { MatDialog, MatDialogRef, MatDialogConfig, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import { Router, Params } from '@angular/router';
 import { MatTableDataSource } from '@angular/material';
 import { Subscription, Observable } from 'rxjs';
@@ -57,9 +57,6 @@ export class AddProjectComponent implements OnInit, OnDestroy {
     public router: Router,
     @Inject(AngularFireStorage) private afStorage: AngularFireStorage
   ) {
-
-    localStorage.setItem('user', JSON.stringify(this.userId));
-    console.log(this.userId);
     this.addProjectForm = this.fb.group({
       name: [''],
       overview: [''],
@@ -73,12 +70,28 @@ export class AddProjectComponent implements OnInit, OnDestroy {
       addressRegion: [''],
       cost: [''],
       status: [''],
+      'amenities': this.fb.array([]),
       'agentUid': [''],
       'agentName': [''],
       'photoURL': [''],
-      'cover_photo':[''],
-      isArchived: [false]
+      'cover_photo': [''],
+      isArchived: [false],
+      'isFeatured' : [false]
     });
+  }
+
+  get amenities() {
+    return this.addProjectForm.get('amenities') as FormArray;
+  }
+
+  /////// This is new /////////////////
+
+  addAmenities() {
+    this.amenities.push(new FormControl(''));
+  }
+
+  deleteAmenities(index) {
+    this.amenities.removeAt(index);
   }
 
   submitAddProjectForm() {
@@ -87,7 +100,8 @@ export class AddProjectComponent implements OnInit, OnDestroy {
       this.addProjectForm.controls['agentUid'].setValue(this.selectedAgentUid);
       this.addProjectForm.controls['ownerClientName'].setValue(this.selectedClient);
       this.addProjectForm.controls['agentName'].setValue(this.selectedAgent);
-      //this.fileupload();
+      this.addProjectForm.controls['isFeatured'].setValue(this);
+      // this.fileupload();
 
 
     }
@@ -99,8 +113,8 @@ export class AddProjectComponent implements OnInit, OnDestroy {
 
   }
   submitFinal() {
-    //console.log(this.);
-    //this.addProjectForm.controls['photoURL'].setValue(this.filestored);
+    // console.log(this.);
+    //t his.addProjectForm.controls['photoURL'].setValue(this.filestored);
     console.log(this.addProjectForm);
     this.firebaseService.addOne(this.addProjectForm.value, 'project');
     this.router.navigate(['/project']);
@@ -188,13 +202,13 @@ export class AddProjectComponent implements OnInit, OnDestroy {
     if (this.picFile.length) {
       document.getElementById('uploadbtn').classList.remove('btn-primary');
       document.getElementById('uploadbtn').classList.add('btn-success');
-      this.qtyinput = "a file attached";
+      this.qtyinput = 'a file attached';
       try {
         console.log(this.picFile);
         for (var i = 0; i < this.picFile.length; i++) {
           var reader = new FileReader();
           reader.onload = (event: any) => {
-            //console.log(event.target.result);
+            // console.log(event.target.result);
             this.arrayphoto.push(event.target.result);
           }
           reader.readAsDataURL(this.picFile[i]);

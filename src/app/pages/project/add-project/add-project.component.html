@@ -101,6 +101,16 @@
                                  value={{selectedAgent}} (click)="pickAgent()" readonly>
                             </mat-form-field>
                             <br>
+                            <button mat-button (click)="addAmenities()">Add Amenity</button>
+                            <div *ngFor="let control of amenities.controls; index as i">
+                                <input  [formControl]="amenities.controls[i]" />
+                                <button mat-button color="warn" (click)="deleteAmenities(i)">X</button>
+                            </div>
+                            <br>
+                          
+                                <mat-checkbox formControlName="isFeatured">is Featured</mat-checkbox>
+                          
+
                         </div>
                         <div class="col-3">
                             <label>
@@ -138,5 +148,7 @@
         </div>
     </div>
 </div>
+
+{{ this.addProjectForm.value | json }}
 
     

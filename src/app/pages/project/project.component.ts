@@ -44,13 +44,13 @@ export class ProjectComponent implements OnInit, OnDestroy {
     public fileservice: FileService,
     public authService: AuthService,
     public mailerService: MailerService,
-    public router:Router) {
+    public router: Router) {
 
     this.isManager = this.authService.isManager();
 
     try {
       this.fileslist = this.fileservice.getFiles();
-      this.userId = firebase.auth().currentUser.uid
+      this.userId = firebase.auth().currentUser.uid;
     } catch (err) {
       this.userId = '';
     }

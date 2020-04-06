@@ -87,6 +87,39 @@
                 </div>
             </div>
         </mat-tab>
+        <mat-tab label="Currently Leased">
+            <div class="card">
+                <div class="card-header">
+                     <h3>Currently Leased</h3>
+                </div>
+                <div class="card-body">
+                    <div class="search">
+                          <input class="form-control" type="text" name="search"  autocomplete="off" placeholder="&#61442;  Search ">
+                    </div>
+            
+                    <table class="table table-inbox table-hover">
+                        <thead>
+                            <th>Lease Date Finalized</th>
+                            <th>Lease Date Start</th>
+                            <th>Lease Date End</th>
+                            <th>Project Name</th>
+                            <th>Buyer Name</th>
+                            <th>Status</th>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let transaction of leasedTransactions" (click)="openViewTransaction(transaction , 'Leased')" >
+                                <td class="view-message  text-left">{{transaction.dateFinalizedLease.toDate() | date: 'MMM-dd-yy hh:mm'}}</td>
+                                <td class="view-message  text-left">{{transaction.leaseMonth}} {{transaction.leaseYearStart}}</td>
+                                <td class="view-message  text-left">{{transaction.leaseMonth}} {{transaction.leaseYearEnd}}</td>
+                                <td >{{transaction.projectName}}</td>
+                                <td >{{transaction.clientName}}</td>
+                                <td >{{transaction.status}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </mat-tab>
         <mat-tab label="Completed">
             <div class="card">
                 <div class="card-header">
@@ -102,6 +135,7 @@
                             <th>Date/Time Started</th>
                             <th>Project Name</th>
                             <th>Buyer Name</th>
+                            <th>Sale Type</th>
                             <th>Status</th>
                         </thead>
                         <tbody>
@@ -109,6 +143,7 @@
                                 <td class="view-message  text-left">{{transaction.dateStart.toDate() | date: 'MMM-dd-yy hh:mm' }}</td>
                                 <td >{{transaction.projectName}}</td>
                                 <td >{{transaction.clientName}}</td>
+                                <td> {{transaction.projectSaleType}} </td>
                                 <td >{{transaction.status}}</td>
                             </tr>
                         </tbody>

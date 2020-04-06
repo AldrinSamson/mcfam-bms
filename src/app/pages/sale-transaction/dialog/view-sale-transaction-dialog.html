@@ -38,14 +38,43 @@
             <p>{{data.doc_status}}</p>
             <br>
             <div *ngIf="stage === 4 || stage === 5 ">
-                <h5> Commission Rate: </h5>
-                <br>
-                <p>{{data.commissionRate}}</p>
-                <br>
-                <h5> Commission Total: </h5>
-                <br>
-                <p>{{data.commissionTotal}}</p>
-                <br>
+                <div *ngIf="data.projectSaleType === 'For Sale'">
+                    <h5> Commission Rate: </h5>
+                    <br>
+                    <p>{{data.commissionRate}}</p>
+                    <br>
+                    <h5> Commission Total: </h5>
+                    <br>
+                    <p>{{data.commissionTotal}}</p>
+                    <br>
+                    <h5> Sale Total: </h5>
+                    <br>
+                    <p>{{data.saleTotal}}</p>
+                    <br>
+                </div>
+                <div *ngIf="data.projectSaleType === 'For Lease'">
+                    <h5> Lease Start: </h5>
+                    <br>
+                    <p>{{data.leaseMonth}} {{data.leaseYearStart}}</p>
+                    <br>
+                    <h5> Lease End: </h5>
+                    <br>
+                    <p>{{data.leaseMonth}} {{data.leaseYearEnd}}</p>
+                    <br>
+                    <h5> Lease Total: </h5>
+                    <br>
+                    <p>{{data.leaseTotal}}</p>
+                    <br>
+                    <h5> Commission Total: </h5>
+                    <br>
+                    <p>{{data.commissionTotal}}</p>
+                    <br>
+                    <h5> Sale Total: </h5>
+                    <br>
+                    <p>{{data.saleTotal}}</p>
+                    <br>
+                </div>
+                
             </div>
 
             
@@ -56,13 +85,23 @@
         <div *ngIf="stage == 3">
             <div *ngIf="authService.isManager()">
                 <button mat-button (click)="downloadDocs()" >Download Documents</button>
-                <button mat-button (click)="approveAndSetRate()">Approve and set commission</button>
+                <div *ngIf="data.projectSaleType == 'For Sale'">
+                    <button mat-button (click)="approveAndSetRate()">Approve and set commission</button>
+                </div>
+                <div *ngIf="data.projectSaleType == 'For Lease'">
+                    <button mat-button (click)="approveAndLease()">Approve and set Years to Lease</button>
+                </div>
                 <button mat-button (click)="disapprove()" >Disapprove</button>
             </div>
         </div>
         <div *ngIf="stage == 4">
             <div *ngIf="!authService.isManager()">
-                <button mat-button (click)="finalize()">Finalize</button>
+                <div *ngIf="data.projectSaleType === 'For Sale'">
+                    <button mat-button (click)="finalize()">Finalize Sale</button>
+                </div>
+                <div *ngIf="data.projectSaleType === 'For Lease'">
+                    <button mat-button (click)="finalizeLease()">Finalize Lease</button>
+                </div>
             </div>
         </div>
     </div>
@@ -77,6 +116,9 @@
     </div>
     <div *ngIf="buttonConfig == 'Cancelled'">
         <button mat-button (click)="delete()">Delete</button>
+    </div>
+    <div *ngIf="buttonConfig == 'Leased'">
+        <button mat-button (click)="endLeaase()">End Lease</button>
     </div>
 
     <button mat-button (click)="onNoClick()">Back</button> 

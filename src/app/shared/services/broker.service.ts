@@ -1,12 +1,8 @@
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-// import * as admin from 'firebase-admin';
-
-import { Broker } from '../models';
 import { AlertService } from './alert.service';
-import { flatMap } from 'rxjs/operators';
-import { throwError } from 'rxjs';
+import { HttpClient , HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +11,9 @@ export class BrokerService {
 
   constructor(public afAuth: AngularFireAuth,
     public db: AngularFirestore,
-    public alertService: AlertService) { }
+    public alertService: AlertService,
+    public http: HttpClient) { }
+
   profpic: any;
 
   createProcess(values) {
@@ -23,7 +21,7 @@ export class BrokerService {
       this.afAuth.auth.createUserWithEmailAndPassword(values.email, values.password)
         .then((authData) => {
           this.db.collection('broker').add({
-            //brokerId: values.brokerId,
+            // brokerId: values.brokerId,
             firstName: values.firstName,
             lastName: values.lastName,
             fullName: values.fullName,
@@ -43,7 +41,7 @@ export class BrokerService {
         .catch((_error) => {
           console.log('Broker Create Failed!', _error);
         });
-    })
+    });
   }
   async existUserNameCheck(values) {
     console.log(values);
@@ -53,19 +51,19 @@ export class BrokerService {
           ref.where('userName', '==', values)
         ).get().toPromise().then(function (querySnapshot) {
           console.log(querySnapshot.size);
-          if(querySnapshot.size >0){
-            //throw new Error('username already exist')
-            resolve('username already exist')
-          }else{
-            resolve('no account')
+          if (querySnapshot.size > 0) {
+            // throw new Error('username already exist')
+            resolve('username already exist');
+          } else {
+            resolve('no account');
           }
-        }).catch(err=>{
+        }).catch(err => {
           alert('' + err);
         });
-      })
-    
+      });
+
     } catch (err) {
-      
+
     }
   }
 
@@ -73,9 +71,9 @@ export class BrokerService {
     return new Promise(async resolve => {
       this.createProcess(values);
       resolve(null);
-    }).catch(err=>{
+    }).catch(err => {
       console.log('Broker Create Failed!', err);
-    })
+    });
 
   }
 
@@ -84,7 +82,7 @@ export class BrokerService {
   }
 
   updateBroker(id, values, photoURL) {
-    if(photoURL){
+    if (photoURL) {
       this.db.collection('broker').doc(id).update({
         photoURL: photoURL
       });
@@ -104,15 +102,25 @@ export class BrokerService {
     });
   }
 
-  deleteBroker(id) {
-    /*
-    admin.auth().deleteUser(id)
-    .then(function() {
-      console.log("Successfully deleted user");
-      })
-    .catch(function(error) {
-      console.log("Error deleting user:", error);
-    });
-    */
+  deleteBrokerAuth(uid) {
+    const url = 'https://us-central1-mcfam-systems.cloudfunctions.net/terminateUser';
+    const body: any = {
+      'uid' : uid,
+    };
+    const output = <JSON>body;
+    const httpOptions = {
+      responseType: 'text' as 'json'
+    };
+    return this.http.post<any>(url , <JSON>output , httpOptions ).subscribe({
+      error: error => console.error('There was an error!', error)
+    }).unsubscribe();
+  }
+
+  computeRating(uid) {
+    const url = 'https://us-central1-mcfam-systems.cloudfunctions.net/computeRating?uid=' + uid;
+    return this.http.options(url).subscribe({
+      error: error => console.error('There was an error!', error)
+    }).unsubscribe();
+
   }
 }

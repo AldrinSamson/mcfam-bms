@@ -4,6 +4,7 @@ import { MatDialog, MatDialogRef , MatDialogConfig , MAT_DIALOG_DATA } from '@an
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router, Params } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { registerLocaleData } from '@angular/common';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -17,6 +18,7 @@ export class SaleTransactionComponent implements OnInit , OnDestroy {
   activeTransactions: Array<any>;
   managerDisapprovedTransactions: Array<any>;
   cancelledTransactions: Array<any>;
+  leasedTransactions: Array<any>;
   completedTransactions: Array<any>;
   public transactionSub: Subscription;
   uid: String;
@@ -37,12 +39,19 @@ export class SaleTransactionComponent implements OnInit , OnDestroy {
   getUserTransactions() {
     this.transactionSub = this.transactionService.getTransaction(this.uid , this.isManager).subscribe( res => {
       this.transactions = res;
+
       this.activeTransactions = this.transactions.filter( res => res.isCompleted === false  && res.isDisapproved === false
-        && res.isCancelled === false );
+        && res.isCancelled === false && res.isLeased === false );
+
       this.managerDisapprovedTransactions = this.transactions.filter( res => res.isCompleted === false && res.isDisapproved === true);
-      this.cancelledTransactions = this.transactions.filter( res => res.isCompleted === false  && res.isCancelled === true );
+
+      this.cancelledTransactions = this.transactions.filter( res => res.isCancelled === true );
+
+      this.leasedTransactions = this.transactions.filter( res => res.isApproved === true && res.isLeased === true );
+
       this.completedTransactions = this.transactions.filter( res => res.isCompleted === true && res.isApproved === true
-        && res.isDisapproved === false && res.isCancelled === false );
+        && res.isDisapproved === false && res.isCancelled === false && res.isLeased === false );
+
     });
   }
 
@@ -70,7 +79,13 @@ export class SaleTransactionComponent implements OnInit , OnDestroy {
       buttonConfig: status,
       doc_status: value.doc_status,
       commissionRate : value.commissionRate,
-      commissionTotal : value.commissionTotal
+      commissionTotal : value.commissionTotal,
+      saleTotal: value.saleTotal,
+      yearsToLease: value.yearsToLease,
+      leaseTotal: value.leaseTotal,
+      leaseMonth: value.leaseMonth,
+      leaseYearStart: value.leaseYearStart,
+      leaseYearEnd : value.leaseYearEnd,
     };
     // tslint:disable-next-line:no-use-before-declare
     this.dialog.open(ViewSaleTransactionComponent, dialogConfig).afterClosed().subscribe(result => {
@@ -153,6 +168,17 @@ export class ViewSaleTransactionComponent {
     }
 
     finalize() {
+      this.trasactionService.finalizeSale(this.data.id);
+      this.dialogRef.close();
+    }
+
+    finalizeLease() {
+      this.trasactionService.finalizeLease(this.data.id);
+      this.dialogRef.close();
+    }
+
+    endLeaase() {
+      this.trasactionService.endLease(this.data.id);
       this.dialogRef.close();
     }
 
@@ -185,9 +211,17 @@ export class SetAgentRateComponent {
     }
 
     commission;
-    percentage;
-    total = parseInt(this.data.projectCost , 10) * this.percentage;
-    saleTotal = this.data.projectCost - this.total;
+    percentage ;
+    total ;
+    saleTotal ;
+    computed = false;
+
+    compute() {
+      this.percentage = this.commission / 100 ;
+      this.total = parseInt(this.data.projectCost , 10) * this.percentage;
+      this.saleTotal = this.data.projectCost - this.total;
+      this.computed = true;
+    }
 
     setCommission() {
       this.trasactionService.approveAndSetCommission(this.data.id , this.commission , this.total , this.saleTotal);
@@ -209,10 +243,14 @@ export class SetAgentRateComponent {
 
 export class SetLeaseYearComponent {
 
-  leaseYears;
-  leaseTotal = (this.leaseYears * 12) * this.data.projectCost;
-  commisionTotal = this.data.projectCost * this.leaseYears;
-  saleTotal = this.leaseYears.leaseTotal - this.commisionTotal;
+  leaseYears: Number ;
+  leaseTotal;
+  commisionTotal;
+  saleTotal;
+  leaseMonth;
+  leaseYearStart: Number;
+  leaseYearEnd;
+  computed = false;
 
 
   constructor(
@@ -223,8 +261,17 @@ export class SetLeaseYearComponent {
     ) {
     }
 
+    compute() {
+      this.leaseTotal = (+this.leaseYears * 12) * this.data.projectCost;
+      this.commisionTotal = this.data.projectCost * +this.leaseYears;
+      this.saleTotal = this.leaseTotal - this.commisionTotal;
+      this.leaseYearEnd = +this.leaseYearStart + +this.leaseYears;
+      this.computed = true;
+    }
+
     setLeaseYear() {
-      this.trasactionService.approveAndSetLease(this.data.id , this.leaseYears , this.leaseTotal , this.commisionTotal , this.saleTotal);
+      this.trasactionService.approveAndSetLease(this.data.id , this.leaseYears , this.leaseTotal , this.commisionTotal,
+         this.saleTotal , this.leaseMonth , this.leaseYearStart , this.leaseYearEnd);
       this.dialogRef.close();
     }
 
