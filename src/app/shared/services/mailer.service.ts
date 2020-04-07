@@ -50,7 +50,7 @@ export class MailerService {
       case 1 && 'manager':
 
         subject = 'Assigned Agent';
-        message = header + otherValues[0] + ' pepe go ' + otherValues[1] + footer;
+        message = header +   ' pepe go '  + footer;
 
         content.push(subject);
         content.push(message);
@@ -110,7 +110,7 @@ export class MailerService {
       // client has feedback
       case 5 && 'agent':
 
-        subject = 'Project Client Upload';
+        subject = 'Client Feedback';
         message = header + '<h3>Good day  ' + name + '!</h3>'
                 + '<br>' +
                 '<p>A client has sent a feedback on you. </p>'
@@ -123,7 +123,7 @@ export class MailerService {
       //client has cancelled
       case 'cancelled' && 'agent':
 
-        subject = 'Project Client Upload';
+        subject = 'Cancelled Request';
         message = header + '<h3>Good day  ' + name + '!</h3>'
                 + '<br>' +
                 '<p>' + otherValues[0] + 'has cancelled their request. </p>'
@@ -140,7 +140,7 @@ export class MailerService {
         subject = 'Document Status';
         message = header + '<h3>Good day  ' + name + '!</h3>'
                 + '<br>' +
-                '<p>Your request is disapproved by the manager. Please contact the manager for more information. Thank you very much!</p>'
+                '<p>Your request was disapproved by the manager. Please contact the manager for more information. Thank you very much!</p>'
                 + footer;
 
         content.push(subject);
@@ -152,7 +152,7 @@ export class MailerService {
         subject = 'Document Status';
         message = header + '<h3>Good day  ' + name + '!</h3>'
                 + '<br>' +
-                '<p>Your request is disapproved by the manager. Please contact the agent or manager for more information. Thank you very much!</p>'
+                '<p>Your request was disapproved by the manager. Please contact the agent or manager for more information. Thank you very much!</p>'
                 + footer;
 
         content.push(subject);
@@ -162,7 +162,7 @@ export class MailerService {
       //manager restored 
       case 'restored' && 'client':
 
-        subject = 'Project Status';
+        subject = 'Project Status Restored';
         message = header + '<h3>Good day  ' + name + '!</h3>'
                 + '<br>' +
                 '<p>The manager has restored the status of the project that you requested. For more information contact the agent or manager. Thank you!</p>'
@@ -174,7 +174,7 @@ export class MailerService {
 
       case 'restored' && 'agent':
 
-        subject = 'Project Status';
+        subject = 'Project Status Restored';
         message = header + '<h3>Good day  ' + name + '!</h3>'
                 + '<br>' +
                 '<p>The manager has restored the status of the project that you requested. For more information contact the manager. Thank you!</p>'
@@ -204,7 +204,7 @@ export class MailerService {
       content = this.genTransactionMessage(role, stage, project, otherValues);
     }
 
-    getEmail = this.db.collection(table, ref => ref.where('uid', '==', uid)).valueChanges().subscribe( (res: any) => {
+    getEmail = this.db.collection(table, ref => ref.where('email', '==', uid)).valueChanges().subscribe( (res: any) => {
       email = res[0].email;
       this.sendEmail(email , content[0] , content[1]);
       getEmail.unsubscribe();

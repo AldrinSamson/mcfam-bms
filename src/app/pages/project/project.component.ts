@@ -71,11 +71,11 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   openAddProject(): void {
     // this.router.navigate(['/project/add']);
-    //this.mailerService.mailTransactionMessage('sioAzNVKOlXkahhjcsEiwg1SErs1' ,'manager' , 1 ,'Mangahas Oasis', ['arara' , 'boom'] );
+    //this.mailerService.mailTransactionMessage('sioAzNVKOlXkahhjcsEiwg1SErs1' , 'manager' , 1 , 'Mangahas Oasis );
     this.mailerService.sendEmail('joshuabono0903@gmail.com', 'Mangahas Oasis', 'Mangahas Oasis');
   }
   openViewProject(value): void {
-    this.router.navigate(['/project/'+value.id+'']);
+    this.router.navigate(['/project/' + value.id + '']);
   }
 
   ngOnDestroy(): void {
