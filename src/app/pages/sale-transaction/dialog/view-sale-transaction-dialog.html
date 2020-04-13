@@ -74,6 +74,15 @@
                     <p>{{data.saleTotal}}</p>
                     <br>
                 </div>
+                <div *ngIf="data.rating">
+                    <h5> Rating: </h5>
+                    <br>
+                    <p>{{data.rating}} </p>
+                    <br>
+                    <h5> FeedBack: </h5>
+                    <br>
+                    <p>{{data.feedback}}</p>
+                </div>
                 
             </div>
 

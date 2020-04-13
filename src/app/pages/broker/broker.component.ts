@@ -62,7 +62,7 @@ export class BrokerComponent implements OnInit, OnDestroy {
     console.log(value);
     dialogConfig.data = {
       id: value.id,
-      brokerId: value.brokerId,
+      // brokerId: value.brokerId,
       firstName: value.firstName,
       lastName: value.lastName,
       userName: value.userName,
@@ -121,7 +121,7 @@ export class AddBrokerDialogComponent {
       this.userId = '';
     }
     this.addBrokerForm = this.fb.group({
-      brokerId: [''],
+      //brokerId: [''],
       firstName: [''],
       lastName: [''],
       userName: [''],
@@ -223,7 +223,7 @@ export class AddBrokerDialogComponent {
   }
   async insertBroker(url) {
     this.addBrokerForm = this.fb.group({
-      brokerId: [this.addBrokerForm.value.brokerId],
+      // brokerId: [this.addBrokerForm.value.brokerId],
       firstName: [this.addBrokerForm.value.firstName],
       lastName: [this.addBrokerForm.value.lastName],
       fullName: [this.addBrokerForm.value.firstName + ' ' + this.addBrokerForm.value.lastName],
@@ -335,7 +335,7 @@ export class ViewBrokerDialogComponent {
     this.isManager = this.authService.isManager();
 
     this.editBrokerForm = this.fb.group({
-      brokerId: [this.data.brokerId],
+      // brokerId: [this.data.brokerId],
       firstName: [this.data.firstName],
       lastName: [this.data.lastName],
       'fullName': [''],

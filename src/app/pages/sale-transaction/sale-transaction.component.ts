@@ -86,6 +86,8 @@ export class SaleTransactionComponent implements OnInit , OnDestroy {
       leaseMonth: value.leaseMonth,
       leaseYearStart: value.leaseYearStart,
       leaseYearEnd : value.leaseYearEnd,
+      rating: value.rating,
+      feedback: value.feedback
     };
     // tslint:disable-next-line:no-use-before-declare
     this.dialog.open(ViewSaleTransactionComponent, dialogConfig).afterClosed().subscribe(result => {

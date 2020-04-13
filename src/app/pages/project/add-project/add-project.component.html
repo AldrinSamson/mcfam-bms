@@ -7,7 +7,10 @@
                 <div class="card-body">
                     <div class="fb-profile">
                         <div *ngIf='cover_photo_file' class="toaddphotosdiv center" >
-                        <img align="left" class="fb-image-lg" [src]="cover_photo" alt="Add a cover photo">
+                            <img align="left" class="fb-image-lg" [src]="cover_photo" alt="Add a cover photo">
+                        </div>
+                        <div *ngIf='card_photo_file' class="toaddphotosdiv center" >
+                            <img align="right"  [src]="card_photo" alt="Add a card photo">
                         </div>
                     </div>
                     <div class = "row">
@@ -127,6 +130,12 @@
                                 Attach a cover photo<br>
                                 <button class="btn btn-primary" id='addbutton' (click)='addphotoview()'>Upload</button>
                                 <br><input hidden id='inputfileview' type="file" accept='image/*' (change)='addcoverphoto($event)' multiple>
+                            </label>
+                            <br>
+                            <label>
+                                Attach a card photo<br>
+                                <button class="btn btn-primary" id='addbutton2' (click)='addphotoview2()'>Upload</button>
+                                <br><input hidden id='inputfileview2' type="file" accept='image/*' (change)='addcardphoto($event)' multiple>
                             </label>
                             <br>
                             <div *ngFor='let ph of arrayphoto'>

@@ -18,7 +18,7 @@ export class TransactionService {
 
   getTransaction(uid: String,isManager:Boolean) {
 
-    if(isManager == true) {
+    if (isManager == true) {
       return this.db.collection('transaction', ref =>
       ref.where('managerUid', '==', uid))
       .valueChanges({ idField: 'id' });

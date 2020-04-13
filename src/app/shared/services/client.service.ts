@@ -30,8 +30,8 @@ export class ClientService {
                     email: values.email,
                     contactNumber : values.contactNumber,
                     //addressStreet: values.addressStreet,
-                    addressTown: values.addressTown,
-                    //addressCity: values.addressCity,
+                    //addressTown: values.addressTown,
+                    addressCity: values.addressCity,
                     addressRegion: values.addressRegion,
                     photoURL: values.photoURL,
                     uid : authData.user.uid,
@@ -50,9 +50,9 @@ export class ClientService {
                     fullName: values.fullName,
                     userName: values.userName,
                     contactNumber : values.contactNumber,
-                    //addressStreet: values.addressStreet,
-                    addressTown: values.addressTown,
-                   // addressCity: values.addressCity,
+                    // addressStreet: values.addressStreet,
+                    // addressTown: values.addressTown,
+                    addressCity: values.addressCity,
                     addressRegion: values.addressRegion,
     });
   }

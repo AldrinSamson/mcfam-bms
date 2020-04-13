@@ -37,6 +37,9 @@ export class AddProjectComponent implements OnInit, OnDestroy {
   arrayphoto = [];
   cover_photo: any;
   cover_photo_file: any;
+  card_photo: any;
+  card_photo_file: any;
+
 
   ngOnInit() {
     try {
@@ -51,7 +54,6 @@ export class AddProjectComponent implements OnInit, OnDestroy {
     public firebaseService: FirebaseService,
     public fb: FormBuilder,
     public fileservice: FileService,
-    private firestore: AngularFirestore,
     public brokerService: BrokerService,
     public dialog: MatDialog,
     public router: Router,
@@ -75,6 +77,7 @@ export class AddProjectComponent implements OnInit, OnDestroy {
       'agentName': [''],
       'photoURL': [''],
       'cover_photo': [''],
+      'card_photo': [''],
       isArchived: [false],
       isFeatured : [false]
     });
@@ -83,8 +86,6 @@ export class AddProjectComponent implements OnInit, OnDestroy {
   get amenities() {
     return this.addProjectForm.get('amenities') as FormArray;
   }
-
-  /////// This is new /////////////////
 
   addAmenities() {
     this.amenities.push(new FormControl(''));
@@ -100,18 +101,14 @@ export class AddProjectComponent implements OnInit, OnDestroy {
       this.addProjectForm.controls['agentUid'].setValue(this.selectedAgentUid);
       this.addProjectForm.controls['ownerClientName'].setValue(this.selectedClient);
       this.addProjectForm.controls['agentName'].setValue(this.selectedAgent);
-      // this.addProjectForm.controls['isFeatured'].setValue(this);
-      // this.fileupload();
-
-
     }
     if (this.picFile.length > 0) {
       this.fileupload();
     } else {
       this.submitFinal();
     }
-
   }
+
   submitFinal() {
     // console.log(this.);
     // this.addProjectForm.controls['photoURL'].setValue(this.filestored);
@@ -120,25 +117,25 @@ export class AddProjectComponent implements OnInit, OnDestroy {
     this.router.navigate(['/project']);
   }
 
-  uploadImageAsPromise(fl, islast) {
-    console.log(fl);
+  uploadImageAsPromise(file, islast) {
+    console.log(file);
     // var fs = this.fileservice;
-    const path = `project/storeFile${new Date().getTime()}_${fl.name}`;
+    const path = `project/storeFile${new Date().getTime()}_${file.name}`;
     return new Promise(function (resolvse, reject) {
       var storageRef = firebase.storage().ref(path);
 
       //Upload file 
-      var task = storageRef.put(fl);
-      console.log(JSON.stringify(fl));
+      var task = storageRef.put(file);
+      console.log(JSON.stringify(file));
       task.then(function (snapshot) {
         snapshot.ref.getDownloadURL().then(async function (url) {  // Now I can use url
           var file1 = {
-            name: fl.name,
-            lastModified: fl.lastModified,
-            lastModifiedDate: fl.lastModifiedDate,
-            webkitRelativePath: fl.webkitRelativePath,
-            size: fl.size,
-            type: fl.type
+            name: file.name,
+            lastModified: file.lastModified,
+            lastModifiedDate: file.lastModifiedDate,
+            webkitRelativePath: file.webkitRelativePath,
+            size: file.size,
+            type: file.type
           };
           const id = await this.firestore.createId();
           var fileprop = {
@@ -146,7 +143,7 @@ export class AddProjectComponent implements OnInit, OnDestroy {
             fileProperties: file1,
             uidUploaded: this.userId,
             section: 'BMS',
-            fileName: `storeFile${new Date().getTime()}_${fl.name}`,
+            fileName: `storeFile${new Date().getTime()}_${file.name}`,
             category: 'project',
             photoURL: url,
             path: path
@@ -171,30 +168,41 @@ export class AddProjectComponent implements OnInit, OnDestroy {
   async fileupload() {
     try {
       console.log(this.picFile);
-      var filestored = [];
-      //this.uploadprogress(this.picFile);
-      var savephotos = [];
-      for (var i = 0; i < this.picFile.length; i++) {
-        var fl = this.picFile[i];
-        //this.uploadImageAsPromise(this.picFile[i], islast);
-        const path = `project/storeFile${new Date().getTime()}_${fl.name}`;
-        var fileprop = await this.fileservice.upload_in_storage(path, fl, this.userId, 'project');
-        savephotos.push({ id: fileprop['id'], photoURL: fileprop['photoURL'] })
+      // var filestored = [];
+      // this.uploadprogress(this.picFile);
+      const savephotos = [];
+
+      for (let i = 0; i < this.picFile.length; i++) {
+        const file = this.picFile[i];
+        // this.uploadImageAsPromise(this.picFile[i], islast);
+        const path = `project/storeFile${new Date().getTime()}_${file.name}`;
+        const fileprop = await this.fileservice.upload_in_storage(path, file, this.userId, 'project');
+        savephotos.push({ id: fileprop['id'], photoURL: fileprop['photoURL'] });
       }
-      const path = `project/storeFile${new Date().getTime()}_${this.cover_photo_file.name}`;
-      var fileprop = await this.fileservice.upload_in_storage(path, this.cover_photo_file, this.userId, 'project');
+
+      const cover_photo_path = `project/storeFile${new Date().getTime()}_${this.cover_photo_file.name}`;
+      const cover_photo_fileprop = await this.fileservice.upload_in_storage(
+        cover_photo_path, this.cover_photo_file, this.userId, 'project');
+
+      const card_photo_path = `project/storeFile${new Date().getTime()}_${this.card_photo_file.name}`;
+      const card_photo_fileprop = await this.fileservice.upload_in_storage(
+        card_photo_path, this.card_photo_file, this.userId, 'project');
       console.log(savephotos);
+
       this.addProjectForm.controls['photoURL'].setValue(savephotos);
-      this.addProjectForm.controls['cover_photo'].setValue({ id: fileprop['id'], photoURL: fileprop['photoURL']} );
+      this.addProjectForm.controls['cover_photo'].setValue({ id: cover_photo_fileprop['id'], photoURL: cover_photo_fileprop['photoURL']} );
+      this.addProjectForm.controls['card_photo'].setValue({ id: card_photo_fileprop['id'], photoURL: card_photo_fileprop['photoURL']} );
       this.submitFinal();
     } catch (err) {
       alert(err.message);
     }
-  }
-  inputFileClick() {
-    document.getElementById('inputfile').click();
 
   }
+
+  inputFileClick() {
+    document.getElementById('inputfile').click();
+  }
+
   getFile(event) {
     this.picFile = event.target.files;
     console.log(this.picFile);
@@ -225,14 +233,21 @@ export class AddProjectComponent implements OnInit, OnDestroy {
   }
 
   trackByFn(i: number) {
-    return i
+    return i;
   }
+
   addphotoview() {
     document.getElementById('inputfileview').click();
   }
-  addcoverphotoview(){
-    
+
+  addphotoview2() {
+    document.getElementById('inputfileview2').click();
   }
+
+  addcoverphotoview() {
+
+  }
+
   addcoverphoto(file) {
     try {
       console.log(file.target.files);
@@ -246,35 +261,61 @@ export class AddProjectComponent implements OnInit, OnDestroy {
       }
 
       this.cover_photo_file = file.target.files[0];
-      var reader = new FileReader();
+      const reader = new FileReader();
       reader.onload = (event: any) => {
-        //console.log(event.target.result);
-        //this.arrayphoto.push(event.target.result);
+        // console.log(event.target.result);
+        // this.arrayphoto.push(event.target.result);
         this.cover_photo = event.target.result;
-      }
+      };
       reader.readAsDataURL(this.cover_photo_file);
     } catch (err) {
-
+      console.log(err);
     }
   }
-  addphotos(files) {
-    //this.arrayphoto=[];
 
-    this.viewFiles = files;
-    for (var i = 0; i < this.viewFiles.length; i++) {
-      var reader = new FileReader();
-      reader.onload = (event: any) => {
-        //console.log(event.target.result);
-        this.arrayphoto.push(event.target.result);
+  addcardphoto(file) {
+    try {
+      console.log(file.target.files);
+
+      if (file.target.files.length) {
+        document.getElementById('addbutton2').classList.remove('btn-primary');
+        document.getElementById('addbutton2').classList.add('btn-success');
+      } else {
+        document.getElementById('addbutton2').classList.add('btn-primary');
+        document.getElementById('addbutton2').classList.remove('btn-success');
       }
-      reader.readAsDataURL(files[i]);
+
+      this.card_photo_file = file.target.files[0];
+      const reader = new FileReader();
+      reader.onload = (event: any) => {
+        // console.log(event.target.result);
+        // this.arrayphoto.push(event.target.result);
+        this.card_photo = event.target.result;
+      };
+      reader.readAsDataURL(this.card_photo_file);
+    } catch (err) {
+      console.log(err);
     }
-
-
-    console.log(this.viewFiles);
-
-
   }
+
+  // addphotos(files) {
+  //   //this.arrayphoto=[];
+
+  //   this.viewFiles = files;
+  //   for (var i = 0; i < this.viewFiles.length; i++) {
+  //     var reader = new FileReader();
+  //     reader.onload = (event: any) => {
+  //       //console.log(event.target.result);
+  //       this.arrayphoto.push(event.target.result);
+  //     }
+  //     reader.readAsDataURL(files[i]);
+  //   }
+
+
+  //   console.log(this.viewFiles);
+
+
+  // }
 
   pickClient() {
     this.dialog.open(ViewProjectClientDialogComponent).afterClosed().subscribe(result => {
