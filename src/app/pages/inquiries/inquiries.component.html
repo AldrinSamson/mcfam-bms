@@ -1,29 +1,129 @@
 <div class = "main">
-    <div class="card">
-        <div class="card-header">
-             <h3>Customer Inquiries</h3>
-        </div>
-        <div class="card-body">
-            <div class="search">
-                  <input class="form-control" type="text" name="search"  autocomplete="off" placeholder="&#61442;  Search ">
+    <div *ngIf="!authService.isManager()">
+        <div class="card">
+            <div class="card-header">
+                 <h3>Customer Inquiries</h3>
             </div>
-    
-            <table class="table table-inbox table-hover">
-                <thead>
-                    <th>Date/Time Sent</th>
-                    <th>Project Name</th>
-                    <th>Client Name</th>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let inquiry of inquiries" (click)="openViewInquiry(inquiry)" >
-                        <td class="view-message  text-left">{{inquiry.dateSent.toDate() | date: 'MMM-dd-yy hh:mm' }}</td>
-                        <td >{{inquiry.projectName}}</td>
-                        <td >{{inquiry.clientName}}</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="card-body">
+                <mat-tab-group mat-align-tabs="center">
+                    <mat-tab label="Active">
+                        <div class="search">
+                            <input class="form-control" type="text" name="search"  autocomplete="off" placeholder="&#61442;  Search ">
+                        </div>
+              
+                        <table class="table table-inbox table-hover">
+                          <thead>
+                              <th>Date/Time Sent</th>
+                              <th>Project Name</th>
+                              <th>Client Name</th>
+                          </thead>
+                          <tbody>
+                              <tr *ngFor="let inquiry of activeBuyInquiries" (click)="openViewInquiry(inquiry)" >
+                                  <td class="view-message  text-left">{{inquiry.dateSent.toDate() | date: 'MMM-dd-yy hh:mm' }}</td>
+                                  <td >{{inquiry.projectName}}</td>
+                                  <td >{{inquiry.clientName}}</td>
+                              </tr>
+                          </tbody>
+                        </table>
+                    </mat-tab>
+                    <mat-tab label="Archived">
+                        <div class="search">
+                            <input class="form-control" type="text" name="search"  autocomplete="off" placeholder="&#61442;  Search ">
+                        </div>
+              
+                        <table class="table table-inbox table-hover">
+                          <thead>
+                              <th>Date/Time Sent</th>
+                              <th>Project Name</th>
+                              <th>Client Name</th>
+                          </thead>
+                          <tbody>
+                              <tr *ngFor="let inquiry of archivedBuyInquiries" (click)="openViewInquiry(inquiry)" >
+                                  <td class="view-message  text-left">{{inquiry.dateSent.toDate() | date: 'MMM-dd-yy hh:mm' }}</td>
+                                  <td >{{inquiry.projectName}}</td>
+                                  <td >{{inquiry.clientName}}</td>
+                              </tr>
+                          </tbody>
+                         </table>
+                    </mat-tab>
+                </mat-tab-group>
+            </div>
         </div>
-    </div>        
-    
-    
+    </div>
+    <div *ngIf="authService.isManager()">
+        <div class="card">
+            <div class="card-header">
+                 <h3>Customer Inquiries</h3>
+            </div>
+            <div class="card-body">
+                <mat-tab-group mat-align-tabs="center">
+                    <mat-tab label="Open">
+                        <div class="search">
+                            <input class="form-control" type="text" name="search"  autocomplete="off" placeholder="&#61442;  Search ">
+                        </div>
+                        <table class="table table-inbox table-hover">
+                          <thead>
+                              <th>Date/Time Sent</th>
+                              <th>Client Name</th>
+                              <th>City</th>
+                              <th>Region</th>
+                          </thead>
+                          <tbody>
+                              <tr *ngFor="let inquiry of openInquiries" (click)="openViewInquiry(inquiry , 'open')" >
+                                  <td class="view-message  text-left">{{inquiry.dateSent.toDate() | date: 'MMM-dd-yy hh:mm' }}</td>
+                                  <td >{{inquiry.clientName}}</td>
+                                  <td >{{inquiry.projectCity}}</td>
+                                  <td >{{inquiry.projectRegion}}</td>
+                              </tr>
+                          </tbody>
+                        </table>
+
+                    </mat-tab>
+                    <mat-tab label="Assigned">
+                        <div class="search">
+                            <input class="form-control" type="text" name="search"  autocomplete="off" placeholder="&#61442;  Search ">
+                        </div>
+                        <table class="table table-inbox table-hover">
+                          <thead>
+                              <th>Date/Time Sent</th>
+                              <th>Client Name</th>
+                              <th>City</th>
+                              <th>Region</th>
+                          </thead>
+                          <tbody>
+                              <tr *ngFor="let inquiry of activeSellInquiries" (click)="openViewInquiry(inquiry)" >
+                                  <td class="view-message  text-left">{{inquiry.dateSent.toDate() | date: 'MMM-dd-yy hh:mm' }}</td>
+                                  <td >{{inquiry.clientName}}</td>
+                                  <td >{{inquiry.projectCity}}</td>
+                                  <td >{{inquiry.projectRegion}}</td>
+                              </tr>
+                          </tbody>
+                        </table>
+                    </mat-tab>
+                    <mat-tab label="Archived">
+                        <div class="search">
+                            <input class="form-control" type="text" name="search"  autocomplete="off" placeholder="&#61442;  Search ">
+                        </div>
+              
+                        <table class="table table-inbox table-hover">
+                            <thead>
+                                <th>Date/Time Sent</th>
+                                <th>Client Name</th>
+                                <th>City</th>
+                                <th>Region</th>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let inquiry of archivedSellInquiries" (click)="openViewInquiry(inquiry)" >
+                                    <td class="view-message  text-left">{{inquiry.dateSent.toDate() | date: 'MMM-dd-yy hh:mm' }}</td>
+                                    <td >{{inquiry.clientName}}</td>
+                                    <td >{{inquiry.projectCity}}</td>
+                                    <td >{{inquiry.projectRegion}}</td>
+                                </tr>
+                            </tbody>
+                          </table>
+                    </mat-tab>
+                </mat-tab-group>
+            </div>
+        </div>
+    </div>
 </div>

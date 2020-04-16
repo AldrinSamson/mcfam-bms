@@ -170,7 +170,9 @@
                         <button mat-button color="warn" (click)="archiveProject()">Archive</button>
                         <button mat-button (click)="submitEditProjectForm()">Edit</button>
                     </div>
-                    <button mat-button (click)="openTransaction()">Sell</button>
+                    <div *ngIf="currentUid === project.agentUid">
+                        <button mat-button (click)="openTransaction()">Sell</button>
+                    </div>
                     <button mat-button (click)="onNoClick()">Back</button>
                 </div>
             </div>

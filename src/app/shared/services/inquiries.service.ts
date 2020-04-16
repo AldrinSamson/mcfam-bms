@@ -16,10 +16,28 @@ export class InquiriesService {
   constructor(public afAuth: AngularFireAuth,
     public db: AngularFirestore) { }
 
-  getInquiries(uid: String,isArchived: Boolean) {
-
-    return this.db.collection('inquiry', ref =>
-    ref.where('agentUid', '==', uid).where('isArchived', '==', isArchived))
+  getBuyInquiries(uid: String) {
+    return this.db.collection('buyInquiry', ref =>
+    ref.where('agentUid', '==', uid))
     .valueChanges({ idField: 'id' });
+  }
+
+  getOpenSellInquiries() {
+    return this.db.collection('sellInquiry', ref =>
+    ref.where('isAssigned', '==', false).where('isArchived', '==', false))
+    .valueChanges({ idField: 'id' });
+  }
+
+  getAssignedSellInquiries(uid: String) {
+    return this.db.collection('sellInquiry', ref =>
+    ref.where('managerUid', '==', uid))
+    .valueChanges({ idField: 'id' });
+  }
+
+  assignInquiry(tid , uid: String) {
+    return this.db.collection('sellInquiry').doc(tid).update({
+      managerUid: uid,
+      isAssigned: true
+    });
   }
 }

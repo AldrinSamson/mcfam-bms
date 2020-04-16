@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject , OnDestroy } from '@angular/core';
-import { FirebaseService } from '../../shared/services';
+import { FirebaseService, AuthService } from '../../shared/services';
 import { MatDialog, MatDialogRef , MatDialogConfig , MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router, Params } from '@angular/router';
@@ -14,27 +14,62 @@ import { Subscription } from 'rxjs';
 })
 export class InquiriesComponent implements OnInit, OnDestroy {
 
-    inquiries: Array<any>;
-    public inquirySub: Subscription;
+    buyInquiries: Array<any>;
+    sellInquiries: Array<any>;
+    openInquiries: Array<any>;
+    activeBuyInquiries: Array<any>;
+    archivedBuyInquiries: Array<any>;
+    activeSellInquiries: Array<any>;
+    archivedSellInquiries: Array<any>;
+
+    public buyInquirySub: Subscription;
+    public sellInquirySub: Subscription;
+    public openInquirySub: Subscription;
+
     uid: String;
+    isManager = false;
 
     constructor( public fbs: FirebaseService,
       public inquiryService: InquiriesService,
-      public dialog: MatDialog
-    ) {}
+      public dialog: MatDialog,
+      public authService: AuthService
+    ) {
+      this.isManager = this.authService.isManager();
+    }
 
     ngOnInit() {
       this.uid = sessionStorage.getItem('session-user-uid');
-      this.getUserInquiries();
+      if (!this.authService.isManager()) {
+        this.getUserBuyInquiries();
+      } else {
+        this.getOpenSellInquiries();
+        this.getUserSellInquiries();
+      }
     }
 
-    getUserInquiries() {
-      this.inquirySub = this.inquiryService.getInquiries(this.uid ,false).subscribe( result => {
-        this.inquiries = result;
+    getUserBuyInquiries() {
+      this.buyInquirySub = this.inquiryService.getBuyInquiries(this.uid).subscribe( result => {
+        this.buyInquiries = result;
+        this.activeBuyInquiries = this.buyInquiries.filter( res => res.isArchived === false );
+        this.archivedBuyInquiries = this.buyInquiries.filter( res => res.isArchived === true );
       });
     }
 
-    openViewInquiry(value): void {
+    getOpenSellInquiries() {
+      this.openInquirySub = this.inquiryService.getOpenSellInquiries().subscribe( result => {
+        this.openInquiries = result;
+      });
+    }
+
+    getUserSellInquiries() {
+      this.sellInquirySub = this.inquiryService.getAssignedSellInquiries(this.uid).subscribe( result => {
+        this.sellInquiries = result;
+        this.activeSellInquiries = this.sellInquiries.filter( res => res.isArchived === false );
+        this.archivedSellInquiries = this.sellInquiries.filter( res => res.isArchived === true );
+      });
+    }
+
+    openViewInquiry(value , isOpen?): void {
       const dialogConfig = new MatDialogConfig();
       dialogConfig.data = {
         id: value.id,
@@ -43,15 +78,32 @@ export class InquiriesComponent implements OnInit, OnDestroy {
         clientContactNumber: value.clientContactNumber,
         clientMessage: value.clientMessage,
         projectName: value.projectName,
+        projectCity: value.projectCity,
+        projectRegion: value.projectRegion,
+        projectPropertyType: value.projectPropertyType,
+        projectSaleType: value.projectSaleType,
+        uid: this.uid,
+        open: isOpen
       };
       this.dialog.open(ViewInquiryDialogComponent, dialogConfig).afterClosed().subscribe(result => {
-        this.getUserInquiries();
+        if (!this.authService.isManager()) {
+          this.getUserBuyInquiries();
+        } else {
+          this.getOpenSellInquiries();
+          this.getUserSellInquiries();
+        }
       });
     }
 
     ngOnDestroy() {
-      if(this.inquirySub != null){
-        this.inquirySub.unsubscribe();
+      if (this.buyInquirySub != null) {
+        this.buyInquirySub.unsubscribe();
+      }
+      if (this.sellInquirySub != null) {
+        this.sellInquirySub.unsubscribe();
+      }
+      if (this.openInquirySub != null) {
+        this.openInquirySub.unsubscribe();
       }
     }
 }
@@ -65,15 +117,26 @@ export class InquiriesComponent implements OnInit, OnDestroy {
 
 export class ViewInquiryDialogComponent {
 
+  public isManager = false;
+
   constructor(
     public firebaseService: FirebaseService,
+    public inquiriesService: InquiriesService,
+    public authService: AuthService,
     public dialogRef: MatDialogRef<ViewInquiryDialogComponent>,
     public fb: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: any
-    ) { }
+    ) { 
+      this.isManager = this.authService.isManager();
+    }
 
-  archiveInquiry() {
-    this.firebaseService.archiveOne(this.data.id , 'inquiry');
+  archiveInquiry(table) {
+    this.firebaseService.archiveOne(this.data.id , table);
+    this.dialogRef.close();
+  }
+
+  assignInquiry() {
+    this.inquiriesService.assignInquiry(this.data.id , this.data.uid);
     this.dialogRef.close();
   }
 

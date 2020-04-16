@@ -33,6 +33,7 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
   tree: UrlTree;
   userDetails: any;
   isManager = false;
+  currentUid;
   // Selector Data
   selectedClientUid: any;
   selectedClient: any;
@@ -75,8 +76,8 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.currentUid = sessionStorage.getItem('session-user-uid');
     this.getProject();
-
   }
 
   getProject() {

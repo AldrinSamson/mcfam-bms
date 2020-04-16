@@ -1,7 +1,7 @@
 <h2 mat-dialog-title>{{data.clientName}}'s Inquiry</h2>
 <div mat-dialog-content>
    
-            
+    <div *ngIf="!authService.isManager()">
             <h5> From: </h5>
             <br>
             <p>{{data.clientName}}</p>
@@ -22,10 +22,59 @@
             <br>
             <p>{{data.clientMessage}}</p>
             <br>
+    </div>
+    <div *ngIf="authService.isManager()">
+            <h5> From: </h5>
+            <br>
+            <p>{{data.clientName}}</p>
+            <br>
+            <h5> Email: </h5>
+            <br>
+            <p>{{data.clientEmail}}</p>
+            <br>
+            <h5> Contact Number: </h5>
+            <br>
+            <p>{{data.clientContactNumber}}</p>
+            <br>
+            <h5> City: </h5>
+            <br>
+            <p>{{data.projectCity}}</p>
+            <br>
+            <h5> Region: </h5>
+            <br>
+            <p>{{data.projectCity}}</p>
+            <br>
+            <h5> Property Type: </h5>
+            <br>
+            <p>{{data.projectPropertyType}}</p>
+            <br>
+            <h5> Sale Type: </h5>
+            <br>
+            <p>{{data.projectSaleType}}</p>
+            <br>
+            <h5> Message: </h5>
+            <br>
+            <p>{{data.clientMessage}}</p>
+            <br>
+    </div>
+            
+            
             
             
 </div>
 <div mat-dialog-actions>
-    <button mat-button (click) = "archiveInquiry()" >Archive</button>
+    <div *ngIf="data.open === 'open'">
+        <button mat-button (click) = "assignInquiry()" >Claim</button>
+    </div>
+    <div *ngIf="data.open != 'open'">
+        <div *ngIf="!authService.isManager()">
+            <button mat-button (click) = "archiveInquiry('buyInquiry')" >Archive</button>
+        </div>
+        <div *ngIf="authService.isManager()">
+            <button mat-button (click) = "archiveInquiry('sellInquiry')" >Archive</button>
+        </div>
+    </div>
+    
+    
     <button mat-button (click)="onNoClick()">Back</button> 
 </div>
