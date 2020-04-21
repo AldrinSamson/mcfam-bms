@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject , OnDestroy } from '@angular/core';
-import { FirebaseService, AuthService, TransactionService } from '../../shared';
+import { FirebaseService, AuthService, TransactionService , MailerService } from '../../shared';
 import { MatDialog, MatDialogRef , MatDialogConfig , MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router, Params } from '@angular/router';
@@ -118,6 +118,7 @@ export class ViewSaleTransactionComponent {
 
   constructor(
     public trasactionService: TransactionService,
+    public mailerService: MailerService,
     public dialogRef: MatDialogRef<ViewSaleTransactionComponent>,
     public dialog: MatDialog,
     public authService: AuthService,
@@ -133,6 +134,9 @@ export class ViewSaleTransactionComponent {
         dialogConfig.data = {
         id: this.data.id,
         agentName: this.data.agentName,
+        agentUid: this.data.agentUid,
+        clientUid: this.data.clientUid,
+        projectName: this.data.projectName,
         projectCost : this.data.projectCost
       };
       // tslint:disable-next-line:no-use-before-declare
@@ -146,6 +150,9 @@ export class ViewSaleTransactionComponent {
         dialogConfig.data = {
         id: this.data.id,
         agentName: this.data.agentName,
+        agentUid: this.data.agentUid,
+        clientUid: this.data.clientUid,
+        projectName: this.data.projectName,
         projectCost : this.data.projectCost
       };
       // tslint:disable-next-line:no-use-before-declare
@@ -157,6 +164,9 @@ export class ViewSaleTransactionComponent {
 
     disapprove() {
       this.trasactionService.disapprove(this.data.id);
+      const mailLoad = [ this.data.agentName ];
+      this.mailerService.mailTransactionMessage( this.data.clientUid , 'client' , 'disapproved' , this.data.projectName , mailLoad);
+      this.mailerService.mailTransactionMessage( this.data.agentUid , 'agent' , 'disapproved', this.data.projectName );
       this.dialogRef.close();
     }
 
@@ -166,16 +176,23 @@ export class ViewSaleTransactionComponent {
 
     reactivate() {
       this.trasactionService.restoreDisapproved(this.data.id);
+      const mailLoad = [ this.data.clientName ];
+      this.mailerService.mailTransactionMessage( this.data.clientUid , 'client' , 'restored' , this.data.projectName);
+      this.mailerService.mailTransactionMessage( this.data.agentUid , 'agent', 'restored', this.data.projectName , mailLoad );
       this.dialogRef.close();
     }
 
     finalize() {
       this.trasactionService.finalizeSale(this.data.id);
+      const mailLoad = [ this.data.agentName ];
+      this.mailerService.mailTransactionMessage( this.data.clientUid , 'client' , 4 , this.data.projectName , mailLoad);
       this.dialogRef.close();
     }
 
     finalizeLease() {
       this.trasactionService.finalizeLease(this.data.id);
+      const mailLoad = [ this.data.agentName ];
+      this.mailerService.mailTransactionMessage( this.data.clientUid , 'client' , 4 , this.data.projectName , mailLoad);
       this.dialogRef.close();
     }
 
@@ -206,6 +223,7 @@ export class SetAgentRateComponent {
 
   constructor(
     public trasactionService: TransactionService,
+    public mailerService: MailerService,
     public dialogRef: MatDialogRef<SetAgentRateComponent>,
     public authService: AuthService,
     @Inject(MAT_DIALOG_DATA) public data: any
@@ -227,6 +245,9 @@ export class SetAgentRateComponent {
 
     setCommission() {
       this.trasactionService.approveAndSetCommission(this.data.id , this.commission , this.total , this.saleTotal);
+      const mailLoad = [ this.data.agentName ];
+      this.mailerService.mailTransactionMessage( this.data.clientUid , 'client' , 3 , this.data.projectName , mailLoad);
+      this.mailerService.mailTransactionMessage( this.data.agentUid , 'agent' , 3 , this.data.projectName);
       this.dialogRef.close();
     }
 
@@ -257,6 +278,7 @@ export class SetLeaseYearComponent {
 
   constructor(
     public trasactionService: TransactionService,
+    public mailerService: MailerService,
     public dialogRef: MatDialogRef<SetAgentRateComponent>,
     public authService: AuthService,
     @Inject(MAT_DIALOG_DATA) public data: any
@@ -274,6 +296,9 @@ export class SetLeaseYearComponent {
     setLeaseYear() {
       this.trasactionService.approveAndSetLease(this.data.id , this.leaseYears , this.leaseTotal , this.commisionTotal,
          this.saleTotal , this.leaseMonth , this.leaseYearStart , this.leaseYearEnd);
+      const mailLoad = [ this.data.agentName ];
+      this.mailerService.mailTransactionMessage( this.data.clientUid , 'client' , 3 , this.data.projectName , mailLoad);
+      this.mailerService.mailTransactionMessage( this.data.agentUid , 'agent' , 3 , this.data.projectName);
       this.dialogRef.close();
     }
 

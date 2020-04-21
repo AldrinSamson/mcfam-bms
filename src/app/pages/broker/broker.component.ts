@@ -121,7 +121,7 @@ export class AddBrokerDialogComponent {
       this.userId = '';
     }
     this.addBrokerForm = this.fb.group({
-      //brokerId: [''],
+      // brokerId: [''],
       firstName: [''],
       lastName: [''],
       userName: [''],
@@ -288,7 +288,7 @@ export class AddBrokerDialogComponent {
     if (this.picFile.length) {
       document.getElementById('uploadbtn').classList.remove('btn-primary');
       document.getElementById('uploadbtn').classList.add('btn-success');
-      this.qtyinput = 'a file attached'; 
+      this.qtyinput = 'a file attached';
     } else {
       document.getElementById('uploadbtn').classList.remove('btn-success');
       document.getElementById('uploadbtn').classList.add('btn-primary');

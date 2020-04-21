@@ -35,7 +35,7 @@ import { AddProjectComponent , ViewProjectClientDialogComponent , ViewProjectAge
 
 import { ViewProjectComponent, ViewProjectClientDialogComponent2 , ViewProjectAgentDialogComponent2 , SaleProjectDialogComponent } from './pages/project/view-project/view-project.component';
 import { InquiriesComponent , ViewInquiryDialogComponent } from './pages/inquiries/inquiries.component';
-import { SaleTransactionComponent , ViewSaleTransactionComponent , SetAgentRateComponent ,SetLeaseYearComponent } from './pages/sale-transaction/sale-transaction.component';
+import { SaleTransactionComponent , ViewSaleTransactionComponent , SetAgentRateComponent , SetLeaseYearComponent } from './pages/sale-transaction/sale-transaction.component';
 import { ClientComponent, AddClientDialogComponent, ViewClientDialogComponent } from './pages/client/client.component';
 import { ProjectArchiveComponent , ViewProjectArchiveDialogComponent } from './pages/project-archive/project-archive.component';
 import { AuditComponent } from './pages/audit/audit.component';
@@ -119,7 +119,8 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
     AuthService,
     WindowService,
     AngularFireStorage,
-    
+    BrowserAnimationsModule,
+    BrowserModule
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

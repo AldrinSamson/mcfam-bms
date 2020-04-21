@@ -21,61 +21,58 @@ export class MailerService {
       'subject' : subject,
       'message' : message,
     };
-    let output = <JSON>body;
-    let httpOptions = {
+    const output = <JSON>body;
+    const httpOptions = {
       responseType: 'text' as 'json'
     };
     return this.http.post<any>(url , <JSON>output , httpOptions ).subscribe({
       error: error => console.error('There was an error!', error)
-    })
+    });
   }
 
-  genTransactionMessage(role: any, stage: any, project: String, otherValues?: Array<any>){
+  genTransactionMessage(role: any, stage: any, project: String, otherValues?: Array<any>) {
 
     let subject: String;
     let message: String;
-    let content = [];
+    const content = [];
 
-    let header = '<img _ngcontent-arm-c2="" src="/assets/img/temp-icon.jpg">';
-    let footer = '&copy; 2020 MCFam Reality. All rights Reserved.'
+    const header = '<img _ngcontent-arm-c2="" src="https://firebasestorage.googleapis.com/v0/b/mcfam-systems.appspot.com/o/broker%2FstoreFile1587285467947_image.png?alt=media&token=ebf3e94d-3df2-485c-a03e-dbdf7e63e06c">';
+    const footer = '&copy; 2020 MCFam Reality. All rights Reserved.'
                   + '<br>' +
                   'Insert Address here'
                   + '<br>' +
-                  'Sales Hotline: insert Number'
-    ;
+                  'Sales Hotline: insert Number';
 
     switch (stage && role) {
 
-      //broker initiate
+      // broker initiate
       case 1 && 'manager':
 
-        subject = 'Assigned Agent';
-        message = header +   ' pepe go '  + footer;
+        subject = 'Transaction for ' + project + ' was started';
+        message = header +   'Agent ' + otherValues[0] + ' has started a transaction on project ' + project +
+        ' for Client ' + otherValues[1]  + footer;
 
         content.push(subject);
         content.push(message);
         return content;
 
-      //client has uploaded
-      case 2 && 'manager':
+      case 1 && 'client':
 
-        subject = 'Client Documents';
-        message = header + '<h3>Good day  ' + name + '!</h3>'
-                + '<br>' +
-                '<p> ' + otherValues[0] +  ', has already uploaded the required documents. </p>'
-                + footer;
-        // 0= client's name
+        subject = 'Your Transaction for ' + project + 'has been started';
+        message = header +   'Agent ' + otherValues[0] + ' has started your trasaction, kindly go to your transactions section '
+        + 'in the our website and upload the required documents'  + footer;
+
         content.push(subject);
         content.push(message);
         return content;
 
-      //manager has approved
+      // manager has approved
       case 3 && 'client':
 
-        subject = 'Approval of Manager';
-        message = header + '<h3>Good day  ' + name + '!</h3>'
-                + '<br>' +
-                '<p>The manager has received and approved your uploaded documents.</p>'
+        subject = 'Approval of Manager for transaction on ' + project;
+        message = header +
+                '<p>The Manager has received and approved your uploaded documents. Please wait for Agent '
+                + otherValues[0] + 'to contact you </p>'
                 + footer;
 
         content.push(subject);
@@ -84,10 +81,9 @@ export class MailerService {
 
       case 3 && 'agent':
 
-        subject = 'Approval of Manager';
-        message = header + '<h3>Good day  ' + name + '!</h3>'
-                + '<br>' +
-                '<p>The manager has received and approved your request.</p>'
+        subject = 'Approval of Manager for transaction on ' + project;
+        message = header +
+                '<p>The manager has received and approved your client&#39;s documents. Please contact them as soon as possible.</p>'
                 + footer;
 
         content.push(subject);
@@ -97,50 +93,23 @@ export class MailerService {
       // transaction has been finalized
       case 4 && 'client':
 
-        subject = 'Transaction Status';
-        message = header + '<h3>Good day  ' + name + '!</h3>'
-                + '<br>' +
-                '<p>The transaction of the project is now complete. Please contact the agent for further informations.</p>'
+        subject = 'Transaction Status for ' + project;
+        message = header +
+                '<p>The transaction of the project is now complete. We have deleted your documents from our database. ' +
+                'Please contact Agent ' + otherValues[0] + ' for more information.</p>'
                 + footer;
 
         content.push(subject);
         content.push(message);
         return content;
 
-      // client has feedback
-      case 5 && 'agent':
-
-        subject = 'Client Feedback';
-        message = header + '<h3>Good day  ' + name + '!</h3>'
-                + '<br>' +
-                '<p>A client has sent a feedback on you. </p>'
-                + footer;
-
-        content.push(subject);
-        content.push(message);
-        return content;
-
-      //client has cancelled
-      case 'cancelled' && 'agent':
-
-        subject = 'Cancelled Request';
-        message = header + '<h3>Good day  ' + name + '!</h3>'
-                + '<br>' +
-                '<p>' + otherValues[0] + 'has cancelled their request. </p>'
-                + footer;
-
-        content.push(subject);
-        content.push(message);
-        return content;
-      //0= client's name
-
-      //manager disapproved
+      // manager disapproved
       case 'disapproved' && 'client':
 
         subject = 'Document Status';
-        message = header + '<h3>Good day  ' + name + '!</h3>'
-                + '<br>' +
-                '<p>Your request was disapproved by the manager. Please contact the manager for more information. Thank you very much!</p>'
+        message = header +
+                '<p>Your transaction for ' + project + ' was disapproved by our manager. We have deleted your documents from our database. Please contact Agent ' +
+                otherValues[0] + ' for more information. Thank you very much!</p>'
                 + footer;
 
         content.push(subject);
@@ -150,22 +119,20 @@ export class MailerService {
       case 'disapproved' && 'agent':
 
         subject = 'Document Status';
-        message = header + '<h3>Good day  ' + name + '!</h3>'
-                + '<br>' +
-                '<p>Your request was disapproved by the manager. Please contact the agent or manager for more information. Thank you very much!</p>'
+        message = header +
+                '<p>Your client&#39;s transaction for ' + project + ' was disapproved by the manager. Please contact the manager for more information.</p>'
                 + footer;
 
         content.push(subject);
         content.push(message);
         return content;
 
-      //manager restored 
+      // manager restored
       case 'restored' && 'client':
 
-        subject = 'Project Status Restored';
-        message = header + '<h3>Good day  ' + name + '!</h3>'
-                + '<br>' +
-                '<p>The manager has restored the status of the project that you requested. For more information contact the agent or manager. Thank you!</p>'
+        subject = 'Transaction Status Restored';
+        message = header +
+                '<p>The manager has restored your transaction for ' + project + '. Please return to your transactions section of our website and upload the required documents. Thank you!</p>'
                 + footer;
 
         content.push(subject);
@@ -174,10 +141,9 @@ export class MailerService {
 
       case 'restored' && 'agent':
 
-        subject = 'Project Status Restored';
-        message = header + '<h3>Good day  ' + name + '!</h3>'
-                + '<br>' +
-                '<p>The manager has restored the status of the project that you requested. For more information contact the manager. Thank you!</p>'
+        subject = 'Transaction Status Restored';
+        message = header +
+                '<p>The manager has restored the transaction for ' + project + ' of Client' + otherValues[0] + '.</p>'
                 + footer;
 
         content.push(subject);
@@ -187,14 +153,14 @@ export class MailerService {
 
   }
 
-  mailTransactionMessage( uid: string , role: string, stage: number, project: String, otherValues?: Array<any>){
+  mailTransactionMessage( destUid: string , role: string, stage: any, project: String, otherValues?: Array<any>) {
 
     let content = [];
     let email: any;
     let table = 'broker';
-    let getEmail: Subscription
+    let getEmail: Subscription;
 
-    if ( role == 'client') {
+    if ( role === 'client') {
       table = 'client';
     }
 
@@ -204,7 +170,7 @@ export class MailerService {
       content = this.genTransactionMessage(role, stage, project, otherValues);
     }
 
-    getEmail = this.db.collection(table, ref => ref.where('email', '==', uid)).valueChanges().subscribe( (res: any) => {
+    getEmail = this.db.collection(table, ref => ref.where('email', '==', destUid)).valueChanges().subscribe( (res: any) => {
       email = res[0].email;
       this.sendEmail(email , content[0] , content[1]);
       getEmail.unsubscribe();

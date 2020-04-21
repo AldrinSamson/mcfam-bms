@@ -1,35 +1,35 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AuthService } from './auth.service';
-import { MailerService } from './mailer.service'
+import { MailerService } from './mailer.service';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class TransactionService {
-  
-  
+
+
 
   constructor(public db: AngularFirestore,
-    public mailerService: MailerService) { 
-   
+    public mailerService: MailerService) {
+
   }
 
-  getTransaction(uid: String,isManager:Boolean) {
+  getTransaction(uid: String, isManager: Boolean) {
 
-    if (isManager == true) {
+    if (isManager === true) {
       return this.db.collection('transaction', ref =>
       ref.where('managerUid', '==', uid))
       .valueChanges({ idField: 'id' });
-    }else{
+    } else {
       return this.db.collection('transaction', ref =>
       ref.where('agentUid', '==', uid))
       .valueChanges({ idField: 'id' });
     }
   }
 
-  approveAndSetCommission(tid , rate , total , saleTotal){
+  approveAndSetCommission(tid , rate , total , saleTotal) {
     return this.db.collection('transaction').doc(tid).update({
       commissionRate: rate,
       commissionTotal: total,
@@ -59,7 +59,7 @@ export class TransactionService {
     });
   }
 
-  disapprove(tid){
+  disapprove(tid) {
     return this.db.collection('transaction').doc(tid).update({
       isDisapproved: true,
       dateDisapproved: new Date(),
@@ -68,7 +68,7 @@ export class TransactionService {
     });
   }
 
-  restoreDisapproved(tid){
+  restoreDisapproved(tid) {
     return this.db.collection('transaction').doc(tid).update({
       stage: 2,
       isDisapproved: false,
@@ -77,7 +77,7 @@ export class TransactionService {
     });
   }
 
-  finalizeSale(tid ){
+  finalizeSale(tid ) {
     return this.db.collection('transaction').doc(tid).update({
       stage: 5,
       isCompleted: true,
@@ -106,7 +106,7 @@ export class TransactionService {
     });
   }
 
-  deleteTransaction(tid){
-    return this.db.collection('transaction').doc(tid).delete()
+  deleteTransaction(tid) {
+    return this.db.collection('transaction').doc(tid).delete();
   }
 }

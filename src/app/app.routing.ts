@@ -9,7 +9,6 @@ import { PageNotFoundComponent } from './pages/not-found/not-found.component';
 import { AboutMeComponent } from './pages/about-me/about-me.component';
 import { ContactComponent } from './pages/contact/contact.component';
 import { AuthComponent } from './pages/auth/auth.component';
-import { ProfileComponent } from './pages/profile/profile.component';
 import { ProfileSettingsComponent } from './pages/profile/profile-settings.component';
 import { ProjectComponent } from './pages/project/project.component';
 import { BrokerComponent } from './pages/broker/broker.component';
@@ -43,7 +42,6 @@ const appRoutes: Routes = [
 
   // Protected pages
   // { path: 'profile/:uid/:name', component: ProfileComponent, canActivate: [AuthGuardService] },
-  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService] },
   { path: 'profile-settings', component: ProfileSettingsComponent, canActivate: [AuthGuardService] },
   { path: 'project' , component: ProjectComponent, canActivate: [AuthGuardService] },
   { path: 'project/add' , component: AddProjectComponent, canActivate: [AuthGuardService] },

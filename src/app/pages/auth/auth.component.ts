@@ -13,9 +13,9 @@ import * as firebase from 'firebase';
   styleUrls: ['./auth.component.scss']
 })
 export class AuthComponent {
-  email='';
-  passw='';
- 
+  email = '';
+  passw = '';
+
   constructor(private authService: AuthService,
     private router: Router,
     public fbs: FirebaseService,
@@ -25,14 +25,14 @@ export class AuthComponent {
   //   this.router.navigate(['/project']);
   //   return this.authService.onSuccess();
   // }
-  
-  
-  login(){
-    this.authService.login(this.email,this.passw).then(() => {
+
+
+  login() {
+    this.authService.login(this.email, this.passw).then(() => {
     });
-    
+
   }
 
-  
+
 
 }

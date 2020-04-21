@@ -8,10 +8,10 @@ import { AlertService } from './alert.service';
 @Injectable()
 export class AuthService {
   public token: any;
-  userDetails : Array<any>;
+  userDetails: Array<any>;
   userUid: any;
   userPosition: any;
- 
+
 
   constructor(public afAuth: AngularFireAuth,
     private router: Router,
@@ -20,23 +20,27 @@ export class AuthService {
     private alert: AlertService) { }
 
   async login(email: string, password: string) {
-    //console.log(" user auth "+this.isAuthenticated());
+    // console.log(" user auth "+this.isAuthenticated());
     try {
 
-      var result = await this.afAuth.auth.signInWithEmailAndPassword(email, password).then( res => {
-        this.userUid = res.user.uid
+      const result = await this.afAuth.auth.signInWithEmailAndPassword(email, password).then( res => {
+        this.userUid = res.user.uid;
         this.db.collection('broker', ref => ref.where('uid', '==', res.user.uid)).valueChanges().forEach( result => {
-        this.userDetails = result
-        console.log(this.userDetails)
-        sessionStorage.setItem('session-alive', 'true');
-        sessionStorage.setItem('session-user-uid', this.userUid)
-        sessionStorage.setItem('session-user-details', JSON.stringify(this.userDetails[0]));    
-        this.router.navigate(['/project']);
-      })
+          this.userDetails = result;
+          if (result.length !== 0) {
+            sessionStorage.setItem('session-alive', 'true');
+            sessionStorage.setItem('session-user-uid', this.userUid);
+            sessionStorage.setItem('session-user-details', JSON.stringify(this.userDetails[0]));
+            this.router.navigate(['/project']);
+          } else {
+            this.alert.showToaster('You\'re using a BSRE account');
+          }
+
+      });
       });
     } catch (err) {
       console.log(err);
-      this.alert.showToaster("Email or Password is wrong");
+      this.alert.showToaster('Email or Password is wrong');
     }
   }
 
@@ -61,13 +65,13 @@ export class AuthService {
   }
 
   public isManager() {
-    this.userPosition = JSON.parse(sessionStorage.getItem('session-user-details'))
-    if(!this.isAuthenticated()){
-      return false
-    } else if (this.userPosition.position == "Manager") {
-      return true
-    }else {
-      return false
+    this.userPosition = JSON.parse(sessionStorage.getItem('session-user-details'));
+    if (!this.isAuthenticated()) {
+      return false;
+    } else if (this.userPosition.position === 'Manager') {
+      return true;
+    } else {
+      return false;
     }
-  }  
+  }
 }

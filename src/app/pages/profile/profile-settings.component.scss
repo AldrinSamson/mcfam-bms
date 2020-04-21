@@ -5,26 +5,63 @@
 form {
     text-align: center;
 }
-
-mat-card {
-    width: 400px;
-    height: 530px;
-    margin: 100px auto;
-}
-
-mat-form-field {
-    width: 100%;
-}
-
-textarea {
-    resize: none;
-}
-
 .avatar {
     margin: 10px auto;
     width: 120px;
 }
+mat-card {
+    width: 400px;
+    //height: 530px;
+    margin: 100px auto;
+}
+.avatar img {
+    width: 120px;
+    height: 120px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 50%;
+}
+
+
+   
+::ng-deep{
+    .mat-card-header-text{
+        width: 100%;
+    }
+}
+
+
+textarea {
+    resize: none;
+}
+.changeprofpicdiv{
+    display: none;
+    padding: 5px;
+    font-size: 10px;
+}
+.changeprofpic{
+    padding: 5px;
+    font-size: 10px;
+}
+.avatar {
+    margin: 10px auto;
+    width: 100%;
+    
+}
 
 a:hover {
     text-decoration: none;
+}
+.progress_bar{
+    width: 80%;
+    background-color: lightgray;
+    border-radius: 5px;
+    text-align: left;
+    border: solid 1px;
+    cursor: default;
+}
+.progress_bar_indic{
+    height: 8px;
+    font-size: 0;
+    background-color: green;
 }

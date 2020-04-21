@@ -48,7 +48,9 @@
 
     <hr>
     
-    <button mat-button routerLink="/profile"(click)="sidenav.close()">
+    <button mat-button routerLink="/profile-settings"
+          [queryParams]="{profile: '1'}"
+          fragment="editProfile" (click)="sidenav.close()">
       <mat-icon class="logout">face</mat-icon>
       <span>Profile</span>
     </button>

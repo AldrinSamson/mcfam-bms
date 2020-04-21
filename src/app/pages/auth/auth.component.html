@@ -1,32 +1,33 @@
-
-<div class="thebody center">
-  <!---
-  <h1>Login</h1>
-  <br>
-  <label>
-    Email:<br>
-    <input type='text' [(ngModel)]='email'>
-  </label>
-  <br>
-  <label>
-    Password:<br>
-    <input type='password' [(ngModel)]='passw'>
-  </label><br>
-  <button (click)='login()'>Login</button>
-  <br>
-  <br>
--->
-  
-
-  <div class="form-group">
-    <label for=""><b>Email</b>
-      <input type="text" class="form-control" placeholder="Enter Email" name="email" [(ngModel)]='email'>
-    </label>
-    <br>
-    <label for="psw"><b>Password</b>
-      <input type="password" class="form-control" placeholder="Enter Password" name="psw" [(ngModel)]='passw'>
-    </label>
-    <button type="submit" class="btn btn-success" (click)='login()'>Login</button>
-  </div>
-
+<div class="container">
+	<div class="d-flex justify-content-center h-100">
+		<div class="main-auth">
+       <div class="card">
+            <div class="card-header">
+              <h3>Log In</h3>
+            </div>
+            <div class="card-body" >
+                <div class="input-group form-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><mat-icon>alternate_email</mat-icon></span>
+                  </div>
+                  <input type="text" class="form-control" placeholder="Email" [(ngModel)]='email' > 
+                </div>
+                <div class="input-group form-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><mat-icon>vpn_key</mat-icon></span>
+                  </div>
+                  <input type="password" class="form-control" placeholder="Password" [(ngModel)]='passw' >
+                </div>
+                <div class="form-group">
+                  <button (click)='login()' class="btn float-right login_btn">Login</button>
+                </div>
+            </div>
+            <div class="card-footer">
+              <div class="d-flex justify-content-center">
+                <a href="#">Forgot your password?</a>
+              </div>
+            </div>
+          </div>  
+    </div>
+	</div>
 </div>

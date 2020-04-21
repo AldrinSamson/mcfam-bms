@@ -126,7 +126,7 @@ export class ViewInquiryDialogComponent {
     public dialogRef: MatDialogRef<ViewInquiryDialogComponent>,
     public fb: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: any
-    ) { 
+    ) {
       this.isManager = this.authService.isManager();
     }
 
