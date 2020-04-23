@@ -283,6 +283,7 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
       }
       console.log( this.editProjectForm);
       this.projectService.updateProject(this.projectID, this.editProjectForm.value);
+      this.firebaseService.audit('Project' , 'Edited Project ' + this.editProjectForm.value.name);
 
 
       /**/
@@ -415,6 +416,7 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
 
   archiveProject() {
     this.firebaseService.archiveOne(this.project.id, 'project');
+    this.firebaseService.audit('Project' , 'Archived Project ' + this.project.name);
     this.router.navigate(['/project']);
   }
 

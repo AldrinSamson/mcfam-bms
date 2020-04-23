@@ -137,6 +137,7 @@ export class ViewInquiryDialogComponent {
 
   assignInquiry() {
     this.inquiriesService.assignInquiry(this.data.id , this.data.uid);
+    this.firebaseService.audit('Sell Inquiry' , 'Claimed Sell Inquiry of ' + this.data.clientName);
     this.dialogRef.close();
   }
 

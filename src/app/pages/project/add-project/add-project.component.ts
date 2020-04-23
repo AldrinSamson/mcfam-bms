@@ -79,7 +79,8 @@ export class AddProjectComponent implements OnInit, OnDestroy {
       'cover_photo': [''],
       'card_photo': [''],
       isArchived: [false],
-      isFeatured : [false]
+      isFeatured : [false],
+      dateAdded: new Date()
     });
   }
 
@@ -114,6 +115,7 @@ export class AddProjectComponent implements OnInit, OnDestroy {
     // this.addProjectForm.controls['photoURL'].setValue(this.filestored);
     console.log(this.addProjectForm);
     this.firebaseService.addOne(this.addProjectForm.value, 'project');
+    this.firebaseService.audit('Project' , 'Created Project ' + this.addProjectForm.value.name);
     this.router.navigate(['/project']);
   }
 

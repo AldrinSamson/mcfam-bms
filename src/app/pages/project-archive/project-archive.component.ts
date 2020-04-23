@@ -104,11 +104,13 @@ export class ViewProjectArchiveDialogComponent {
 
     restoreProject() {
       this.firebaseService.restoreOne(this.data.id , 'project');
-        this.dialogRef.close();
+      this.firebaseService.audit('Project' , 'Restored Project ' + this.data.name);
+      this.dialogRef.close();
     }
 
     destroyProject() {
       this.firebaseService.deleteOne(this.data.id , 'project');
+      this.firebaseService.audit('Project' , 'Deleted Project ' + this.data.name);
       this.dialogRef.close();
     }
 

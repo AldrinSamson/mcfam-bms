@@ -10,7 +10,7 @@ import { Subscription } from 'rxjs';
 })
 export class AuditComponent implements OnInit , OnDestroy {
 
-  displayedColumnsAudit: string[] = ['date' , 'level' , 'name' ,  'action' ];
+  displayedColumnsAudit: string[] = ['date' , 'level' , 'name' , 'type' , 'action' ];
   public auditSub: Subscription;
   audits: MatTableDataSource<any>;
 

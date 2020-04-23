@@ -112,6 +112,7 @@ export class AddBrokerDialogComponent {
     public BrokerService: BrokerService,
     public dialogRef: MatDialogRef<AddBrokerDialogComponent>,
     public fileservice: FileService,
+    public firebaseService: FirebaseService,
     public fb: FormBuilder,
     private firestore: AngularFirestore,
   ) {
@@ -240,7 +241,8 @@ export class AddBrokerDialogComponent {
       password: [this.addBrokerForm.value.password]
     });
     console.log(this.addBrokerForm.value);
-    return this.BrokerService.createBroker(this.addBrokerForm.value);
+    this.BrokerService.createBroker(this.addBrokerForm.value);
+    this.firebaseService.audit('Broker' , 'Created Broker ' + this.addBrokerForm.value.fullName);
 
   }
   async submitAddBrokerForm() {
@@ -363,6 +365,7 @@ export class ViewBrokerDialogComponent {
       const fullName = this.data.firstName + ' ' + this.data.lastName;
       this.editBrokerForm.controls['fullName'].setValue(fullName);
       this.BrokerService.updateBroker(this.data.id, this.editBrokerForm.value, photoURL);
+      this.firebaseService.audit('Broker' , 'Edited Broker ' + this.editBrokerForm.value.fullName);
       this.dialogRef.close();
     }
   }
@@ -386,7 +389,8 @@ export class ViewBrokerDialogComponent {
   deleteBroker() {
     this.firebaseService.deleteOne(this.data.id, 'broker');
     this.firebaseService.deleteOne(this.data.uid, 'users');
-    // this.BrokerService.deleteBroker(this.data.uid)
+    this.BrokerService.deleteBrokerAuth(this.data.uid);
+    this.firebaseService.audit('Broker' , 'Deleted Broker ' + this.data.fullName);
     this.dialogRef.close();
   }
 

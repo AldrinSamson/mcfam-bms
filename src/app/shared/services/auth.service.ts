@@ -4,6 +4,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import * as firebase from 'firebase';
 import { AlertService } from './alert.service';
+import { FirebaseService } from './firebase.service';
 
 @Injectable()
 export class AuthService {
@@ -17,7 +18,8 @@ export class AuthService {
     private router: Router,
     private auth: AngularFireAuth,
     private db: AngularFirestore,
-    private alert: AlertService) { }
+    private alert: AlertService,
+    public fbs: FirebaseService) { }
 
   async login(email: string, password: string) {
     // console.log(" user auth "+this.isAuthenticated());
@@ -31,6 +33,7 @@ export class AuthService {
             sessionStorage.setItem('session-alive', 'true');
             sessionStorage.setItem('session-user-uid', this.userUid);
             sessionStorage.setItem('session-user-details', JSON.stringify(this.userDetails[0]));
+            this.fbs.audit('Authentication' , 'Logged In');
             this.router.navigate(['/project']);
           } else {
             this.alert.showToaster('You\'re using a BSRE account');
@@ -45,6 +48,7 @@ export class AuthService {
   }
 
   public logout(): void {
+    this.fbs.audit('Authentication' , 'Logged Out');
     sessionStorage.removeItem('session-alive');
     sessionStorage.removeItem('session-user-uid');
     sessionStorage.removeItem('session-user-details');

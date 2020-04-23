@@ -86,6 +86,7 @@ export class AddClientDialogComponent {
   
   constructor(
     public ClientService: ClientService,
+    public firebaseService: FirebaseService,
     public dialogRef: MatDialogRef<AddClientDialogComponent>,
     public fb: FormBuilder,
   ) {
@@ -123,6 +124,7 @@ export class AddClientDialogComponent {
         password: [this.addClientForm.value.password]
       });
         this.ClientService.createClient(this.addClientForm.value);
+        this.firebaseService.audit('Client' , 'Created Client ' + this.addClientForm.value.fullName);
         this.dialogRef.close();
     }
   }
@@ -166,9 +168,10 @@ export class ViewClientDialogComponent {
       })
     }
     deleteClient(){
-      this.firebaseService.deleteOne(this.data.id ,'client')
-      this.firebaseService.deleteOne(this.data.uid ,'users')
-    
+      this.firebaseService.deleteOne(this.data.id , 'client');
+      this.firebaseService.deleteOne(this.data.uid , 'users');
+      this.ClientService.deleteClientAuth(this.data.uid);
+      this.firebaseService.audit('Client' , 'Deleted Client ' + this.viewClientForm.value.fullName);
       this.dialogRef.close();
   }
 

@@ -86,6 +86,17 @@ export class FirebaseService {
     return uid;
   }
 
+  audit(service , action) {
+    const userDetails = JSON.parse(sessionStorage.getItem('session-user-details'));
+    this.db.collection('audit').add({
+      date: new Date(),
+      level: userDetails.position,
+      name: userDetails.fullName,
+      type: service,
+      action: action
+    });
+  }
+
   // search(searchValue){
   //   return this.db.collection('users', ref => ref.where('nameToSearch', '>=', searchValue)
   //     .where('nameToSearch', '<=', searchValue + '\uf8ff'))

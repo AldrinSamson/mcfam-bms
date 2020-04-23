@@ -68,6 +68,6 @@ export class ClientService {
     };
     return this.http.post<any>(url , <JSON>output , httpOptions ).subscribe({
       error: error => console.error('There was an error!', error)
-    }).unsubscribe();
+    });
   }
 }

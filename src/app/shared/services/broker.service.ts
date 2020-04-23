@@ -39,6 +39,7 @@ export class BrokerService {
           this.alertService.showToaster('Broker Create Success');
         })
         .catch((_error) => {
+          this.alertService.showToaster('Broker Create Failed!, ' + _error.message);
           console.log('Broker Create Failed!', _error);
         });
     });
@@ -113,14 +114,14 @@ export class BrokerService {
     };
     return this.http.post<any>(url , <JSON>output , httpOptions ).subscribe({
       error: error => console.error('There was an error!', error)
-    }).unsubscribe();
+    });
   }
 
   computeRating(uid) {
     const url = 'https://us-central1-mcfam-systems.cloudfunctions.net/computeRating?uid=' + uid;
     return this.http.options(url).subscribe({
       error: error => console.error('There was an error!', error)
-    }).unsubscribe();
+    });
 
   }
 }

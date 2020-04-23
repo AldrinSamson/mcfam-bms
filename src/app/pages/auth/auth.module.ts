@@ -7,13 +7,17 @@ import { MatButtonModule, MatInputModule, MatProgressBarModule,
          MatCardModule, MatIconModule } from '@angular/material';
 
 // Components
-import { AuthComponent } from './auth.component';
+import { AuthComponent , PasswordResetDialogComponent } from './auth.component';
 import { PhoneSigninComponent } from './phone-signin/phone-signin.component';
 
 @NgModule({
+  entryComponents: [
+    PasswordResetDialogComponent
+  ],
   declarations: [
     AuthComponent,
-    PhoneSigninComponent
+    PhoneSigninComponent,
+    PasswordResetDialogComponent
   ],
   imports: [
     CommonModule,
