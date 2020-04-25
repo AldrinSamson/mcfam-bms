@@ -44,6 +44,7 @@ import { MatDialogRef } from '@angular/material';
 import { AngularFireAuth, AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { HttpModule } from '@angular/http';
 
 
 
@@ -110,7 +111,8 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
     MiscModule,
     AngularFireModule.initializeApp(firebaseKeys),
     AngularFirestoreModule,
-    AngularFireAuthModule
+    AngularFireAuthModule,
+    HttpModule
   ],
   providers: [
     UserService,
@@ -120,7 +122,8 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
     WindowService,
     AngularFireStorage,
     BrowserAnimationsModule,
-    BrowserModule
+    BrowserModule,
+    HttpModule
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

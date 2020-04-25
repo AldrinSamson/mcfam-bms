@@ -16,7 +16,7 @@ export class FileService {
   files: any;
   joined$: Observable<any>;
   constructor(public afAuth: AngularFireAuth, public router: Router, public firestore: AngularFirestore,
-    public afs: AngularFirestore , public afstorage: AngularFireStorage) {
+    public afs: AngularFirestore, public afstorage: AngularFireStorage) {
     this.fileCollection = afs.collection<FileModel>('filesStored');
     this.files = this.fileCollection.snapshotChanges().subscribe(data => {
       this.files = data.map(e => {
@@ -51,7 +51,7 @@ export class FileService {
     //return this.accountCollection.add(acc);
     var thisclass = this;
     return new Promise(function (resolve, reject) {
-    
+
       const f: FileModel = {
         id: fl.id,
         //id: id,
@@ -63,7 +63,7 @@ export class FileService {
         photoURL: fl.photoURL,
         path: fl.path
       };
-      
+
       thisclass.fileCollection.doc(fl.id).set(f);
       resolve(f);
     })
@@ -74,25 +74,30 @@ export class FileService {
     //console.log(deleteDoc)
   }
   async delete_in_storage(id) {
-    // Create a reference to the file to delete
-    console.log(id)
-    var x = await this.getFile(id);
-    var path = x['path'];
-    //this.filedelete(id);
-    console.log(x)
-    if(path){
-      var storageRef = firebase.storage().ref(path);
-      var desertRef = storageRef.child(path);
-  
-      // Delete the file
-      desertRef.delete().then(function () {
-        // File deleted successfully
-      }).catch(function (error) {
-        // Uh-oh, an error occurred!
-      });
-    }
-    /*
-        */
+    try {
+      // Create a reference to the file to delete
+      console.log(id);
+
+      var x = await this.getFile(id);
+      var path = x['path'];
+      this.filedelete(id);
+
+      console.log(path);
+
+      if (path) {
+        var storageRef = firebase.storage().ref(path);
+        var desertRef = storageRef.child(path);
+
+        // Delete the file
+        desertRef.delete().then(function () {
+          // File deleted successfully
+        }).catch(function (error) {
+          // Uh-oh, an error occurred!
+        });
+      }
+    } catch (err) { }
+
+
   }
   async upload_in_storage(path, file, uid, category) {
 
@@ -136,7 +141,7 @@ export class FileService {
   async upload_in_storage_percent(path, file, uid, category, theclass) {
     console.log(file);
     console.log(theclass);
-    var file1 = { 
+    var file1 = {
       name: file.name,
       lastModified: file.lastModified,
       lastModifiedDate: file.lastModifiedDate,
@@ -150,10 +155,10 @@ export class FileService {
       console.log(file);
 
       var storageRef = firebase.storage().ref(path);
-      
-      var task = thisclass.afstorage.upload(path,file);
+
+      var task = thisclass.afstorage.upload(path, file);
       theclass.upload_perc = task.percentageChanges()
-      var d =  task.percentageChanges()
+      var d = task.percentageChanges()
       console.log(d)
       task.then(function (snapshot) {
         snapshot.ref.getDownloadURL().then(async function (url) {

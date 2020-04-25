@@ -93,7 +93,7 @@
     <div *ngIf="buttonConfig == 'Active'"> 
         <div *ngIf="stage == 3">
             <div *ngIf="authService.isManager()">
-                <button mat-button (click)="downloadDocs()" >Download Documents</button>
+                <button mat-button (click)="downloadMulitple()" >Download Documents</button>
                 <div *ngIf="data.projectSaleType == 'For Sale'">
                     <button mat-button (click)="approveAndSetRate()">Approve and set commission</button>
                 </div>

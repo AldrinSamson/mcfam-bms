@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AuthService } from './auth.service';
 import { MailerService } from './mailer.service';
-
+import * as JSZipUtils from 'jszip-utils'
+import * as JSZip from 'jszip';
+import { FileService } from '@shared/services/file.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +14,9 @@ export class TransactionService {
 
 
   constructor(public db: AngularFirestore,
-    public mailerService: MailerService) {
+    public mailerService: MailerService,
+    public fileservice: FileService
+  ) {
 
   }
 
@@ -20,16 +24,31 @@ export class TransactionService {
 
     if (isManager === true) {
       return this.db.collection('transaction', ref =>
-      ref.where('managerUid', '==', uid))
-      .valueChanges({ idField: 'id' });
+        ref.where('managerUid', '==', uid))
+        .valueChanges({ idField: 'id' });
     } else {
       return this.db.collection('transaction', ref =>
-      ref.where('agentUid', '==', uid))
-      .valueChanges({ idField: 'id' });
+        ref.where('agentUid', '==', uid))
+        .valueChanges({ idField: 'id' });
     }
   }
 
-  approveAndSetCommission(tid , rate , total , saleTotal) {
+  getOneTransaction(id) {
+    console.log(id);
+    const thisclass = this;
+    return new Promise(function (resolve) {
+      thisclass.db.collection('transaction').doc(id).ref.get()
+        .then(doc => {
+          const project = {
+            id: doc.id,
+            ...doc.data()
+          };
+          resolve(project);
+        });
+    });
+  }
+
+  approveAndSetCommission(tid, rate, total, saleTotal) {
     return this.db.collection('transaction').doc(tid).update({
       commissionRate: rate,
       commissionTotal: total,
@@ -42,7 +61,7 @@ export class TransactionService {
     });
   }
 
-  approveAndSetLease(tid , yearsToLease , leaseTotal , commissionTotal , saleTotal , leaseMonth , leaseYearStart , leaseYearEnd ) {
+  approveAndSetLease(tid, yearsToLease, leaseTotal, commissionTotal, saleTotal, leaseMonth, leaseYearStart, leaseYearEnd) {
     return this.db.collection('transaction').doc(tid).update({
       yearsToLease: yearsToLease,
       leaseTotal: leaseTotal,
@@ -50,7 +69,7 @@ export class TransactionService {
       saleTotal: saleTotal,
       leaseMonth: leaseMonth,
       leaseYearStart: leaseYearStart,
-      leaseYearEnd : leaseYearEnd,
+      leaseYearEnd: leaseYearEnd,
       isApproved: true,
       dateApproved: new Date(),
       stage: 4,
@@ -77,17 +96,54 @@ export class TransactionService {
     });
   }
 
-  finalizeSale(tid ) {
+  async finalizeSale(tid) {
+    var x = await this.getOneTransaction(tid);
+    console.log(x);
+    const files = [
+      'doc_BIS',
+      'doc_RF',
+      'doc_RA',
+      'doc_VG1',
+      'doc_VG2',
+      'doc_POI',
+      'doc_POB',
+      'doc_PSS']
+
+    for (var i = 0; i < files.length; i++) {
+      try {
+        var m = x[files[i]]['file']['id'];
+        console.log(m);
+        this.fileservice.delete_in_storage(m);
+      } catch (err) { }
+    }
+    for (var i = 0; i < x['doc_others'].length; i++) {
+      try {
+        var m = x['doc_others'][i]['id'];
+        console.log(m);
+        this.fileservice.delete_in_storage(m);
+      } catch (err) { }
+    }
+
+
     return this.db.collection('transaction').doc(tid).update({
       stage: 5,
       isCompleted: true,
       status: 'Completed , No Feedback Yet',
       doc_status: 'Deleted',
-      dateCompleted: new Date()
+      dateCompleted: new Date(),
+      doc_BIS: "",
+      doc_RF: "",
+      doc_RA: "",
+      doc_VG1: "",
+      doc_VG2: "",
+      doc_POI: "",
+      doc_POB: "",
+      doc_PSS: ""
+
     });
   }
 
-  finalizeLease(tid ) {
+  finalizeLease(tid) {
     return this.db.collection('transaction').doc(tid).update({
       stage: 5,
       isLeased: true,
