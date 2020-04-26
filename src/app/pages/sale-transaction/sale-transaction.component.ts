@@ -213,7 +213,7 @@ export class ViewSaleTransactionComponent {
         console.log(url)
         var filename = toUpload2[i]['desc'];
         console.log(filename)
-        zip.file(filename, await this.urlToPromise(url), { binary: true });
+        //zip.file(filename, await this.urlToPromise(url), { binary: true });
       }
 
       zip.generateAsync({ type: "blob" }).then(function (zipFile) {

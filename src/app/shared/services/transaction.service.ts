@@ -138,8 +138,8 @@ export class TransactionService {
       doc_VG2: "",
       doc_POI: "",
       doc_POB: "",
-      doc_PSS: ""
-
+      doc_PSS: "",
+      doc_others:''
     });
   }
 
