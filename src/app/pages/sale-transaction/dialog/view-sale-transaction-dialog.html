@@ -84,40 +84,40 @@
     <div *ngIf="buttonConfig == 'Active'">
         <div *ngIf="stage == 3">
             <div *ngIf="authService.isManager()">
-                <button mat-button (click)="downloadMulitple()" >Download Documents</button>
+                <button mat-raised-button (click)="downloadMulitple()" >Download Documents</button><br>
                 <div *ngIf="data.projectSaleType == 'For Sale'">
-                    <button mat-button (click)="approveAndSetRate()">Approve and set commission</button>
+                    <button mat-raised-button (click)="approveAndSetRate()">Approve and set commission</button><br>
                 </div>
                 <div *ngIf="data.projectSaleType == 'For Lease'">
-                    <button mat-button (click)="approveAndLease()">Approve and set Years to Lease</button>
+                    <button mat-raised-button (click)="approveAndLease()">Approve and set Years to Lease</button><br>
                 </div>
-                <button mat-button (click)="disapprove()" >Disapprove</button>
+                <button mat-raised-button (click)="disapprove()" >Disapprove</button><br>
             </div>
         </div>
         <div *ngIf="stage == 4">
             <div *ngIf="!authService.isManager()">
                 <div *ngIf="data.projectSaleType === 'For Sale'">
-                    <button mat-button (click)="finalize()">Finalize Sale</button>
+                    <button mat-raised-button (click)="finalize()">Finalize Sale</button><br>
                 </div>
                 <div *ngIf="data.projectSaleType === 'For Lease'">
-                    <button mat-button (click)="finalizeLease()">Finalize Lease</button>
+                    <button mat-raised-button (click)="finalizeLease()">Finalize Lease</button><br>
                 </div>
             </div>
         </div>
     </div>
     <div *ngIf="buttonConfig == 'Manager Disapprove'">
         <div *ngIf="authService.isManager()">
-            <button mat-button (click)="reactivate()">Reactivate</button>
+            <button mat-raised-button (click)="reactivate()">Reactivate</button><br>
         </div>
-        <button mat-button color = "warn" (click)="delete()">Delete</button>
+        <button mat-raised-button color = "warn" (click)="delete()">Delete</button><br>
     </div>
     <div *ngIf="buttonConfig == 'Completed'">
-        <button mat-button (click)="delete()">Delete</button>
+        <button mat-raised-button (click)="delete()">Delete</button><br>
     </div>
     <div *ngIf="buttonConfig == 'Cancelled'">
-        <button mat-button (click)="delete()">Delete</button>
+        <button mat-raised-button (click)="delete()">Delete</button><br>
     </div>
     <div *ngIf="buttonConfig == 'Leased'">
-        <button mat-button (click)="endLeaase()">End Lease</button>
+        <button mat-raised-button (click)="endLeaase()">End Lease</button><br>
     </div>
 </div>

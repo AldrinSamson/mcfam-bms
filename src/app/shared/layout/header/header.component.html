@@ -68,6 +68,11 @@
         <span>Logout</span>
       </button>
     </ng-template>
+
+    <button mat-button routerLink="/projectArchive" (click)="sidenav.close()">
+      <mat-icon class="misc">shopping_cart</mat-icon>
+      <span>MCFAM Buy n Sell</span>
+    </button>
   </div>
 
 </mat-sidenav>
@@ -82,7 +87,7 @@
     </button>
   </div>
 
-  <span><a href="/project"><app-titlecase-pipe></app-titlecase-pipe></a></span>
+  <a class="navbar-brand text-brand" routerLink="/project">MCFAM<span class="color-b">Realty</span></a>
 
   <!-- Menu -->
   <span class="spacer"></span>

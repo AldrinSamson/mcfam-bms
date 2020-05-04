@@ -31,7 +31,7 @@
 <div mat-dialog-actions>
     <button mat-button (click)="onNoClick()">Back</button>
     <div *ngIf="computed === true">
-        <button mat-button (click)="setLeaseYear()">Confirm</button>
+        <button mat-raised-button (click)="setLeaseYear()">Confirm</button>
     </div>
-    <button mat-button (click)="compute()">Compute</button>
+    <button mat-raised-button (click)="compute()">Compute</button>
 </div>

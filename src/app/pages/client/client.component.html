@@ -2,7 +2,7 @@
 	<div class="card">
 		<div class="card-header">
 			<h3>Client Management</h3>
-			 <div *ngIf="authService.isManager()" style="float:right">  
+			 <div *ngIf="authService.isManager()" style="float:right">
 				<button mat-raised-button color="primary" (click) = "openAddClient()">Add New Client</button>
 			 </div>
 		</div>
@@ -22,7 +22,7 @@
 						<tbody>
 							<tr  *ngFor="let client of clients | paginate:{itemsPerPage: 5, currentPage:p} | filter:clientSearchText " (click)="openViewClient(client)">
 								<td>
-									<img src="{{client.photoUrl}}" >
+									<img src="{{client.photoURL.photoURL}}" >
 									<a  class="user-link">{{client.fullName}}</a>
 								</td>
 								<td>
@@ -36,8 +36,8 @@
 					</table>
 						<div id="pagination">
 							<pagination-controls (pageChange)="p=$event"></pagination-controls>
-						</div>  		
+						</div>
 				</div>
 		</div>
-	</div>	
+	</div>
 </div>
