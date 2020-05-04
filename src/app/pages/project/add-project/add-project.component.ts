@@ -1,9 +1,9 @@
-import { Component, OnInit, Inject, OnDestroy, ElementRef } from '@angular/core';
+import { Component, OnInit, Inject, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { FirebaseService, FileService, ProjectService, Project, BrokerService } from '../../../shared';
 import { MatDialog, MatDialogRef, MatDialogConfig, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import { Router, Params } from '@angular/router';
-import { MatTableDataSource } from '@angular/material';
+import { MatTableDataSource, MatPaginator } from '@angular/material';
 import { Subscription, Observable } from 'rxjs';
 
 import { AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask } from 'angularfire2/storage';
@@ -70,6 +70,8 @@ export class AddProjectComponent implements OnInit, OnDestroy {
       addressTown: [''],
       addressCity: [''],
       addressRegion: [''],
+      addressLatitude: [''],
+      addressLongtitude: [''],
       cost: [''],
       status: [''],
       'amenities': this.fb.array([]),
@@ -126,7 +128,7 @@ export class AddProjectComponent implements OnInit, OnDestroy {
     return new Promise(function (resolvse, reject) {
       var storageRef = firebase.storage().ref(path);
 
-      //Upload file 
+      //Upload file
       var task = storageRef.put(file);
       console.log(JSON.stringify(file));
       task.then(function (snapshot) {
@@ -357,12 +359,12 @@ export class ViewProjectClientDialogComponent implements OnInit, OnDestroy {
   selectedClientUid = '';
   selectedClient = '';
   selected = [];
-  displayedColumnsClient: string[] = ['fullName', 'userName', 'email'];
+  displayedColumnsClient: string[] = ['fullName', 'addressCity', 'addressRegion'];
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
   constructor(
     public firebaseService: FirebaseService,
     public dialogRef: MatDialogRef<ViewProjectClientDialogComponent>,
-
     public brokerService: BrokerService,
 
   ) { }
@@ -371,9 +373,15 @@ export class ViewProjectClientDialogComponent implements OnInit, OnDestroy {
     this.getClient();
   }
 
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.clients.filter = filterValue.trim().toLowerCase();
+  }
+
   getClient() {
     this.clientSub = this.firebaseService.getAllData('client').subscribe(result => {
       this.clients = new MatTableDataSource(result);
+      this.clients.paginator = this.paginator;
     });
   }
 
@@ -387,7 +395,7 @@ export class ViewProjectClientDialogComponent implements OnInit, OnDestroy {
     this.selected.push(this.selectedClientUid);
     this.selected.push(this.selectedClient);
 
-    this.dialogRef.disableClose = true;//disable default close operation
+    this.dialogRef.disableClose = true; // disable default close operation
     this.dialogRef.backdropClick().subscribe(result => {
       this.dialogRef.close(this.selected);
     });
@@ -416,7 +424,8 @@ export class ViewProjectAgentDialogComponent implements OnInit, OnDestroy {
   selectedAgenttUid = '';
   selectedAgent = '';
   selected = [];
-  displayedColumnsAgent: string[] = ['fullName', 'userName', 'email'];
+  displayedColumnsAgent: string[] = ['fullName', 'addressCity', 'addressRegion'];
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
   constructor(
     public firebaseService: FirebaseService,
@@ -433,7 +442,13 @@ export class ViewProjectAgentDialogComponent implements OnInit, OnDestroy {
   getAgent() {
     this.agentSub = this.brokerService.getWithPosition('Agent').subscribe(result => {
       this.agents = new MatTableDataSource(result);
+      this.agents.paginator = this.paginator;
     });
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.agents.filter = filterValue.trim().toLowerCase();
   }
 
   selectAgent(value) {
@@ -446,7 +461,7 @@ export class ViewProjectAgentDialogComponent implements OnInit, OnDestroy {
     this.selected.push(this.selectedAgenttUid);
     this.selected.push(this.selectedAgent);
 
-    this.dialogRef.disableClose = true;//disable default close operation
+    this.dialogRef.disableClose = true; // disable default close operation
     this.dialogRef.backdropClick().subscribe(result => {
       this.dialogRef.close(this.selected);
     });

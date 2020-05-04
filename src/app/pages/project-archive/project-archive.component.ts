@@ -1,11 +1,11 @@
-import { Component, OnInit, Inject , OnDestroy } from '@angular/core';
+import { Component, OnInit, Inject , OnDestroy, ViewChild } from '@angular/core';
 import { FirebaseService } from '../../shared/services';
 import { MatDialog, MatDialogRef , MatDialogConfig , MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router, Params } from '@angular/router';
 import { ProjectService } from '../../shared';
 import { Project } from '../../shared';
-import { MatTableDataSource } from '@angular/material';
+import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -18,6 +18,8 @@ export class ProjectArchiveComponent implements OnInit, OnDestroy {
   displayedColumnsProject: string[] = ['name' , 'saleType' , 'propertyType' ,  'addressTown' ,  'addressRegion' , 'cost' , 'status'];
 
   projects: MatTableDataSource<any>;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   public projectSub: Subscription;
 
@@ -33,7 +35,14 @@ export class ProjectArchiveComponent implements OnInit, OnDestroy {
     this.projectSub = this.projectService.getProjects(true)
     .subscribe(result => {
       this.projects = new MatTableDataSource(result) ;
+      this.projects.paginator = this.paginator;
+      this.projects.sort = this.sort;
     });
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.projects.filter = filterValue.trim().toLowerCase();
   }
 
   openViewProject(value): void {
@@ -61,10 +70,10 @@ export class ProjectArchiveComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if(this.projectSub != null){
+    if (this.projectSub != null) {
       this.projectSub.unsubscribe();
     }
-    //this.projectSub.unsubscribe();
+    // this.projectSub.unsubscribe();
   }
 
 }

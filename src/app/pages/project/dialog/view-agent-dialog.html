@@ -1,28 +1,42 @@
 <h2 mat-dialog-title>Pick Agent</h2>
 <div mat-dialog-content class="modalform">
-    <table mat-table [dataSource]="agents" class="mat-elevation-z8">
-    
-        <ng-container matColumnDef="fullName">
-            <th mat-header-cell *matHeaderCellDef> Name </th>
-            <td mat-cell *matCellDef="let agents"> {{agents.fullName}} </td>
-        </ng-container>
+  <div class="row">
+    <div class="card">
+        <div class="card-header">
+          <mat-form-field>
+            <mat-label>Filter</mat-label>
+            <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Quezon City">
+          </mat-form-field>
+        </div>
+        <div class="card-body">
+          <table mat-table [dataSource]="agents" class="mat-elevation-z8">
 
-        <ng-container matColumnDef="userName">
-            <th mat-header-cell *matHeaderCellDef> User Name </th>
-            <td mat-cell *matCellDef="let agents"> {{agents.userName}} </td>
-        </ng-container>
+            <ng-container matColumnDef="fullName">
+                <th mat-header-cell *matHeaderCellDef> Name </th>
+                <td mat-cell *matCellDef="let agents"> {{agents.fullName}} </td>
+            </ng-container>
 
-        <ng-container matColumnDef="email">
-            <th mat-header-cell *matHeaderCellDef> Email </th>
-            <td mat-cell *matCellDef="let agents"> {{agents.email}} </td>
-        </ng-container>
+            <ng-container matColumnDef="addressCity">
+                <th mat-header-cell *matHeaderCellDef> City </th>
+                <td mat-cell *matCellDef="let agents"> {{agents.addressCity}} </td>
+            </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumnsAgent"></tr>
-        <tr mat-row *matRowDef="let agents; columns: displayedColumnsAgent;"
-            (click)="selectAgent(agents)"></tr>
-    </table>
-    <br>
-    <p>You Picked : {{selectedAgent}}</p>
+            <ng-container matColumnDef="addressRegion">
+                <th mat-header-cell *matHeaderCellDef> Region </th>
+                <td mat-cell *matCellDef="let agents"> {{agents.addressRegion}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsAgent"></tr>
+            <tr mat-row *matRowDef="let agents; columns: displayedColumnsAgent;"
+                (click)="selectAgent(agents)"></tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[3,5,7]" showFirstLastButtons></mat-paginator>
+        </div>
+        <div class="card-footer">
+          <p>You Picked : {{selectedAgent}}</p>
+        </div>
+    </div>
+  </div>
 </div>
 <div mat-dialog-actions>
     <button mat-button (click)="onNoClick()">Confirm</button>

@@ -1,72 +1,85 @@
 <h2 mat-dialog-title>{{data.clientName}}'s Inquiry</h2>
 <div mat-dialog-content>
-   
     <div *ngIf="!authService.isManager()">
-            <h5> From: </h5>
+      <div class = "row">
+        <div class = "col-sm-12 col-md-5">
+          <h5> From: </h5>
             <br>
             <p>{{data.clientName}}</p>
-            <br>
             <h5> Email: </h5>
             <br>
             <p>{{data.clientEmail}}</p>
             <br>
             <h5> Contact Number: </h5>
-            <br>
             <p>{{data.clientContactNumber}}</p>
             <br>
             <h5> Project Name: </h5>
-            <br>
             <p>{{data.projectName}}</p>
-            <br>
-            <h5> Message: </h5>
-            <br>
-            <p>{{data.clientMessage}}</p>
-            <br>
+        </div>
+        <div class = "col-sm-12 col-md-2">
+
+        </div>
+        <div class = "col-sm-12 col-md-5">
+          <h5> Message: </h5>
+          <p>{{data.clientMessage}}</p>
+        </div>
+      </div>
     </div>
     <div *ngIf="authService.isManager()">
-            <h5> From: </h5>
-            <br>
-            <p>{{data.clientName}}</p>
-            <br>
-            <h5> Email: </h5>
-            <br>
-            <p>{{data.clientEmail}}</p>
-            <br>
-            <h5> Contact Number: </h5>
-            <br>
-            <p>{{data.clientContactNumber}}</p>
-            <br>
-            <h5> City: </h5>
-            <br>
-            <p>{{data.projectCity}}</p>
-            <br>
-            <h5> Region: </h5>
-            <br>
-            <p>{{data.projectCity}}</p>
-            <br>
+      <div class = "row">
+        <div class = "col-sm-12 col-md-5">
+          <h5> From: </h5>
+          <p>{{data.clientName}}</p>
+          <br>
+          <h5> Email: </h5>
+          <p>{{data.clientEmail}}</p>
+          <br>
+          <h5> Contact Number: </h5>
+          <p>{{data.clientContactNumber}}</p>
+          <br>
+          <h5> City: </h5>
+          <p>{{data.projectCity}}</p>
+          <br>
+          <h5> Region: </h5>
+          <p>{{data.projectCity}}</p>
+        </div>
+        <div class = "col-sm-12 col-md-2">
+
+        </div>
+        <div class = "col-sm-12 col-md-5">
+          <br>
             <h5> Property Type: </h5>
-            <br>
             <p>{{data.projectPropertyType}}</p>
             <br>
             <h5> Sale Type: </h5>
-            <br>
             <p>{{data.projectSaleType}}</p>
             <br>
             <h5> Message: </h5>
-            <br>
             <p>{{data.clientMessage}}</p>
             <br>
+        </div>
+      </div>
     </div>
-            
-            
-            
-            
+
+
+
+
 </div>
 <div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">Back</button>
     <div *ngIf="data.open === 'open'">
         <button mat-button (click) = "assignInquiry()" >Claim</button>
     </div>
-    <div *ngIf="data.open != 'open'">
+    <div *ngIf="data.isArchived">
+      <div *ngIf="!authService.isManager()">
+        <button mat-button (click) = "deleteInquiry('buyInquiry')" >Delete</button>
+    </div>
+    <div *ngIf="authService.isManager()">
+        <button mat-button (click) = "deleteInquiry('sellInquiry')" >Delete</button>
+    </div>
+    </div>
+    <div *ngIf="!data.isArchived">
+      <div *ngIf="data.open != 'open'">
         <div *ngIf="!authService.isManager()">
             <button mat-button (click) = "archiveInquiry('buyInquiry')" >Archive</button>
         </div>
@@ -74,7 +87,5 @@
             <button mat-button (click) = "archiveInquiry('sellInquiry')" >Archive</button>
         </div>
     </div>
-    
-    
-    <button mat-button (click)="onNoClick()">Back</button> 
+    </div>
 </div>

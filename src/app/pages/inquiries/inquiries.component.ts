@@ -82,9 +82,12 @@ export class InquiriesComponent implements OnInit, OnDestroy {
         projectRegion: value.projectRegion,
         projectPropertyType: value.projectPropertyType,
         projectSaleType: value.projectSaleType,
+        isArchived : value.isArchived,
         uid: this.uid,
         open: isOpen
       };
+      dialogConfig.minWidth = 80;
+      dialogConfig.maxWidth = 700;
       this.dialog.open(ViewInquiryDialogComponent, dialogConfig).afterClosed().subscribe(result => {
         if (!this.authService.isManager()) {
           this.getUserBuyInquiries();
@@ -138,6 +141,11 @@ export class ViewInquiryDialogComponent {
   assignInquiry() {
     this.inquiriesService.assignInquiry(this.data.id , this.data.uid);
     this.firebaseService.audit('Sell Inquiry' , 'Claimed Sell Inquiry of ' + this.data.clientName);
+    this.dialogRef.close();
+  }
+
+  deleteInquiry(table) {
+    this.firebaseService.deleteOne(this.data.id , table);
     this.dialogRef.close();
   }
 

@@ -1,9 +1,9 @@
-import { Component, OnInit, Inject, OnDestroy, ElementRef } from '@angular/core';
+import { Component, OnInit, Inject, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { FirebaseService, FileService, ProjectService, AuthService, BrokerService , MailerService } from '../../../shared';
 import { MatDialog, MatDialogRef, MatDialogConfig, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import { Router, UrlTree, PRIMARY_OUTLET } from '@angular/router';
-import { MatTableDataSource } from '@angular/material';
+import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
 import { Subscription, Observable } from 'rxjs';
 
 import { AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask } from 'angularfire2/storage';
@@ -26,6 +26,9 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
   cover_photo_file: any;
   cover_photo: any;
   cov_photo_change = false;
+  card_photo_file: any;
+  card_photo: any;
+  card_photo_change = false;
   viewFiles = [];
   arrayphoto = [];
   editProjectForm: any;
@@ -60,17 +63,24 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
       propertyType: [''],
       ownerClientUid: [''],
       ownerClientName: [''],
-      // addressStreet: [''],
+      addressStreet: [''],
       addressTown: [''],
-     // addressCity: [''],
+      addressCity: [''],
       addressRegion: [''],
+      addressLatitude: [''],
+      addressLongtitude: [''],
+      amenities: [''],
       cost: [''],
       status: [''],
       agentUid: [''],
       agentName: [''],
       photoURL: [''],
+      cover_photo: [''],
+      card_photo: [''],
       isArchived: [''],
-      cover_photo: ['']
+      isFeatured: [''],
+      dateAdded: ['']
+
     });
 
   }
@@ -104,65 +114,74 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
 
           }
         }
-
-
       }
       console.log(this.viewphotos);
       if (this.project['cover_photo']) {
         this.cover_photo_file = this.project['cover_photo'];
         this.cover_photo = this.project['cover_photo']['photoURL'];
       }
+      if (this.project['card_photo']) {
+        this.card_photo_file = this.project['card_photo'];
+        this.card_photo = this.project['card_photo']['photoURL'];
+      }
       this.editProjectForm = this.fb.group({
         name: this.project['name'],
         overview: this.project['overview'],
         saleType: this.project['saleType'],
         propertyType: this.project['propertyType'],
-        ownerClientUid: this.project['ownerClientUid'],
-        ownerClientName: this.project['ownerClientName'],
+        'ownerClientUid': this.project['ownerClientUid'],
+        'ownerClientName': this.project['ownerClientName'],
         addressStreet: this.project['addressStreet'],
         addressTown: this.project['addressTown'],
         addressCity: this.project['addressCity'],
         addressRegion: this.project['addressRegion'],
+        addressLatitude: this.project['addressLatitude'],
+        addressLongtitude: this.project['addressLongtitude'],
+        'amenities': this.fb.array(this.project['amenities']),
         cost: this.project['cost'],
         status: this.project['status'],
-        agentUid: this.project['agentUid'],
-        agentName: this.project['agentName'],
+        'agentUid': this.project['agentUid'],
+        'agentName': this.project['agentName'],
         photoURL: [this.viewphotos],
         cover_photo : this.project['cover_photo'],
-        isArchived: this.project['isArchived']
+        card_photo : this.project['card_photo'],
+        isArchived: this.project['isArchived'],
+        isFeatured: this.project['isFeatured'],
+        dateAdded: this.project['dateAdded'],
       });
-
-
-
-      //
+    this.selectedClientUid = this.project['ownerClientUid'];
+    this.selectedClient = this.project['ownerClientName'];
+    this.selectedAgentUid = this.project['agentUid'];
+    this.selectedAgent = this.project['agentName'];
     });
-
-    // this.editProjectForm = this.fb.group({
-    //   name: [this.project.name],
-    //   overview: [this.project.overview],
-    //   saleType: [this.project.saleType],
-    //   propertyType: [this.project.propertyType],
-    //   ownerClientName: [this.project.ownerClientName],
-    //   ownerClientUid: [this.project.ownerClientUid],
-    //   addressStreet: [this.project.addressStreet],
-    //   addressTown: [this.project.addressTown],
-    //   addressCity: [this.project.addressCity],
-    //   addressRegion: [this.project.addressRegion],
-    //   cost: [this.project.cost],
-    //   status: [this.project.status],
-    //   photoURL: [this.project.photoURL],
-    //   agentName: [this.project.agentName],
-    //   agentUid: [this.project.agentUid]
-    //   });
-
-    return true;
   }
+
+  get amenities() {
+    return this.editProjectForm.get('amenities') as FormArray;
+  }
+
+  addAmenities() {
+    this.amenities.push(new FormControl(''));
+  }
+
+  deleteAmenities(index) {
+    this.amenities.removeAt(index);
+  }
+
   pickClient() {
     this.dialog.open(ViewProjectClientDialogComponent2).afterClosed().subscribe(result => {
       this.selectedClientUid = result[0];
-      this.project['ownerClientName'] = result[1];
+      this.selectedClient = result[1];
     });
   }
+
+  pickAgent() {
+    this.dialog.open(ViewProjectAgentDialogComponent2).afterClosed().subscribe(result => {
+      this.selectedAgentUid = result[0];
+      this.selectedAgent = result[1];
+    });
+  }
+
   selectdelete(event) {
     console.log(event.target.value);
     if (event.target.value === 0) {
@@ -196,13 +215,6 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
 
   }
 
-  pickAgent() {
-    console.log(this.editProjectForm);
-    this.dialog.open(ViewProjectAgentDialogComponent2).afterClosed().subscribe(result => {
-      this.selectedAgentUid = result[0];
-      this.project['agentName'] = result[1];
-    });
-  }
   async submitEditProjectForm() {
     console.log(this.editProjectForm);
     if (this.editProjectForm.valid) {
@@ -273,15 +285,29 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
       console.log(this.editProjectForm.value);
       console.log(this.cov_photo_change);
       if (this.cov_photo_change) {
-        try{
+        try {
         const path = `project/storeFile${new Date().getTime()}_${this.cover_photo_file.name}`;
-        var fileprop = await this.fileservice.upload_in_storage(path, this.cover_photo_file, this.userId, 'project');
+        const fileprop = await this.fileservice.upload_in_storage(path, this.cover_photo_file, this.userId, 'project');
         this.editProjectForm.controls['cover_photo'].setValue({ id: fileprop['id'], photoURL: fileprop['photoURL']} );
         } catch (err) {
 
         }
       }
+
+      if (this.card_photo_change) {
+        try {
+        const path = `project/storeFile${new Date().getTime()}_${this.card_photo_file.name}`;
+        const fileprop2 = await this.fileservice.upload_in_storage(path, this.card_photo_file, this.userId, 'project');
+        this.editProjectForm.controls['card_photo'].setValue({ id: fileprop2['id'], photoURL: fileprop2['photoURL']} );
+        } catch (err) {
+
+        }
+      }
       console.log( this.editProjectForm);
+      this.editProjectForm.controls['ownerClientUid'].setValue(this.selectedClientUid);
+      this.editProjectForm.controls['agentUid'].setValue(this.selectedAgentUid);
+      this.editProjectForm.controls['ownerClientName'].setValue(this.selectedClient);
+      this.editProjectForm.controls['agentName'].setValue(this.selectedAgent);
       this.projectService.updateProject(this.projectID, this.editProjectForm.value);
       this.firebaseService.audit('Project' , 'Edited Project ' + this.editProjectForm.value.name);
 
@@ -290,6 +316,7 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
       this.router.navigate(['/project']);
     }
   }
+
   toRemove(event) {
     console.log(event);
     var getid = event.target.value.split("|")[0];
@@ -302,6 +329,7 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
       // document.getElementById('photoID_' + getid).classList.add('btn-success');
     }
   }
+
   choosedelete() {
     console.log($('#choosedelete').hasClass("btn-danger"));
     if ($('#choosedelete').hasClass("btn-danger")) {
@@ -320,13 +348,23 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
       $('.forlabel').unwrap();
     }
   }
+
   addphotoview() {
     document.getElementById('inputfileview').click();
   }
+
+  addphotoview2() {
+    document.getElementById('inputfileview2').click();
+  }
+
   addcoverphotoview() {
     document.getElementById('inputcoverphotofileview').click();
-
   }
+
+  addcardphotoview() {
+    document.getElementById('inputcardphotofileview').click();
+  }
+
   addcoverphoto(file) {
     try {
       console.log(file.target.files);
@@ -353,6 +391,33 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
 
     }
   }
+
+  addcardphoto(file) {
+    try {
+      console.log(file.target.files);
+
+      if (file.target.files.length) {
+        document.getElementById('addbutton2').classList.remove('btn-primary');
+        document.getElementById('addbutton2').classList.add('btn-success');
+      } else {
+        document.getElementById('addbutton2').classList.add('btn-primary');
+        document.getElementById('addbutton2').classList.remove('btn-success');
+      }
+
+      this.card_photo_file = file.target.files[0];
+      const reader = new FileReader();
+      reader.onload = (event: any) => {
+        // console.log(event.target.result);
+        // this.arrayphoto.push(event.target.result);
+        this.card_photo = event.target.result;
+        this.card_photo_change = true;
+      };
+      reader.readAsDataURL(this.card_photo_file);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   addphotos(files) {
     // this.arrayphoto=[];
 
@@ -372,6 +437,7 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
 
 
   }
+
   removephoto(index) {
     console.log(index);
     // delete this.arrayphoto[index];
@@ -395,6 +461,7 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
   trackByFn(i: number) {
     return i;
   }
+
   openTransaction() {
 
     const dialogConfig = new MatDialogConfig();
@@ -406,8 +473,8 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
       agentName: this.project.agentName,
       agentUid: this.project.agentUid
     };
-    dialogConfig.maxWidth = '50vw';
-    dialogConfig.width = '50vw';
+    dialogConfig.maxWidth = 1250;
+    dialogConfig.minWidth = 1250;
     this.dialog.open(SaleProjectDialogComponent, dialogConfig).afterClosed().subscribe(result => {
       this.router.navigate(['/project']);
     });
@@ -420,7 +487,7 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
     this.router.navigate(['/project']);
   }
 
-  onNoClick(): void {
+  goBack() {
     this.router.navigate(['/project']);
   }
 
@@ -446,7 +513,8 @@ export class ViewProjectClientDialogComponent2 implements OnInit, OnDestroy {
   selectedClientUid = '';
   selectedClient = '';
   selected = [];
-  displayedColumnsClient: string[] = ['fullName', 'userName', 'email'];
+  displayedColumnsClient: string[] = ['fullName', 'addressCity', 'addressRegion'];
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
   constructor(
     public firebaseService: FirebaseService,
@@ -463,7 +531,13 @@ export class ViewProjectClientDialogComponent2 implements OnInit, OnDestroy {
   getClient() {
     this.clientSub = this.firebaseService.getAllData('client').subscribe(result => {
       this.clients = new MatTableDataSource(result);
+      this.clients.paginator = this.paginator;
     });
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.clients.filter = filterValue.trim().toLowerCase();
   }
 
   selectClient(value) {
@@ -506,7 +580,8 @@ export class ViewProjectAgentDialogComponent2 implements OnInit, OnDestroy {
   selectedAgenttUid = '';
   selectedAgent = '';
   selected = [];
-  displayedColumnsAgent: string[] = ['fullName', 'userName', 'email'];
+  displayedColumnsAgent: string[] = ['fullName', 'addressCity', 'addressRegion'];
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
   constructor(
     public firebaseService: FirebaseService,
@@ -523,7 +598,13 @@ export class ViewProjectAgentDialogComponent2 implements OnInit, OnDestroy {
   getAgent() {
     this.agentSub = this.brokerService.getWithPosition('Agent').subscribe(result => {
       this.agents = new MatTableDataSource(result);
+      this.agents.paginator = this.paginator;
     });
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.agents.filter = filterValue.trim().toLowerCase();
   }
 
   selectAgent(value) {
@@ -563,18 +644,21 @@ export class SaleProjectDialogComponent implements OnInit, OnDestroy {
   public dateNow = Date.toString();
 
   saleProjectForm: any;
+  @ViewChild('paginator', {static: true}) paginator: MatPaginator;
+  @ViewChild('paginator2', {static: true}) paginator2: MatPaginator;
+  // @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   clientSub: Subscription;
   clients: MatTableDataSource<any>;
   selectedClientUid = '';
   selectedClient = '';
-  displayedColumnsClient: string[] = ['fullName', 'userName', 'email'];
+  displayedColumnsClient: string[] = ['fullName', 'addressCity', 'addressRegion'];
 
   managerSub: Subscription;
   managers: MatTableDataSource<any>;
   selectedManagerUid = '';
   selectedManager = '';
-  displayedColumnsManager: string[] = ['fullName', 'userName', 'email'];
+  displayedColumnsManager: string[] = ['fullName', 'addressCity', 'addressRegion'];
 
   constructor(
     public firebaseService: FirebaseService,
@@ -625,11 +709,25 @@ export class SaleProjectDialogComponent implements OnInit, OnDestroy {
   getClientAndManager() {
     this.clientSub = this.firebaseService.getAllData('client').subscribe(result => {
       this.clients = new MatTableDataSource(result);
+      this.clients.paginator = this.paginator;
+      // this.clients.sort = this.sort;
     });
 
     this.managerSub = this.brokerService.getWithPosition('Manager').subscribe(result => {
       this.managers = new MatTableDataSource(result);
+      this.managers.paginator = this.paginator2;
+      // this.managers.sort = this.sort;
     });
+  }
+
+  applyFilterClient(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.clients.filter = filterValue.trim().toLowerCase();
+  }
+
+  applyFilterManager(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.managers.filter = filterValue.trim().toLowerCase();
   }
 
   selectClient(value) {

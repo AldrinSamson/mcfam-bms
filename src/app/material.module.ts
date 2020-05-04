@@ -41,7 +41,8 @@ import {
     MatToolbarModule,
     MatTooltipModule,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatSortModule
   } from '@angular/material';
 
 
@@ -92,6 +93,7 @@ import {
       ReactiveFormsModule,
       MatPaginatorModule,
       FlexLayoutModule,
+      MatSortModule
     ],
 
   })

@@ -64,16 +64,23 @@ export class ProjectService {
       overview: values.overview,
       saleType: values.saleType,
       propertyType: values.propertyType,
+      ownerClientUid: values.ownerClientUid,
       ownerClientName: values.ownerClientName,
-      //addressStreet: values.addressStreet,
+      addressStreet: values.addressStreet,
       addressTown: values.addressTown,
-      //addressCity: values.addressCity,
+      addressCity: values.addressCity,
       addressRegion: values.addressRegion,
+      addressLatitude: values.addressLatitude,
+      addressLongtitude: values.addressLongtitude,
+      amenities: values.amenities,
       cost: values.cost,
-      photoURL: values.photoURL,
       status: values.status,
+      agentUid: values.agentUid,
       agentName: values.agentName,
-      cover_photo: values.cover_photo
+      photoURL: values.photoURL,
+      cover_photo: values.cover_photo,
+      card_photo: values.card_photo,
+      isFeatured: values.isFeatured
     });
   }
 

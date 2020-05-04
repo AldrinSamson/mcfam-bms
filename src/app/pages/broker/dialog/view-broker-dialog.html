@@ -1,6 +1,6 @@
 <h2 mat-dialog-title>Edit {{data.position}} {{data.userName}}'s Profile</h2>
 <div mat-dialog-content [formGroup] = "editBrokerForm" >
-   
+
             <mat-form-field >
                 <mat-label> Username </mat-label>
                 <input matInput formControlName = "userName" value = {{data.userName}} name = "broker-userName" required>
@@ -48,20 +48,19 @@
                 <br>
                 <button class="btn btn-primary btn-sm" (click)='btnclickphoto()' >Change profile picture</button>
                 <br>
-                
+
                 <input hidden type="file" id='photochange' (change)='changephoto($event)' >
             </div>
             <br>
 </div>
 <div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">Back</button>
     <div *ngIf="authService.isManager()">
         <button mat-button color = "warn" (click) = "deleteBroker()" >Delete</button>
-        <button mat-button color = "warn" (click) = "deleteBroker()" >Change Email or Password</button>
         <button mat-button (click) = "submitEditBrokerForm()" >Edit</button>
     </div>
     <div *ngIf="!authService.isManager()">
         <p color = "warn" >You only edit your own details in your own profile page</p>
     </div>
-    <button mat-button (click) = "updateRating()" >Update Rating</button>
-    <button mat-button (click)="onNoClick()">Back</button> 
+    <button mat-button (click) = "updateRating()" >Refresh Rating</button>
 </div>

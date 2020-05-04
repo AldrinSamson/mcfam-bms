@@ -1,96 +1,87 @@
 <h2 mat-dialog-title>{{data.clientName}}'s Trasaction</h2>
 <div mat-dialog-content>
-
+  <div class = "row">
+    <div class = "col-sm-12 col-md-5">
             <h5> Status: </h5>
-            <br>
             <p>{{data.status}}</p>
             <br>
             <h5> Project: </h5>
-            <br>
             <p>{{data.projectName}}</p>
             <br>
             <h5> Project Cost: </h5>
-            <br>
             <p>{{data.projectCost}}</p>
             <br>
             <h5> Project Sale Type: </h5>
-            <br>
             <p>{{data.projectSaleType}}</p>
             <br>
             <h5> Client Name: </h5>
-            <br>
             <p>{{data.clientName}}</p>
             <br>
             <h5> Agent Name: </h5>
-            <br>
             <p>{{data.agentName}}</p>
             <br>
             <h5> Manager Name: </h5>
-            <br>
             <p>{{data.managerName}}</p>
-            <br>
+    </div>
+    <div class = "col-sm-12 col-md-2">
+
+    </div>
+    <div class = "col-sm-12 col-md-5">
             <h5> Date Start: </h5>
-            <br>
             <p>{{data.dateStart.toDate() | date: 'MMM-dd-yy hh:mm'}}</p>
             <br>
             <h5> Document Status: </h5>
-            <br>
             <p>{{data.doc_status}}</p>
             <br>
             <div *ngIf="stage === 4 || stage === 5 ">
                 <div *ngIf="data.projectSaleType === 'For Sale'">
                     <h5> Commission Rate: </h5>
-                    <br>
                     <p>{{data.commissionRate}}</p>
                     <br>
                     <h5> Commission Total: </h5>
-                    <br>
                     <p>{{data.commissionTotal}}</p>
                     <br>
                     <h5> Sale Total: </h5>
-                    <br>
                     <p>{{data.saleTotal}}</p>
                     <br>
                 </div>
                 <div *ngIf="data.projectSaleType === 'For Lease'">
                     <h5> Lease Start: </h5>
-                    <br>
                     <p>{{data.leaseMonth}} {{data.leaseYearStart}}</p>
                     <br>
                     <h5> Lease End: </h5>
-                    <br>
                     <p>{{data.leaseMonth}} {{data.leaseYearEnd}}</p>
                     <br>
                     <h5> Lease Total: </h5>
-                    <br>
                     <p>{{data.leaseTotal}}</p>
                     <br>
                     <h5> Commission Total: </h5>
-                    <br>
                     <p>{{data.commissionTotal}}</p>
                     <br>
                     <h5> Sale Total: </h5>
-                    <br>
                     <p>{{data.saleTotal}}</p>
                     <br>
                 </div>
                 <div *ngIf="data.rating">
                     <h5> Rating: </h5>
-                    <br>
                     <p>{{data.rating}} </p>
                     <br>
                     <h5> FeedBack: </h5>
-                    <br>
                     <p>{{data.feedback}}</p>
                 </div>
-                
-            </div>
 
-            
-            
+            </div>
+    </div>
+  </div>
+
+
+
+
+
 </div>
 <div mat-dialog-actions>
-    <div *ngIf="buttonConfig == 'Active'"> 
+  <button mat-button (click)="onNoClick()">Back</button>
+    <div *ngIf="buttonConfig == 'Active'">
         <div *ngIf="stage == 3">
             <div *ngIf="authService.isManager()">
                 <button mat-button (click)="downloadMulitple()" >Download Documents</button>
@@ -118,7 +109,7 @@
         <div *ngIf="authService.isManager()">
             <button mat-button (click)="reactivate()">Reactivate</button>
         </div>
-        <button mat-button (click)="delete()">Delete</button>
+        <button mat-button color = "warn" (click)="delete()">Delete</button>
     </div>
     <div *ngIf="buttonConfig == 'Completed'">
         <button mat-button (click)="delete()">Delete</button>
@@ -129,6 +120,4 @@
     <div *ngIf="buttonConfig == 'Leased'">
         <button mat-button (click)="endLeaase()">End Lease</button>
     </div>
-
-    <button mat-button (click)="onNoClick()">Back</button> 
 </div>

@@ -1,6 +1,6 @@
 <h2 mat-dialog-title>Restore {{data.name}} Project</h2>
 <div mat-dialog-content [formGroup] = "editProjectForm" >
-   
+
             <mat-form-field >
                 <mat-label> Name </mat-label>
                 <input matInput formControlName = "name" value = {{data.name}} name = "project-name" required>
@@ -75,7 +75,7 @@
             <br>
 </div>
 <div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">Back</button>
     <button mat-button color = "warn" (click) = "destroyProject()" >Delete</button>
     <button mat-button color = "warn" (click) = "restoreProject()" >Restore</button>
-    <button mat-button (click)="onNoClick()">Back</button> 
 </div>

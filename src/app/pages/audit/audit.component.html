@@ -1,28 +1,32 @@
 <div class = "main">
     <div class="card">
-        <div class="card-header">  
+        <div class="card-header">
             <h3>Audit</h3>
         </div>
         <div class="card-body">
-             <table mat-table [dataSource]="audits" class="mat-elevation-z8">
-               
+          <mat-form-field>
+            <mat-label>Filter</mat-label>
+            <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium">
+          </mat-form-field>
+             <table mat-table [dataSource]="audits" matSort class="mat-elevation-z8">
+
              <ng-container matColumnDef="date">
-                 <th mat-header-cell *matHeaderCellDef> Date </th>
+                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
                  <td mat-cell *matCellDef="let audits"> {{audits.date.toDate() | date: 'MMM-dd-yy hh:mm' }} </td>
              </ng-container>
-     
+
              <ng-container matColumnDef="level">
-                 <th mat-header-cell *matHeaderCellDef> Level </th>
+                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Level </th>
                  <td mat-cell *matCellDef="let audits"> {{audits.level}} </td>
              </ng-container>
-     
+
              <ng-container matColumnDef="name">
                  <th mat-header-cell *matHeaderCellDef> Name </th>
                  <td mat-cell *matCellDef="let audits"> {{audits.name}} </td>
              </ng-container>
 
              <ng-container matColumnDef="type">
-                <th mat-header-cell *matHeaderCellDef> Type </th>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Type </th>
                 <td mat-cell *matCellDef="let audits"> {{audits.type}} </td>
             </ng-container>
 
@@ -30,12 +34,13 @@
                  <th mat-header-cell *matHeaderCellDef> Action </th>
                  <td mat-cell *matCellDef="let audits"> {{audits.action}} </td>
              </ng-container>
-     
+
              <tr mat-header-row *matHeaderRowDef="displayedColumnsAudit"></tr>
              <tr mat-row *matRowDef="let audit; columns: displayedColumnsAudit;" ></tr>
              </table>
+             <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
          </div>
      </div>
-     
-     
+
+
 </div>

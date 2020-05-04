@@ -1,32 +1,26 @@
 <div class = "main">
     <div class="card">
         <div class="card-header">
-            <h4>Add Project</h4>
+            <h4 align="left" >Add Project</h4>
+            <div align="right">
+              <button mat-raised-button (click)="submitAddProjectForm()">Add</button>
+              <button mat-button (click)="goBack()" >Back</button>
+          </div>
         </div>
             <div [formGroup]="addProjectForm">
                 <div class="card-body">
-                    <div class="fb-profile">
-                        <div *ngIf='cover_photo_file' class="toaddphotosdiv center" >
-                            <img align="left" class="fb-image-lg" [src]="cover_photo" alt="Add a cover photo">
-                        </div>
-                        <div *ngIf='card_photo_file' class="toaddphotosdiv center" >
-                            <img align="right"  [src]="card_photo" alt="Add a card photo">
-                        </div>
-                    </div>
+                    <!-- Info -->
                     <div class = "row">
-                        <div class = "col-6">
+                        <div class = "col-3">
                             <h3>
                                 <mat-form-field>
                                     <mat-label> Name </mat-label>
                                     <input matInput formControlName="name" name="project-name" required>
                                 </mat-form-field>
                             </h3>
-                            <mat-form-field>
-                                <mat-label>Overview Description </mat-label>
-                                <textarea matInput formControlName="overview" name="project-overview" cols="1000" required></textarea>
-                            </mat-form-field>
+                        <textarea class="form-control" formControlName="overview" name="project-overview" cols="1" rows="14" placeholder="Overview Description" required></textarea>
                         </div>
-                        <div class = "col-6">
+                        <div class = "col-3">
                             <mat-form-field>
                                 <mat-label> Property Type </mat-label>
                                 <mat-select formControlName="propertyType" name="project-propertyType" required>
@@ -37,127 +31,170 @@
                                 </mat-select>
                             </mat-form-field>
                             <br>
-
                             <mat-form-field>
-                                <mat-label> Street </mat-label>
-                                <input matInput formControlName="addressStreet" name="project-addressStreet" required>
-                            </mat-form-field>
-                            <br>
-                       
-                            <mat-form-field>
-                                <mat-label> Town/ Barangay </mat-label>
-                                <input matInput formControlName="addressTown" name="project-addressTown" required>
-                            </mat-form-field>
-                            <br>
-                
-                            <mat-form-field>
-                                <mat-label> City </mat-label>
-                                <input matInput formControlName="addressCity" name="project-addressCity" required>
-                            </mat-form-field>
-                            <br>
-                       
-                            <mat-form-field>
-                                <mat-label> Region </mat-label>
-                                <input matInput formControlName="addressRegion" name="project-addressRegion" required>
-                            </mat-form-field>
-                            <br>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-9">
-
-                            <mat-form-field>
-                                <mat-label> Owner Client Name</mat-label>
-                                <input matInput formControlName="ownerClientName" name="project-ownerClientName"
-                                    value={{selectedClient}} (click)="pickClient()" readonly>
-                            </mat-form-field>
-                            <br>
-                
-                            <mat-form-field>
-                                <mat-label> Sale Type </mat-label>
-                                <mat-select formControlName="saleType" name="project-saleType" required>
-                                    <mat-option value="For Sale">For Sale</mat-option>
-                                    <mat-option value="For Lease">For Lease</mat-option>
-                                </mat-select>
+                              <mat-label>Owner Client Name</mat-label>
+                              <input matInput formControlName="clientName" name="project-clientName"
+                              value={{selectedClient}} (click)="pickClient()" readonly>
                             </mat-form-field>
                             <br>
 
-                            <mat-form-field>
-                                <mat-label> Cost </mat-label>
-                                <input matInput formControlName="cost" name="project-cost" required>
-                            </mat-form-field>
-                            <br>
-                
-                            <mat-form-field>
-                                <mat-label> Status </mat-label>
-                                <mat-select formControlName="status" name="project-status" required>
-                                    <mat-option value="Available">Available</mat-option>
-                                    <mat-option value="Rented">Rented</mat-option>
-                                    <mat-option value="Leased">Leased</mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                            <br>
-                
-                            <mat-form-field>
-                                <mat-label>Agent Name</mat-label>
-                                <input matInput formControlName="agentName" name="project-agentName"
-                                 value={{selectedAgent}} (click)="pickAgent()" readonly>
-                            </mat-form-field>
-                            <br>
-                            <button mat-button (click)="addAmenities()">Add Amenity</button>
+                            <mat-label> Amenities </mat-label> &nbsp;&nbsp;
+                            <button mat-raised-button (click)="addAmenities()">+</button>
                             <div *ngFor="let control of amenities.controls; index as i">
-                                <input  [formControl]="amenities.controls[i]" />
+                                <input class="form-control form-control-sm form-control-a" [formControl]="amenities.controls[i]" />
                                 <button mat-button color="warn" (click)="deleteAmenities(i)">X</button>
                             </div>
-                            <br>
-                          
-                            <mat-checkbox formControlName="isFeatured">is Featured</mat-checkbox>
-                          
 
+                          </div>
+                          <div class = "col-3">
+                            <mat-form-field>
+                              <mat-label> Sale Type </mat-label>
+                              <mat-select formControlName="saleType" name="project-saleType" required>
+                                  <mat-option value="For Sale">For Sale</mat-option>
+                                  <mat-option value="For Lease">For Lease</mat-option>
+                              </mat-select>
+                          </mat-form-field>
+                          <br>
+                          <mat-form-field>
+                              <mat-label> Cost </mat-label>
+                              <input matInput formControlName="cost" name="project-cost" required>
+                          </mat-form-field>
+                          <br>
+                          <mat-form-field>
+                              <mat-label> Status </mat-label>
+                              <mat-select formControlName="status" name="project-status" required>
+                                  <mat-option value="Available">Available</mat-option>
+                                  <mat-option value="Rented">Rented</mat-option>
+                                  <mat-option value="Leased">Leased</mat-option>
+                              </mat-select>
+                          </mat-form-field>
+                          <br>
+                          <mat-form-field>
+                              <mat-label>Assigned Agent Name</mat-label>
+                              <input matInput formControlName="agentName" name="project-agentName"
+                              value={{selectedAgent}} (click)="pickAgent()" readonly>
+                          </mat-form-field>
+                          <br>
+                          <br>
+                          <br>
+                          <mat-checkbox formControlName="isFeatured">Show on Featured?</mat-checkbox>
                         </div>
-                        <div class="col-3">
-                            <label>
-                                Attach a photo<br>
-                                <input hidden type="file"  (change)="getFile($event)" id='inputfile' accept=".png,.jpg" multiple>
-                                <div style="vertical-align: bottom;">
-                                    <button class="upload btn btn-primary" id='uploadbtn' (click)='inputFileClick()'>Upload</button>
-                                    &nbsp;
-                                    <span id='qtyinput'>{{qtyinput}}</span>
-                                </div>
-                            </label>
-                            <br>
-                            <label>
-                                Attach a cover photo<br>
-                                <button class="btn btn-primary" id='addbutton' (click)='addphotoview()'>Upload</button>
-                                <br><input hidden id='inputfileview' type="file" accept='image/*' (change)='addcoverphoto($event)' multiple>
-                            </label>
-                            <br>
-                            <label>
-                                Attach a card photo<br>
-                                <button class="btn btn-primary" id='addbutton2' (click)='addphotoview2()'>Upload</button>
-                                <br><input hidden id='inputfileview2' type="file" accept='image/*' (change)='addcardphoto($event)' multiple>
-                            </label>
-                            <br>
-                            <div *ngFor='let ph of arrayphoto'>
-                                <img [src]='ph' class="photoURL">
-                                <br>
-                                <br>
-                            </div>
-                            <br>
+                        <div class = "col-3">
+                          <mat-form-field>
+                            <mat-label> Street </mat-label>
+                            <input matInput formControlName="addressStreet" name="project-addressStreet" required>
+                          </mat-form-field>
+                          <br>
+
+                          <mat-form-field>
+                              <mat-label> Town/ Barangay </mat-label>
+                              <input matInput formControlName="addressTown" name="project-addressTown" required>
+                          </mat-form-field>
+                          <br>
+
+                          <mat-form-field>
+                              <mat-label> City </mat-label>
+                              <input matInput formControlName="addressCity" name="project-addressCity" required>
+                          </mat-form-field>
+                          <br>
+
+                          <mat-form-field>
+                            <mat-label> Region </mat-label>
+                            <input matInput formControlName="addressRegion" name="project-addressRegion" required>
+                          </mat-form-field>
+                          <br>
+                          <br>
+                          <label>Google Map Location</label>
+                          <br>
+                          <mat-form-field>
+                            <mat-label> Latitude </mat-label>
+                            <input matInput formControlName="addressLatitude" name="project-addressLatitude" >
+                          </mat-form-field>
+                          <br>
+
+                          <mat-form-field>
+                            <mat-label> Longtitude </mat-label>
+                            <input matInput formControlName="addressLongtitude" name="project-addressLongtitude" >
+                          </mat-form-field>
                         </div>
                     </div>
-    
-            </div>
-            <div class = "card-footer" >
-                <div >
-                    <button mat-button (click)="submitAddProjectForm()">Add</button>
-                    <button mat-button (click)="goBack()" >Back</button>
+                    <br>
+                    <!-- Picture Button-->
+                    <div class="row">
+                      <div class = "col-6">
+                        <label>
+                          Attach Cover (Landscape) photo<br>
+                          <button class="btn btn-primary" id='addbutton' (click)='addphotoview()'>Upload</button>
+                          <br><input hidden id='inputfileview' type="file" accept='image/*' (change)='addcoverphoto($event)' multiple>
+                      </label>
+                      <span>&nbsp;&nbsp;&nbsp;</span>
+                      <label>
+                          Attach Card (Portrait) photo<br>
+                          <button class="btn btn-primary" id='addbutton2' (click)='addphotoview2()'>Upload</button>
+                          <br><input hidden id='inputfileview2' type="file" accept='image/*' (change)='addcardphoto($event)' multiple>
+                      </label>
+                      </div>
+                      <div class = "col-6">
+                        <label>
+                          Attach Gallery photo<br>
+                          <input hidden type="file"  (change)="getFile($event)" id='inputfile' accept=".png,.jpg" multiple>
+                          <div style="vertical-align: bottom;">
+                              <button class="upload btn btn-primary" id='uploadbtn' (click)='inputFileClick()'>Upload</button>
+                              &nbsp;
+                              <span id='qtyinput'>{{qtyinput}}</span>
+                          </div>
+                      </label>
+                      </div>
+                    </div>
+                    <!-- Picture Cards-->
+                    <div class = "row">
+                      <div class = "col-6">
+                        <div class="fb-profile">
+                          <div *ngIf='cover_photo_file'>
+                              <div class = "card">
+                                <div class = "card-header">
+                                  Cover Photo (Landscape)
+                                </div>
+                                <div class = "card-body">
+                                  <img align="center" class = "fb-image-lg" [src]="cover_photo" alt="Add a cover photo">
+                                </div>
+                              </div>
+                          </div>
+                          <div *ngIf='card_photo_file' class="toaddphotosdiv center" >
+                            <div class = "card">
+                              <div class = "card-header">
+                                Card Photo (Portrait)
+                              </div>
+                              <div class = "card-body">
+                                <img align="center" class = "fb-image-md" [src]="card_photo" alt="Add a cover photo">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class = "col-6">
+                        <div *ngIf='arrayphoto.length != 0' class="toaddphotosdiv center" >
+                          <div class = "card">
+                            <div class = "card-header">
+                              Gallery Photos
+                            </div>
+                            <div class = "card-body">
+                              <div *ngFor='let ph of arrayphoto'>
+                              <img class = "fb-image-md" [src]='ph' class="photoURL">
+                              </div>
+                            </div>
+                          </div>
+                          </div>
+                      </div>
+                    </div>
                 </div>
+            <div class = "card-footer" >
             </div>
         </div>
     </div>
 </div>
 
-{{ this.addProjectForm.value | json }}
 
-    
+
+
+

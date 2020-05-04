@@ -28,14 +28,14 @@
       <mat-icon class="misc">mail</mat-icon>
       <span>Customer Inquiries</span>
     </button>
-      
+
     <button mat-button routerLink="/saleTransaction" (click)="sidenav.close()">
       <mat-icon class="misc">receipt</mat-icon>
       <span>Sales Transaction</span>
     </button>
 
     <button mat-button routerLink="/projectArchive" (click)="sidenav.close()">
-      <mat-icon class="misc">archive</mat-icon> 
+      <mat-icon class="misc">archive</mat-icon>
       <span>Archived Projects</span>
     </button>
 
@@ -47,7 +47,7 @@
     </div>
 
     <hr>
-    
+
     <button mat-button routerLink="/profile-settings"
           [queryParams]="{profile: '1'}"
           fragment="editProfile" (click)="sidenav.close()">
@@ -87,9 +87,9 @@
   <!-- Menu -->
   <span class="spacer"></span>
 
-  
+
     <app-date-pipe></app-date-pipe>
- 
+
 
   <span class="spacer-light"></span>
 

@@ -94,6 +94,8 @@ export class SaleTransactionComponent implements OnInit, OnDestroy {
       rating: value.rating,
       feedback: value.feedback
     };
+    dialogConfig.minWidth = 80;
+    dialogConfig.maxWidth = 700;
     // tslint:disable-next-line:no-use-before-declare
     this.dialog.open(ViewSaleTransactionComponent, dialogConfig).afterClosed().subscribe(result => {
       this.getUserTransactions();
@@ -145,6 +147,8 @@ export class ViewSaleTransactionComponent {
       projectName: this.data.projectName,
       projectCost: this.data.projectCost
     };
+    dialogConfig.minWidth = 80;
+    dialogConfig.maxWidth = 700;
     // tslint:disable-next-line:no-use-before-declare
     this.dialog.open(SetAgentRateComponent, dialogConfig).afterClosed().subscribe(result => {
       this.dialogRef.close();
@@ -161,6 +165,8 @@ export class ViewSaleTransactionComponent {
       projectName: this.data.projectName,
       projectCost: this.data.projectCost
     };
+    dialogConfig.minWidth = 80;
+    dialogConfig.maxWidth = 700;
     // tslint:disable-next-line:no-use-before-declare
     this.dialog.open(SetLeaseYearComponent, dialogConfig).afterClosed().subscribe(result => {
       this.dialogRef.close();
@@ -224,14 +230,14 @@ export class ViewSaleTransactionComponent {
       console.log(err, 'here')
     }
     /*
-    $(".downloadAll").on('click', function () { // find every song urls 
+    $(".downloadAll").on('click', function () { // find every song urls
       $(".album-dl-box").find("a").each(function () {
-        var song = $(this); 
-        var url = song.attr('href'); 
-        var filename = url.replace(/.*\/|%20/g, "").replace(/%5d/g, "]").replace(/%5b/g, "["); 
+        var song = $(this);
+        var url = song.attr('href');
+        var filename = url.replace(/.*\/|%20/g, "").replace(/%5d/g, "]").replace(/%5b/g, "[");
         JSZipUtils.getBinaryContent(url, function (err, data) {
           if (err) {
-            throw err; // or handle the error 
+            throw err; // or handle the error
           } var zip = new JSZip(); zip.file(filename, data, { binary: true });
         });
       });

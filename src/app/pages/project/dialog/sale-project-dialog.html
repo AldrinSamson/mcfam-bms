@@ -1,115 +1,130 @@
 <h2 mat-dialog-title>Project Transaction Form</h2>
 <div mat-dialog-content [formGroup]="saleProjectForm" class="modalform">
     <div class="row">
-        <div class="col-6">
-            <mat-form-field>
-                <mat-label> Project Name </mat-label>
-                <input matInput formControlName="projectName" name="transaction-projectName" value = {{data.projectName}} readonly>
-            </mat-form-field>
-            <br>
+        <div class="col-2">
+          <div class="row">
+            <div class="card">
+              <div class="card-body">
+                <mat-form-field>
+                  <mat-label> Project Name </mat-label>
+                  <input matInput formControlName="projectName" name="transaction-projectName" value = {{data.projectName}} readonly>
+              </mat-form-field>
+              <br>
 
-            <mat-form-field>
-                <mat-label> Cost </mat-label>
-                <input matInput formControlName="projectCost" name="transaction-projectCost" value = {{data.projectCost}} readonly>
-            </mat-form-field>
-            <br>
+              <mat-form-field>
+                  <mat-label> Cost </mat-label>
+                  <input matInput formControlName="projectCost" name="transaction-projectCost" value = {{data.projectCost}} readonly>
+              </mat-form-field>
+              <br>
 
-            <mat-form-field>
-                <mat-label> Sale Type </mat-label>
-                <input matInput formControlName="projectSaleType" name="transaction-projectSaleType" value = {{data.projectSaleType}} readonly>
-            </mat-form-field>
-            <br>
+              <mat-form-field>
+                  <mat-label> Sale Type </mat-label>
+                  <input matInput formControlName="projectSaleType" name="transaction-projectSaleType" value = {{data.projectSaleType}} readonly>
+              </mat-form-field>
+              <br>
 
-            <mat-form-field>
-                <mat-label>Agent Assigned</mat-label>
-                <input matInput formControlName="agentName" name="transaction-agentName" value={{data.agentName}} readonly>
-            </mat-form-field>
-            <br>
+              <mat-form-field>
+                  <mat-label>Agent Assigned</mat-label>
+                  <input matInput formControlName="agentName" name="transaction-agentName" value={{data.agentName}} readonly>
+              </mat-form-field>
+              <br>
 
-            <mat-form-field>
-                <mat-label> Buying Client Name</mat-label>
-                <input matInput formControlName="clientName" name="transaction-clientName" value={{selectedClient}} readonly>
-            </mat-form-field>
-            <br>
+              <mat-form-field>
+                  <mat-label> Buying Client Name</mat-label>
+                  <input matInput formControlName="clientName" name="transaction-clientName" value={{selectedClient}} readonly>
+              </mat-form-field>
+              <br>
 
-            <mat-form-field>
-                <mat-label> Manager Assigned</mat-label>
-                <input matInput formControlName="managerName" name="transaction-managerName" value={{selectedManager}} readonly>
-            </mat-form-field>
-            <br>
-            
+              <mat-form-field>
+                  <mat-label> Manager Assigned</mat-label>
+                  <input matInput formControlName="managerName" name="transaction-managerName" value={{selectedManager}} readonly>
+              </mat-form-field>
+              <br>
+              </div>
+             </div>
+          </div>
+
+
         </div>
-        <div class="col-6">
+        <div class="col-5">
             <div class="row">
                 <div class="card">
                     <div class="card-header">
-                        <mat-form-field fxFlex="40%">
-                            <input matInput placeholder="Filter">
-                        </mat-form-field>
+                      <h5>Select Buying Client</h5>
+                      <mat-form-field>
+                        <mat-label>Filter</mat-label>
+                        <input matInput (keyup)="applyFilterClient($event)" placeholder="Ex. Quezon City">
+                      </mat-form-field>
                     </div>
                     <div class="card-body">
-                        <table mat-table [dataSource]="clients" class="mat-elevation-z8">
+                        <table mat-table [dataSource]="clients"  class="mat-elevation-z8">
 
                             <ng-container matColumnDef="fullName">
                                 <th mat-header-cell *matHeaderCellDef> Name </th>
                                 <td mat-cell *matCellDef="let clients"> {{clients.fullName}} </td>
                             </ng-container>
 
-                            <ng-container matColumnDef="userName">
-                                <th mat-header-cell *matHeaderCellDef> User Name </th>
-                                <td mat-cell *matCellDef="let clients"> {{clients.userName}} </td>
+                            <ng-container matColumnDef="addressCity">
+                                <th mat-header-cell *matHeaderCellDef > City </th>
+                                <td mat-cell *matCellDef="let clients"> {{clients.addressCity}} </td>
                             </ng-container>
 
-                            <ng-container matColumnDef="email">
-                                <th mat-header-cell *matHeaderCellDef> Email </th>
-                                <td mat-cell *matCellDef="let clients"> {{clients.email}} </td>
+                            <ng-container matColumnDef="addressRegion">
+                                <th mat-header-cell *matHeaderCellDef> Region </th>
+                                <td mat-cell *matCellDef="let clients"> {{clients.addressRegion}} </td>
                             </ng-container>
 
                             <tr mat-header-row *matHeaderRowDef="displayedColumnsClient"></tr>
                             <tr mat-row *matRowDef="let clients; columns: displayedColumnsClient;"
                                 (click)="selectClient(clients)"></tr>
                         </table>
+                        <mat-paginator #paginator [pageSizeOptions]="[3,5,7]" showFirstLastButtons></mat-paginator>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="card">
-                    <div class="card-header">
-                        <mat-form-field fxFlex="40%">
-                            <input matInput placeholder="Filter">
-                        </mat-form-field>
-                    </div>
-                    <div class="card-body">
-                        <table mat-table [dataSource]="managers" class="mat-elevation-z8">
+        </div>
+        <div class = "col-5">
+          <div class="row">
+            <div class="card">
+                <div class="card-header">
+                  <h5>Select Manager Assigned</h5>
+                  <mat-form-field>
+                    <mat-label>Filter</mat-label>
+                    <input matInput (keyup)="applyFilterManager($event)" placeholder="Ex. Quezon City">
+                  </mat-form-field>
+                </div>
+                <div class="card-body">
+                    <table mat-table [dataSource]="managers"  class="mat-elevation-z8">
 
-                            <ng-container matColumnDef="fullName">
-                                <th mat-header-cell *matHeaderCellDef> Name </th>
-                                <td mat-cell *matCellDef="let managers"> {{managers.fullName}} </td>
-                            </ng-container>
+                        <ng-container matColumnDef="fullName">
+                            <th mat-header-cell *matHeaderCellDef> Name </th>
+                            <td mat-cell *matCellDef="let managers"> {{managers.fullName}} </td>
+                        </ng-container>
 
-                            <ng-container matColumnDef="userName">
-                                <th mat-header-cell *matHeaderCellDef> User Name </th>
-                                <td mat-cell *matCellDef="let managers"> {{managers.userName}} </td>
-                            </ng-container>
+                        <ng-container matColumnDef="addressCity">
+                            <th mat-header-cell *matHeaderCellDef> City </th>
+                            <td mat-cell *matCellDef="let managers"> {{managers.addressCity}} </td>
+                        </ng-container>
 
-                            <ng-container matColumnDef="email">
-                                <th mat-header-cell *matHeaderCellDef> Email </th>
-                                <td mat-cell *matCellDef="let managers"> {{managers.email}} </td>
-                            </ng-container>
+                        <ng-container matColumnDef="addressRegion">
+                            <th mat-header-cell *matHeaderCellDef> Region </th>
+                            <td mat-cell *matCellDef="let managers"> {{managers.addressRegion}} </td>
+                        </ng-container>
 
-                            <tr mat-header-row *matHeaderRowDef="displayedColumnsManager"></tr>
-                            <tr mat-row *matRowDef="let managers; columns: displayedColumnsManager;"
-                                (click)="selectManager(managers)"></tr>
-                        </table>
-                    </div>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumnsManager"></tr>
+                        <tr mat-row *matRowDef="let managers; columns: displayedColumnsManager;"
+                            (click)="selectManager(managers)"></tr>
+                    </table>
+                    <mat-paginator #paginator2 [pageSizeOptions]="[3,5,7]" showFirstLastButtons></mat-paginator>
                 </div>
             </div>
+        </div>
         </div>
     </div>
 </div>
 
 
 <div mat-dialog-actions>
-    <button mat-button (click)="submitSaleProjectForm()">Continue</button>
     <button mat-button (click)="onNoClick()">Back</button>
+    <button mat-button (click)="submitSaleProjectForm()">Continue</button>
 </div>

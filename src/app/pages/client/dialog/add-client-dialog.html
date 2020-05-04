@@ -1,7 +1,7 @@
 <h2 mat-dialog-title>Add Client</h2>
 <div mat-dialog-content [formGroup] = "addClientForm" >
-           
-        
+
+
             <mat-form-field >
                 <mat-label> Username </mat-label>
                 <input matInput formControlName = "userName" name = "client-userName" required>
@@ -47,6 +47,6 @@
             <br>
 </div>
 <div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">Back</button>
     <button mat-button (click) = "submitAddClientForm()" >Add</button>
-    <button mat-button (click)="onNoClick()">Back</button> 
 </div>
