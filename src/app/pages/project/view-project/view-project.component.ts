@@ -164,19 +164,25 @@ export class ViewProjectComponent implements OnInit, OnDestroy {
     });
   }
   selectdelete(event) {
-    console.log(event.target.value);
-    if (event.target.value === 0) {
-      event.target.value = 1;
-      document.getElementById('delbutton').classList.remove('btn-danger');
+    console.log($('#delbutton').val());
+    if ($('#delbutton').val() === '0') {
+      //event.target.value = 1;
+      
+      $('#delbutton').val('1')//;('value', 1);
+
+      //console.log($('#delbutton').val());
+      //document.getElementById('delbutton').classList.remove('');
       $('#delbutton').addClass('btn-outline-danger');
+      $('#delbutton').removeClass('btn-danger');
       $('#delbutton').text('Cancel deletion');
       $('.spotchkbox').addClass('imgchkbox');
       $('.outlabel').wrap('<label></label>');
 
     } else {
-      event.target.value = 0;
-      document.getElementById('delbutton').classList.add('btn-danger');
+      $('#delbutton').val(0);
+      //document.getElementById('delbutton').classList.add('btn-danger');
       $('#delbutton').removeClass('btn-outline-danger');
+      $('#delbutton').addClass('btn-danger');
       $('#delbutton').text('Delete some photo(s)');
       $('.spotchkbox').removeClass('imgchkbox');
       $('.outlabel').unwrap();
