@@ -115,10 +115,14 @@ export class FileService {
       console.log(file);
 
       var storageRef = firebase.storage().ref(path);
-
+      console.log(storageRef);
       var task = storageRef.put(file);
+      
+
       task.then(function (snapshot) {
+        console.log(snapshot);
         snapshot.ref.getDownloadURL().then(async function (url) {
+          console.log(url);
           const id = await thisclass.firestore.createId();
           var fileprop = {
             id: id,
